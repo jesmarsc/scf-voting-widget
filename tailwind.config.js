@@ -26,6 +26,10 @@ module.exports = {
       indigo: colors.indigo,
       purple: colors.violet,
       pink: colors.pink,
+      stellar: {
+        purple: '#3e1bdb',
+        salmon: '#ff434b',
+      },
     },
     spacing: {
       px: '1px',

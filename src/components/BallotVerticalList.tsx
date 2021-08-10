@@ -15,7 +15,7 @@ const BallotItem = styled(
   'li',
   forwardRef
 )([
-  tw`py-2 px-6 rounded-md cursor-pointer text-white bg-blue-600 font-sans list-none z-index[100]`,
+  tw`py-2 px-6 rounded-md cursor-pointer text-white font-sans list-none z-index[100] bg-stellar-purple`,
 ]);
 
 const BallotItemNumber = styled('span')([tw`font-bold mr-4`]);

@@ -6,18 +6,19 @@ import useBallot from '../stores/useBallot';
 
 const styles = ({ isSelected }: { isSelected: boolean }) => css`
   display: block;
-  padding: 1rem 2rem;
-  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
   color: white;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.025em;
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   border-style: none;
   cursor: pointer;
   transition: background-color 150ms linear;
+  font-family: 'IBM Plex Sans', sans-serif;
+  box-shadow: 0 8px 16px -8px ${isSelected ? theme`colors.stellar.salmon` : theme`colors.stellar.purple`};
   background-color: ${isSelected
-    ? theme`colors.pink.600`
-    : theme`colors.blue.600`};
+    ? theme`colors.stellar.salmon`
+    : theme`colors.stellar.purple`};
 `;
 
 const VoteButton = (item: { name: string; slug: string }) => {
