@@ -1,13 +1,24 @@
 import { h } from 'preact';
 import define from 'preact-custom-element';
-import tw, { styled } from 'twin.macro';
+import { css, theme } from 'twin.macro';
 
 import useBallot from '../stores/useBallot';
 
-const Button = styled('button')([
-  tw`block mt-2 py-4 px-8 uppercase text-white font-extrabold tracking-wide rounded-lg border-none cursor-pointer transition-colors shadow-md bg-blue-600`,
-  (props) => props?.isSelected && tw`bg-pink-600`,
-]);
+const styles = ({ isSelected }: { isSelected: boolean }) => css`
+  display: block;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  color: white;
+  font-weight: 800;
+  letter-spacing: 0.025em;
+  border-radius: 0.5rem;
+  border-style: none;
+  cursor: pointer;
+  transition: background-color 150ms linear;
+  background-color: ${isSelected
+    ? theme`colors.pink.600`
+    : theme`colors.blue.600`};
+`;
 
 const VoteButton = (item: { name: string; slug: string }) => {
   const { name, slug } = item;
@@ -18,7 +29,7 @@ const VoteButton = (item: { name: string; slug: string }) => {
 
   return (
     <button
-      //isSelected={isSelected}
+      class={styles({ isSelected })}
       onClick={() => useBallot.getState().toggleItem({ name, slug })}
     >
       {isSelected ? 'Remove Vote' : 'Add Vote'}
