@@ -17,13 +17,13 @@ const VoteButton = (item: { name: string; slug: string }) => {
     ballotItems.findIndex((ballotItem) => ballotItem.slug === slug) > -1;
 
   return (
-    <Button
-      isSelected={isSelected}
+    <button
+      //isSelected={isSelected}
       onClick={() => useBallot.getState().toggleItem({ name, slug })}
     >
       {isSelected ? 'Remove Vote' : 'Add Vote'}
-    </Button>
+    </button>
   );
 };
 
-define(VoteButton, 'vote-button', undefined);
+define(VoteButton, 'vote-button');
