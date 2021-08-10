@@ -164,7 +164,7 @@ module.exports = {
       4: '4px',
       8: '8px',
     },
-    boxShadow: {
+    boxShadow: (theme) => ({
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
       DEFAULT:
         '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
@@ -174,7 +174,9 @@ module.exports = {
       '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
       inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
       none: 'none',
-    },
+      purple: `0px 8px 16px -8px ${theme('colors.stellar.purple')}`,
+      salmon: `0px 8px 16px -8px ${theme('colors.stellar.salmon')}`,
+    }),
     caretColor: (theme) => theme('colors'),
     contrast: {
       0: '0',

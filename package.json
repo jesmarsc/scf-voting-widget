@@ -9,9 +9,9 @@
     }
   },
   "scripts": {
-    "build": "preact build --no-sw --no-prerender --no-esm",
-    "build:analyze": "preact build --no-sw --no-prerender --no-esm --analyze",
-    "dev": "preact watch"
+    "build": "preact build --no-esm --no-sw --no-json --no-prerender --template=src/template.html",
+    "build:analyze": "npm run build -- --analyze",
+    "dev": "preact watch --template=src/template.html"
   },
   "dependencies": {
     "goober": "^2.0.39",

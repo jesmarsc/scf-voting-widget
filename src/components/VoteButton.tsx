@@ -15,7 +15,7 @@ const styles = ({ isSelected }: { isSelected: boolean }) => css`
   cursor: pointer;
   transition: background-color 150ms linear;
   font-family: 'IBM Plex Sans', sans-serif;
-  box-shadow: 0 8px 16px -8px ${isSelected ? theme`colors.stellar.salmon` : theme`colors.stellar.purple`};
+  box-shadow: ${isSelected ? theme`boxShadow.salmon` : theme`boxShadow.purple`};
   background-color: ${isSelected
     ? theme`colors.stellar.salmon`
     : theme`colors.stellar.purple`};
