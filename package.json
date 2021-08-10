@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "name": "scf-voting",
+  "version": "0.0.0",
+  "license": "MIT",
+  "babelMacros": {
+    "twin": {
+      "preset": "goober"
+    }
+  },
+  "scripts": {
+    "build": "preact build --no-sw --no-prerender --no-esm",
+    "build:analyze": "preact build --no-sw --no-prerender --no-esm --analyze",
+    "dev": "preact watch"
+  },
+  "dependencies": {
+    "goober": "^2.0.39",
+    "preact": "^10.3.1",
+    "preact-custom-element": "^4.2.1",
+    "react-movable": "^2.5.4",
+    "zustand": "^3.5.7"
+  },
+  "devDependencies": {
+    "@agney/babel-plugin-goober-css-prop": "0.0.1",
+    "@types/preact-custom-element": "^4.0.1",
+    "preact-cli": "^3.0.0",
+    "tailwindcss": "^2.2.7",
+    "twin.macro": "^2.6.2",
+    "typescript": "^3.7.5"
+  }
+}
