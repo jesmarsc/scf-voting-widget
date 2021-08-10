@@ -2,6 +2,7 @@ import create from 'zustand';
 import { combine, persist } from 'zustand/middleware';
 
 type State = {
+  isFull: boolean;
   ballotItems: { name: string; slug: string }[];
   toggleItem: (itemData: { name: string; slug: string }) => void;
 };
@@ -9,6 +10,7 @@ type State = {
 const useBallot = create(
   persist<State>(
     (set) => ({
+      isFull: false,
       ballotItems: [],
       toggleItem: (itemData) => {
         const { slug } = itemData;
@@ -19,9 +21,14 @@ const useBallot = create(
           );
 
           itemIndex < 0
-            ? ballotCopy.push(itemData)
+            ? ballotCopy.length < 10 && ballotCopy.push(itemData)
             : ballotCopy.splice(itemIndex, 1);
-          return { ballotItems: ballotCopy };
+
+          return {
+            ...state,
+            ballotItems: ballotCopy,
+            isFull: ballotCopy.length >= 10,
+          };
         });
       },
     }),

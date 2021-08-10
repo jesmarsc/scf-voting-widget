@@ -14,6 +14,8 @@ const BallotContainer = styled('div')([
 
 const BallotTitle = styled('h3')([tw`text-2xl p-4 font-bold tracking-tight`]);
 
+const BallotSubtitle = styled('p')([tw`bg-red-100 py-1 px-4`]);
+
 const BallotItemsContainer = styled(
   'ul',
   forwardRef
@@ -39,10 +41,12 @@ const BallotItemDelete = styled('button')([
 
 const BallotVerticalList = () => {
   const ballotItems = useBallot((state) => state.ballotItems);
+  const isFull = useBallot((state) => state.isFull);
 
   return (
     <BallotContainer>
       <BallotTitle>Your Ballot</BallotTitle>
+      {isFull && <BallotSubtitle>Your ballot is full.</BallotSubtitle>}
       <List
         transitionDuration={150}
         lockVertically
