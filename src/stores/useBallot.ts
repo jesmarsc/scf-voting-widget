@@ -1,8 +1,9 @@
 import create from 'zustand';
-import { combine, persist } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
 type State = {
   isFull: boolean;
+  isExpanded: boolean;
   ballotItems: { name: string; slug: string }[];
   toggleItem: (itemData: { name: string; slug: string }) => void;
 };
@@ -11,6 +12,7 @@ const useBallot = create(
   persist<State>(
     (set) => ({
       isFull: false,
+      isExpanded: false,
       ballotItems: [],
       toggleItem: (itemData) => {
         const { slug } = itemData;

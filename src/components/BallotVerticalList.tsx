@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { forwardRef } from 'preact/compat';
 import { List, arrayMove } from 'react-movable';
+import SVGCaretForward from '../assets/SVGCaretForward';
 
 import tw, { styled } from 'twin.macro';
 
@@ -12,9 +13,22 @@ const BallotContainer = styled('div')([
   tw`box-border all:(m-0 p-0 box-sizing[inherit])`,
 ]);
 
-const BallotTitle = styled('h3')([tw`text-2xl p-4 font-bold tracking-tight`]);
+const BallotTitle = styled('h3')([
+  tw`flex items-center text-2xl p-4 font-bold tracking-tight cursor-pointer`,
+]);
+
+const BallotCaret = styled(SVGCaretForward)([
+  tw`transition-transform mt-1 mr-2`,
+  ({ isExpanded }) => isExpanded && tw`transform rotate-90`,
+]);
 
 const BallotSubtitle = styled('p')([tw`bg-red-100 py-1 px-4`]);
+
+const BallotContent = styled('p')([
+  tw`transition[max-height 500ms]`,
+  ({ isExpanded }) =>
+    isExpanded ? tw`delay-150 max-height[100vh]` : tw`max-h-0`,
+]);
 
 const BallotItemsContainer = styled(
   'ul',
@@ -36,47 +50,55 @@ const BallotItemName = styled('span')([
 const BallotItemNumber = styled('span')([tw`font-bold`]);
 
 const BallotItemDelete = styled('button')([
-  tw`border-none py-0.5 px-2 cursor-pointer rounded transition-colors text-white bg-black bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
+  tw`border-none py-0.5 px-2 cursor-pointer rounded transition-colors font-semibold text-white bg-black bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
 ]);
 
 const BallotVerticalList = () => {
-  const ballotItems = useBallot((state) => state.ballotItems);
-  const isFull = useBallot((state) => state.isFull);
+  const { ballotItems, isFull, isExpanded } = useBallot();
 
   return (
     <BallotContainer>
-      <BallotTitle>Your Ballot</BallotTitle>
-      {isFull && <BallotSubtitle>Your ballot is full.</BallotSubtitle>}
-      <List
-        transitionDuration={150}
-        lockVertically
-        values={ballotItems}
-        onChange={({ oldIndex, newIndex }) =>
-          useBallot.setState({
-            ballotItems: arrayMove(ballotItems, oldIndex, newIndex),
-          })
+      <BallotTitle
+        onClick={() =>
+          useBallot.setState((state) => ({ isExpanded: !state.isExpanded }))
         }
-        renderList={({ children, props }) => (
-          <BallotItemsContainer {...props}>{children}</BallotItemsContainer>
-        )}
-        renderItem={({ value, props, index }) => (
-          <BallotItem
-            {...props}
-            style={{
-              ...props.style,
-              margin: '0.5rem',
-            }}
-          >
-            <BallotItemNumber>{`${index! + 1}.`}</BallotItemNumber>
-            <BallotItemName>{value.name}</BallotItemName>
-            <BallotItemDelete
-              onClick={() => useBallot.getState().toggleItem(value)}
+      >
+        <BallotCaret isExpanded={isExpanded} />
+        <span>Your Ballot</span>
+      </BallotTitle>
+      {isFull && <BallotSubtitle>Your ballot is full.</BallotSubtitle>}
+      <BallotContent isExpanded={isExpanded}>
+        <List
+          transitionDuration={150}
+          lockVertically
+          values={ballotItems}
+          onChange={({ oldIndex, newIndex }) =>
+            useBallot.setState({
+              ballotItems: arrayMove(ballotItems, oldIndex, newIndex),
+            })
+          }
+          renderList={({ children, props }) => (
+            <BallotItemsContainer {...props}>{children}</BallotItemsContainer>
+          )}
+          renderItem={({ value, props, index }) => (
+            <BallotItem
+              {...props}
+              style={{
+                ...props.style,
+                margin: '0.5rem',
+              }}
             >
-              x
-            </BallotItemDelete>
-          </BallotItem>
-        )}
-      />
+              <BallotItemNumber>{`${index! + 1}.`}</BallotItemNumber>
+              <BallotItemName>{value.name}</BallotItemName>
+              <BallotItemDelete
+                onClick={() => useBallot.getState().toggleItem(value)}
+              >
+                x
+              </BallotItemDelete>
+            </BallotItem>
+          )}
+        />
+      </BallotContent>
     </BallotContainer>
   );
 };
