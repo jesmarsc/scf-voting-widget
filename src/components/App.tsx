@@ -1,8 +1,7 @@
 import { h, FunctionalComponent } from 'preact';
-import BallotVerticalList from './BallotVerticalList';
 
 const App: FunctionalComponent = () => {
-  return <BallotVerticalList />;
+  return <div></div>;
 };
 
 export default App;

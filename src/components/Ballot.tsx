@@ -1,11 +1,13 @@
 import { h } from 'preact';
 import { forwardRef } from 'preact/compat';
+import define from 'preact-custom-element';
 import { List, arrayMove } from 'react-movable';
-import SVGCaretForward from '../assets/SVGCaretForward';
-
 import tw, { styled } from 'twin.macro';
 
-import useBallot from '../stores/useBallot';
+import useAuth from 'src/stores/useAuth';
+import useBallot from 'src/stores/useBallot';
+
+import SVGCaretForward from 'src/assets/SVGCaretForward';
 
 const BallotContainer = styled('div')([
   tw`fixed bottom-4 right-4 font-sans overflow-hidden rounded-lg shadow-lg border border-solid border-gray-100 bg-white z-index[1000]`,
@@ -53,8 +55,11 @@ const BallotItemDelete = styled('button')([
   tw`border-none py-0.5 px-2 cursor-pointer rounded transition-colors font-semibold text-white bg-black bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
 ]);
 
-const BallotVerticalList = () => {
+const Ballot = () => {
   const { ballotItems, isFull, isExpanded } = useBallot();
+  const discordToken = useAuth((state) => state.discordToken);
+
+  if (!discordToken) return null;
 
   return (
     <BallotContainer>
@@ -103,4 +108,4 @@ const BallotVerticalList = () => {
   );
 };
 
-export default BallotVerticalList;
+define(Ballot, 'vote-ballot');

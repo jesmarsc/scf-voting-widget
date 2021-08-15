@@ -1,12 +1,8 @@
-import { render, h } from 'preact';
-import { setup } from 'goober';
-setup(h);
+/* REQUIRED: Goober Setup for Styles */
+import 'src/styles/goober';
 
-import App from './components/App';
-import './components/VoteButton';
-
-const root = document.createElement('div');
-root.setAttribute('id', 'react_root');
-document.body.appendChild(root);
-
-render(<App />, root);
+/* Web Components */
+import 'src/components/Ballot';
+import 'src/components/elements/VoteButton';
+import 'src/components/elements/DiscordButton';
+import 'src/components/DiscordCollector';

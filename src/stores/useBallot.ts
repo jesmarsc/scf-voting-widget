@@ -27,14 +27,13 @@ const useBallot = create(
             : ballotCopy.splice(itemIndex, 1);
 
           return {
-            ...state,
             ballotItems: ballotCopy,
             isFull: ballotCopy.length >= 10,
           };
         });
       },
     }),
-    { name: 'ballot' }
+    { name: 'ballot-store' }
   )
 );
 
