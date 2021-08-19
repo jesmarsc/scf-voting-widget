@@ -6,19 +6,21 @@ import useBallot from 'src/stores/useBallot';
 
 import Button from 'src/components/elements/Button';
 
-const VoteButton = (item: { name: string; slug: string }) => {
+const VoteButton = ({ name, slug }: { name: string; slug: string }) => {
   const discordToken = useAuth((state) => state.discordToken);
-  const { ballotItems, toggleItem } = useBallot();
+  const { includes, addApprovedProject, removeProject } = useBallot();
 
   if (!discordToken) return null;
 
-  const { name, slug } = item;
-
-  const isSelected =
-    ballotItems.findIndex((ballotItem) => ballotItem.slug === slug) > -1;
+  const isSelected = includes(slug);
 
   return (
-    <Button danger={isSelected} onClick={() => toggleItem({ name, slug })}>
+    <Button
+      danger={isSelected}
+      onClick={() =>
+        isSelected ? removeProject(slug) : addApprovedProject(slug, name)
+      }
+    >
       {isSelected ? 'Remove Vote' : 'Add Vote'}
     </Button>
   );

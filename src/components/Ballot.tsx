@@ -108,4 +108,4 @@ const Ballot = () => {
   );
 };
 
-//define(Ballot, 'vote-ballot');
+define(Ballot, 'vote-ballot');
