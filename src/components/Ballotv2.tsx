@@ -231,7 +231,7 @@ const BallotItemsContainer = styled('div')([
 ]);
 
 const Title = styled('h3')(
-  tw`text-gray-800 transition[margin 250ms ease] not-only-child:(mb-2)`
+  tw`text-gray-800 transition[margin 250ms ease] not-last:(mb-2)`
 );
 
 const DroppableArea = styled(
@@ -246,8 +246,8 @@ const DroppableArea = styled(
 const DraggableItem = styled(
   'div',
   forwardRef
-)([
-  ({ isDragging }) => isDragging && tw`opacity-25`,
+)<{ isDragging?: boolean }>([
+  ({ isDragging }) => (isDragging ? tw`opacity-25` : ''),
   tw`flex items-center py-2 px-4 rounded-md cursor[grab] text-white bg-stellar-purple z-index[1010] touch-action[none] select-none`,
 ]);
 

@@ -2,7 +2,7 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { arrayMove } from '@dnd-kit/sortable';
 
-type State = {
+export type State = {
   isFull: () => boolean;
   isExpanded: boolean;
   approvedProjects: { id: string; name: string }[];
