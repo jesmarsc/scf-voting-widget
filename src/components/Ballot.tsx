@@ -11,6 +11,7 @@ import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import SVGCaretForward from 'src/assets/SVGCaretForward';
 import Button from './elements/Button';
+import { favorites, unapproveProject } from 'src/stores/api';
 
 const randomData = () => {
   return Array.from({ length: 100 }, () => ({
@@ -31,11 +32,24 @@ const Ballot = () => {
     addFavoriteProject,
     moveFavoriteProject,
     removeProject,
+    
   } = useBallot();
 
   const discordToken = useAuth((state) => state.discordToken);
 
   if (!discordToken) return null;
+
+   const handleSubmit = async() => {
+    const res = await favorites(favoriteProjects.map(project=>project.id));
+  }
+
+  const handleRemove = async(slug: string, name: string) => {
+    removeProject(slug);
+    const res = await unapproveProject(slug).catch(()=>{
+      addApprovedProject(slug,name)
+    });
+    
+  }
 
   return (
     <BallotContainer>
@@ -70,7 +84,7 @@ const Ballot = () => {
                   ★
                 </ProjectFavorite>
                 <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
-                <ProjectDelete onClick={() => removeProject(id)}>
+                <ProjectDelete onClick={() => handleRemove(id,name)}>
                   x
                 </ProjectDelete>
               </ProjectItem>
@@ -104,7 +118,7 @@ const Ballot = () => {
                         ☆
                       </ProjectFavorite>
                       <ProjectName>{name}</ProjectName>
-                      <ProjectDelete onClick={() => removeProject(id)}>
+                      <ProjectDelete onClick={() => handleRemove(id,name)}>
                         x
                       </ProjectDelete>
                     </ProjectItem>
@@ -116,7 +130,7 @@ const Ballot = () => {
         </ApprovedContainer>
 
         <Footer>
-          <SubmitButton>Submit</SubmitButton>
+          <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
         </Footer>
       </BallotContent>
     </BallotContainer>

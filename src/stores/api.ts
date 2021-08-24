@@ -84,7 +84,7 @@ export const favorites = async (slugs: string[]) => {
       Authorization: `Bearer ${discordToken}`,
     },
     body: JSON.stringify({
-      slugs: slugs,
+      favorites: slugs,
     }),
   }).then(handleResponse);
 };
