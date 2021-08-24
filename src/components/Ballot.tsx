@@ -10,6 +10,7 @@ import tw, { styled } from 'twin.macro';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import SVGCaretForward from 'src/assets/SVGCaretForward';
+import Button from './elements/Button';
 
 const randomData = () => {
   return Array.from({ length: 100 }, () => ({
@@ -113,6 +114,10 @@ const Ballot = () => {
             )}
           </AutoSizer>
         </ApprovedContainer>
+
+        <Footer>
+          <SubmitButton>Submit</SubmitButton>
+        </Footer>
       </BallotContent>
     </BallotContainer>
   );
@@ -159,16 +164,20 @@ const ProjectName = styled('span')([
   // tw`relative after:(content absolute top-0 right-0 w-1/4 h-full pointer-events-none bg-gradient-to-l from-stellar-purple to-transparent)`,
 ]);
 
-const BaseButton = styled('button')([
+const ProjectButton = styled('button')([
   tw`flex items-center justify-center border-none cursor-pointer rounded text-base text-white`,
   tw`m-0! p-0! leading-none! w-5 h-5 bg-transparent`,
 ]);
 
-const ProjectFavorite = BaseButton;
+const ProjectFavorite = ProjectButton;
 
-const ProjectDelete = styled(BaseButton)([
+const ProjectDelete = styled(ProjectButton)([
   tw`text-white`,
   tw`bg-black transition-colors bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
 ]);
+
+const Footer = styled('div')([tw`flex p-2 justify-end`]);
+
+const SubmitButton = styled(Button)([tw`px-4 py-2 shadow-none`]);
 
 define(Ballot, 'vote-ballot');
