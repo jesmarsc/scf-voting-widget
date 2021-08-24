@@ -160,12 +160,15 @@ const ProjectName = styled('span')([
 ]);
 
 const BaseButton = styled('button')([
-  tw`flex items-center justify-center p-0! border-none cursor-pointer rounded text-base width[2ch]`,
-  tw`bg-black transition-colors bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
+  tw`flex items-center justify-center border-none cursor-pointer rounded text-base text-white`,
+  tw`m-0! p-0! leading-none! w-5 h-5 bg-transparent`,
 ]);
 
-const ProjectFavorite = styled(BaseButton)(tw`text-yellow-300`);
+const ProjectFavorite = BaseButton;
 
-const ProjectDelete = styled(BaseButton)(tw`text-white`);
+const ProjectDelete = styled(BaseButton)([
+  tw`text-white`,
+  tw`bg-black transition-colors bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
+]);
 
 define(Ballot, 'vote-ballot');
