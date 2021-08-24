@@ -35,7 +35,7 @@ const VoteButton = ({ name, slug }: { name: string; slug: string }) => {
     <Button
       danger={isSelected}
       onClick={() =>
-        isSelected ? removeProject(slug) : addApprovedProject(slug, name)
+        isSelected ? handleRemoveProject() : handleAddApprovedProject()
       }
     >
       {isSelected ? 'Remove Vote' : 'Add Vote'}
