@@ -10,9 +10,9 @@ import tw, { styled } from 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
-import SVGCaretForward from 'src/assets/SVGCaretForward';
 import Button from 'src/components/elements/Button';
 import { getUser, unapproveProject } from 'src/utils/api';
+import SVGCaretForward from 'src/assets/SVGCaretForward';
 
 const randomData = () => {
   return Array.from({ length: 100 }, () => ({
@@ -91,7 +91,7 @@ const Ballot = () => {
           renderList={({ children, props }) => <div {...props}>{children}</div>}
           renderItem={({ value: { slug, name }, props, index }) => {
             return (
-              <ProjectItem isFavorite {...props}>
+              <ProjectItem key={slug} isFavorite {...props}>
                 <ProjectFavorite onClick={() => removeFavoriteProject(slug)}>
                   ★
                 </ProjectFavorite>
@@ -118,7 +118,7 @@ const Ballot = () => {
                   const { slug, name } = data[index];
 
                   return (
-                    <ProjectItem style={style}>
+                    <ProjectItem key={slug} style={style}>
                       <ProjectFavorite
                         onClick={() => addFavoriteProject(slug, name)}
                       >
