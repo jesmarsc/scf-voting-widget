@@ -78,7 +78,6 @@ function TableWrap({columns, data}:any) {
 }
 
 function Admin() {
-     const data = [ob, ob, ob];
       const discordToken = useAuth((state) => state.discordToken);
     const [projectsData, setProjectsData] = useState<any>();
     const columns = useMemo(
