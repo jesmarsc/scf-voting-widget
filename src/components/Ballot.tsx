@@ -151,14 +151,6 @@ const BallotContainer = styled('div')([
   tw`box-border all:(m-0 p-0 box-sizing[inherit])`,
 ]);
 
-const BallotContent = styled('div')([
-  tw`flex flex-col h-96!`,
-  ({ isExpanded }: { isExpanded: boolean }) =>
-    isExpanded ? tw` max-height[24rem]` : tw`max-h-0`,
-]);
-
-const ApprovedContainer = styled('div')([tw`flex-1 shadow-inner bg-blue-600`]);
-
 const BallotTitle = styled('h3')([
   tw`flex items-center text-2xl p-2 font-bold tracking-tight cursor-pointer`,
 ]);
@@ -170,15 +162,23 @@ const BallotCaret = styled(SVGCaretForward)<{ isExpanded?: boolean }>([
   ({ isExpanded }) => (isExpanded ? tw`transform rotate-90` : ''),
 ]);
 
+const BallotContent = styled('div')([
+  tw`flex flex-col h-96!`,
+  ({ isExpanded }: { isExpanded: boolean }) =>
+    isExpanded ? tw` max-height[24rem]` : tw`max-h-0`,
+]);
+
+const ApprovedContainer = styled('div')([tw`flex-1 shadow-inner bg-gray-100`]);
+
 const ProjectItem = styled(
   'div',
   forwardRef
 )([
-  tw`flex items-center p-2 font-sans z-index[1010] text-white`,
+  tw`flex items-center p-2 font-sans z-index[1010]`,
   ({ isFavorite }: { isFavorite?: boolean }) =>
     isFavorite
-      ? tw`rounded cursor-pointer text-white bg-stellar-purple m-2!`
-      : tw`not-first:(border-0 border-t-2 border-solid border-white)`,
+      ? tw`m-2! rounded cursor-pointer bg-stellar-purple all-child:(text-white)`
+      : tw`not-first:(border-0 border-t-2 border-solid border-white) all-child:(text-gray-800)`,
 ]);
 
 const ProjectName = styled('span')([
@@ -187,15 +187,14 @@ const ProjectName = styled('span')([
 ]);
 
 const ProjectButton = styled('button')([
-  tw`flex items-center justify-center border-none cursor-pointer rounded text-base text-white`,
+  tw`flex items-center justify-center border-none cursor-pointer rounded text-base`,
   tw`m-0! p-0! leading-none! w-5 h-5 bg-transparent`,
 ]);
 
 const ProjectFavorite = ProjectButton;
 
 const ProjectDelete = styled(ProjectButton)([
-  tw`text-white`,
-  tw`bg-black transition-colors bg-opacity-20 hover:(bg-opacity-40) active:(bg-opacity-60)`,
+  tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-40) active:(bg-opacity-60)`,
 ]);
 
 const Footer = styled('div')([tw`flex p-2 justify-end`]);

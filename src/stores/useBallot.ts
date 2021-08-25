@@ -35,7 +35,7 @@ export type State = {
 
 const useBallot = create<State>((set, get) => ({
   user: undefined,
-  isExpanded: false,
+  isExpanded: true,
 
   init: (user: User) => set({ user }),
 
