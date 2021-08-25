@@ -10,8 +10,9 @@ type State = {
 const useAuth = create(
   persist<State>(
     (set) => ({
+      discordToken: undefined,
       setDiscordToken: (discordToken: string) => set({ discordToken }),
-      clearAuth: () => set(({ discordToken, ...oldState }) => oldState, true),
+      clearAuth: () => set({}, true),
     }),
     { name: 'auth-store' }
   )

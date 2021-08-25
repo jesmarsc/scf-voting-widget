@@ -1,5 +1,3 @@
-import useAuth from './useAuth';
-
 export const apiUrl =
   'https://wrangler-scf-voting.stellarcommunity.workers.dev';
 
@@ -17,9 +15,7 @@ export async function handleResponse(response: Response) {
   else throw await content;
 }
 
-export const getUser = async () => {
-  const { discordToken } = useAuth.getState();
-
+export const getUser = async (discordToken: string) => {
   return await fetch(`${apiUrl}/auth`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -27,9 +23,23 @@ export const getUser = async () => {
   }).then(handleResponse);
 };
 
-export const approveProject = async (slug: string) => {
-  const { discordToken } = useAuth.getState();
+export const getProjects = async (discordToken: string) => {
+  return await fetch(`${apiUrl}/projects`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
 
+export const getPanelists = async (discordToken: string) => {
+  return await fetch(`${apiUrl}/panelists`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
+export const approveProject = async (slug: string, discordToken: string) => {
   return await fetch(`${apiUrl}/approve`, {
     method: 'POST',
     headers: {
@@ -41,9 +51,7 @@ export const approveProject = async (slug: string) => {
   }).then(handleResponse);
 };
 
-export const unapproveProject = async (slug: string) => {
-  const { discordToken } = useAuth.getState();
-
+export const unapproveProject = async (slug: string, discordToken: string) => {
   return await fetch(`${apiUrl}/unapprove`, {
     method: 'POST',
     headers: {
@@ -55,29 +63,10 @@ export const unapproveProject = async (slug: string) => {
   }).then(handleResponse);
 };
 
-export const projects = async () => {
-  const { discordToken } = useAuth.getState();
-
-  return await fetch(`${apiUrl}/projects`, {
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-  }).then(handleResponse);
-};
-
-export const panelists = async () => {
-  const { discordToken } = useAuth.getState();
-
-  return await fetch(`${apiUrl}/panelists`, {
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-  }).then(handleResponse);
-};
-
-export const favorites = async (slugs: string[]) => {
-  const { discordToken } = useAuth.getState();
-
+export const submitFavorites = async (
+  slugs: string[],
+  discordToken: string
+) => {
   return await fetch(`${apiUrl}/favorites`, {
     method: 'POST',
     headers: {

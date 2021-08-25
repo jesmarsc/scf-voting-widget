@@ -5,31 +5,27 @@ import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 
 import Button from 'src/components/elements/Button';
-import { approveProject, unapproveProject } from 'src/stores/api';
+import { approveProject, unapproveProject } from 'src/utils/api';
 
 const VoteButton = ({ name, slug }: { name: string; slug: string }) => {
   const discordToken = useAuth((state) => state.discordToken);
-  const { includes, addApprovedProject, removeProject } = useBallot();
+  const { user, isApproved, addApprovedProject, removeProject } = useBallot();
 
-  if (!discordToken) return null;
+  if (!discordToken || !user) return null;
 
-  const isSelected = includes(slug);
+  const isSelected = isApproved(slug);
 
-  const handleAddApprovedProject = async() => {
+  const handleAddApprovedProject = async () => {
     addApprovedProject(slug, name);
-    const res = await approveProject(slug);
-    if (!res.id){
-      removeProject(slug)
-    }
-  }
+    approveProject(slug, discordToken).catch(() => removeProject(slug));
+  };
 
-  const handleRemoveProject = async() => {
+  const handleRemoveProject = async () => {
     removeProject(slug);
-    const res = await unapproveProject(slug);
-    if (!res.id){
-      removeProject(slug)
-    }
-  }
+    unapproveProject(slug, discordToken).catch(() =>
+      addApprovedProject(slug, name)
+    );
+  };
 
   return (
     <Button

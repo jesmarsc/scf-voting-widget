@@ -1,4 +1,5 @@
 import { h } from 'preact';
+import { useEffect } from 'preact/hooks';
 import { forwardRef, memo } from 'preact/compat';
 import define from 'preact-custom-element';
 
@@ -10,8 +11,8 @@ import tw, { styled } from 'twin.macro';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import SVGCaretForward from 'src/assets/SVGCaretForward';
-import Button from './elements/Button';
-import { favorites, unapproveProject } from 'src/stores/api';
+import Button from 'src/components/elements/Button';
+import { getUser, unapproveProject } from 'src/utils/api';
 
 const randomData = () => {
   return Array.from({ length: 100 }, () => ({
@@ -24,32 +25,47 @@ const ITEM_HEIGHT = 42;
 
 const Ballot = () => {
   const {
+    user,
+    init,
     isFull,
     isExpanded,
-    approvedProjects,
-    favoriteProjects,
+    isFavorite,
     addApprovedProject,
     addFavoriteProject,
+    removeFavoriteProject,
     moveFavoriteProject,
     removeProject,
-    
   } = useBallot();
 
   const discordToken = useAuth((state) => state.discordToken);
 
-  if (!discordToken) return null;
+  useEffect(() => {
+    if (discordToken) {
+      getUser(discordToken).then((user) => init(user));
+    }
+    return () => {};
+  }, [discordToken]);
 
-   const handleSubmit = async() => {
-    const res = await favorites(favoriteProjects.map(project=>project.id));
-  }
+  if (!user || !discordToken) return null;
 
-  const handleRemove = async(slug: string, name: string) => {
+  const handleRemoveProject = async (slug: string, name: string) => {
     removeProject(slug);
-    const res = await unapproveProject(slug).catch(()=>{
-      addApprovedProject(slug,name)
-    });
-    
-  }
+    unapproveProject(slug, discordToken).catch(() =>
+      addApprovedProject(slug, name)
+    );
+  };
+
+  const handleSubmit = async () => {
+    // const res = await submitFavorites(
+    //   favoriteProjects.map((project) => project.id)
+    // );
+  };
+
+  const { favorites, approved } = user;
+
+  const approvedFiltered = approved.filter(
+    (project) => !isFavorite(project.slug)
+  );
 
   return (
     <BallotContainer>
@@ -67,24 +83,19 @@ const Ballot = () => {
       <BallotContent isExpanded={isExpanded}>
         <List
           transitionDuration={100}
-          values={favoriteProjects}
+          values={favorites}
           onChange={({ oldIndex, newIndex }) =>
             moveFavoriteProject(oldIndex, newIndex)
           }
           renderList={({ children, props }) => <div {...props}>{children}</div>}
-          renderItem={({ value: { id, name }, props, index }) => {
+          renderItem={({ value: { slug, name }, props, index }) => {
             return (
               <ProjectItem isFavorite {...props}>
-                <ProjectFavorite
-                  onClick={() => {
-                    removeProject(id);
-                    addApprovedProject(id, name);
-                  }}
-                >
+                <ProjectFavorite onClick={() => removeFavoriteProject(slug)}>
                   ★
                 </ProjectFavorite>
                 <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
-                <ProjectDelete onClick={() => handleRemove(id,name)}>
+                <ProjectDelete onClick={() => handleRemoveProject(slug, name)}>
                   x
                 </ProjectDelete>
               </ProjectItem>
@@ -98,27 +109,24 @@ const Ballot = () => {
               <FixedSizeList
                 width={'100%'}
                 height={height}
-                itemCount={approvedProjects.length}
-                itemData={approvedProjects}
+                itemCount={approvedFiltered.length}
+                itemData={approvedFiltered}
                 itemSize={ITEM_HEIGHT}
               >
                 {memo(({ index, data, style }: any) => {
-                  const { id, name } = data[index];
+                  const { slug, name } = data[index];
 
                   return (
                     <ProjectItem style={style}>
                       <ProjectFavorite
-                        onClick={() => {
-                          if (!isFull()) {
-                            removeProject(id);
-                            addFavoriteProject(id, name);
-                          }
-                        }}
+                        onClick={() => addFavoriteProject(slug, name)}
                       >
                         ☆
                       </ProjectFavorite>
                       <ProjectName>{name}</ProjectName>
-                      <ProjectDelete onClick={() => handleRemove(id,name)}>
+                      <ProjectDelete
+                        onClick={() => handleRemoveProject(slug, name)}
+                      >
                         x
                       </ProjectDelete>
                     </ProjectItem>

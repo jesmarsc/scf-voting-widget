@@ -1,4 +1,5 @@
-import { projects } from './stores/api';
+import { getProjects } from 'src/utils/api';
+import useAuth from 'src/stores/useAuth';
 
 /* REQUIRED: Goober Setup for Styles */
 import 'src/styles/goober';
@@ -10,18 +11,22 @@ import 'src/components/elements/DiscordButton';
 import 'src/components/DiscordCollector';
 
 if (process.env.NODE_ENV === 'development') {
-  projects().then(({ projects }) => {
-    const container = document.getElementById('container')!;
+  const { discordToken } = useAuth.getState();
 
-    for (const project of projects) {
-      const nameElement = document.createElement('p');
-      nameElement.innerText = project.name;
+  if (discordToken) {
+    getProjects(discordToken).then(({ projects }) => {
+      const container = document.getElementById('container')!;
 
-      const voteButton = document.createElement('vote-button');
-      voteButton.setAttribute('name', project.name);
-      voteButton.setAttribute('slug', project.slug);
-      voteButton.appendChild(nameElement);
-      container.appendChild(voteButton);
-    }
-  });
+      for (const project of projects) {
+        const nameElement = document.createElement('p');
+        nameElement.innerText = project.name;
+
+        const voteButton = document.createElement('vote-button');
+        voteButton.setAttribute('name', project.name);
+        voteButton.setAttribute('slug', project.slug);
+        voteButton.appendChild(nameElement);
+        container.appendChild(voteButton);
+      }
+    });
+  }
 }
