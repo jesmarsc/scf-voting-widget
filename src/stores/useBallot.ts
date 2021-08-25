@@ -37,7 +37,10 @@ const useBallot = create<State>((set, get) => ({
   user: undefined,
   isExpanded: true,
 
-  init: (user: User) => set({ user }),
+  init: (user: User) => {
+    user.approved.sort((a, b) => a.name.localeCompare(b.name));
+    set({ user });
+  },
 
   isFull: () => {
     const { user } = get();

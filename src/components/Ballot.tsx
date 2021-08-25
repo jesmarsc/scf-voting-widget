@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useEffect } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { forwardRef, memo } from 'preact/compat';
 import define from 'preact-custom-element';
 
@@ -38,6 +38,7 @@ const Ballot = () => {
   } = useBallot();
 
   const discordToken = useAuth((state) => state.discordToken);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   useEffect(() => {
     if (discordToken) {
@@ -78,9 +79,9 @@ const Ballot = () => {
         <span>Your Ballot</span>
       </BallotTitle>
 
-      {isFull() && <BallotSubtitle>Your favorites are full.</BallotSubtitle>}
-
       <BallotContent isExpanded={isExpanded}>
+        {isFull() && <BallotSubtitle>Your favorites are full.</BallotSubtitle>}
+
         <List
           transitionDuration={100}
           values={favorites}
@@ -138,12 +139,37 @@ const Ballot = () => {
         </ApprovedContainer>
 
         <Footer>
-          <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
+          <SubmitButton onClick={() => setIsConfirming(true)}>
+            Submit
+          </SubmitButton>
         </Footer>
+
+        {isConfirming && (
+          <Confirmation>
+            <div>
+              <p>
+                <strong>Are you sure?</strong>
+              </p>
+              <p>You will be unable to change your vote once submitted.</p>
+            </div>
+            <ButtonGroup>
+              <SubmitButton onClick={handleSubmit}>Confirm</SubmitButton>
+              <SubmitButton danger onClick={() => setIsConfirming(false)}>
+                Cancel
+              </SubmitButton>
+            </ButtonGroup>
+          </Confirmation>
+        )}
       </BallotContent>
     </BallotContainer>
   );
 };
+
+const Confirmation = styled('div')(
+  tw`absolute inset-0 flex flex-col p-4 items-center justify-center bg-gray-100 text-center`
+);
+
+const ButtonGroup = styled('div')(tw`flex mt-4 gap-2`);
 
 const BallotContainer = styled('div')([
   tw`fixed bottom-4 right-4 font-sans rounded-lg overflow-hidden shadow-lg border border-solid border-gray-200 bg-white z-index[1000]`,
@@ -163,9 +189,9 @@ const BallotCaret = styled(SVGCaretForward)<{ isExpanded?: boolean }>([
 ]);
 
 const BallotContent = styled('div')([
-  tw`flex flex-col h-96!`,
+  tw`relative flex flex-col height[32rem] overflow-hidden`,
   ({ isExpanded }: { isExpanded: boolean }) =>
-    isExpanded ? tw` max-height[24rem]` : tw`max-h-0`,
+    isExpanded ? tw` max-height[32rem]` : tw`max-h-0`,
 ]);
 
 const ApprovedContainer = styled('div')([tw`flex-1 shadow-inner bg-gray-100`]);
