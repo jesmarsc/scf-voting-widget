@@ -1,5 +1,8 @@
 export const discordApiUrl = 'https://discord.com/api';
-export const redirectUrl = `${window.location.origin}`;
+export const redirectUrl =
+  process.env.NODE_ENV === 'development'
+    ? window.location.origin
+    : `${window.location.origin}/auth`;
 
 export const discordAuthUrl = `${discordApiUrl}/oauth2/authorize?client_id=876286801944387605&redirect_uri=${encodeURIComponent(
   redirectUrl
