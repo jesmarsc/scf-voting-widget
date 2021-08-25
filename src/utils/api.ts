@@ -63,8 +63,8 @@ export const unapproveProject = async (slug: string, discordToken: string) => {
   }).then(handleResponse);
 };
 
-export const submitFavorites = async (
-  slugs: string[],
+export const saveFavorites = async (
+  favorites: string[],
   discordToken: string
 ) => {
   return await fetch(`${apiUrl}/favorites`, {
@@ -73,7 +73,20 @@ export const submitFavorites = async (
       Authorization: `Bearer ${discordToken}`,
     },
     body: JSON.stringify({
-      favorites: slugs,
+      favorites,
+    }),
+  }).then(handleResponse);
+};
+
+export const submitVote = async (favorites: string[], discordToken: string) => {
+  return await fetch(`${apiUrl}/favorites`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({
+      favorites,
+      submitted: true,
     }),
   }).then(handleResponse);
 };

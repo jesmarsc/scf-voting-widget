@@ -9,7 +9,8 @@ import 'src/components/Ballot';
 import 'src/components/elements/VoteButton';
 import 'src/components/elements/DiscordButton';
 import 'src/components/DiscordCollector';
-import 'src/components/Admin';
+import 'src/components/Projects';
+import 'src/components/Panelists';
 
 if (process.env.NODE_ENV === 'development') {
   const { discordToken } = useAuth.getState();
