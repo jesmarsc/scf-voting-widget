@@ -3,17 +3,19 @@ import { forwardRef } from 'preact/compat';
 import { styled } from 'twin.macro';
 
 const StyledSpinnerAlt = styled('i')`
-  @keyframes spinneralt {
-    0% {
+  @keyframes spin {
+    from {
       transform: rotate(0deg);
     }
     to {
-      transform: rotate(359deg);
+      transform: rotate(360deg);
     }
   }
+
   & {
     transform: scale(var(--ggs, 1));
   }
+
   &,
   &::before {
     box-sizing: border-box;
@@ -22,11 +24,12 @@ const StyledSpinnerAlt = styled('i')`
     width: 1em;
     height: 1em;
   }
+
   &::before {
     content: '';
     position: absolute;
     border-radius: 100px;
-    animation: spinneralt 1s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+    animation: spin 1s linear infinite;
     border: 3px solid transparent;
     border-top-color: currentColor;
   }

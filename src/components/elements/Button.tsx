@@ -30,7 +30,7 @@ const Button = styled(
   'button',
   forwardRef
 )([
-  tw`flex items-center py-2 px-4 font-bold rounded border-none cursor-pointer tracking-wide transition-colors text-white shadow-purple bg-stellar-purple`,
+  tw`flex items-center justify-center py-2 px-4 font-bold rounded border-none cursor-pointer tracking-wide transition-all text-white shadow-purple bg-stellar-purple`,
   tw`disabled:(cursor-not-allowed)`,
   ({ danger }: Props) => (danger ? tw`shadow-salmon bg-stellar-salmon` : ''),
   ({ isLoading }: Props) => (isLoading ? tw`filter[grayscale(0.5)]` : ''),

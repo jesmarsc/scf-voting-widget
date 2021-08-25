@@ -11,7 +11,7 @@ const DiscordButton = () => {
 
   return (
     <Button
-      danger={discordToken}
+      danger={!!discordToken}
       onClick={discordToken ? clearAuth : openDiscordAuth}
     >
       {discordToken ? 'Logout' : 'Login'}
