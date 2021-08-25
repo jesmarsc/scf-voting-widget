@@ -1,8 +1,6 @@
 import create from 'zustand';
 import { arrayMove } from '@dnd-kit/sortable';
 
-import useAuth from 'src/stores/useAuth';
-
 type Project = {
   name: string;
   slug: string;
@@ -65,9 +63,9 @@ const useBallot = create<State>((set, get) => ({
 
   addFavoriteProject: (slug: string, name: string) => {
     set((state) => {
-      const { user, isFull, isFavorite } = state;
+      const { user, isFull, isFavorite, isApproved } = state;
       if (!user) return state;
-      if (isFull() || isFavorite(slug)) return state;
+      if (isFull() || isFavorite(slug) || !isApproved(slug)) return state;
 
       const project = { slug, name };
       const favoritesClone = [...user.favorites, project];
