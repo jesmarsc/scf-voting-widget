@@ -1,7 +1,11 @@
+import { unstable_batchedUpdates } from 'preact/compat';
 import create from 'zustand';
-import { arrayMove } from '@dnd-kit/sortable';
+import { arrayMove } from 'react-movable';
 
-type Project = {
+import useAuth from './useAuth';
+import { getUser } from 'src/utils/api';
+
+export type Project = {
   name: string;
   slug: string;
 };
@@ -22,13 +26,28 @@ export type State = {
   isExpanded: boolean;
   init: (user: User) => void;
   isFull: () => boolean;
+  isValid: () => boolean;
   isApproved: (slug: string) => boolean;
   isFavorite: (slug: string) => boolean;
   addFavoriteProject: (slug: string, name: string) => void;
   removeFavoriteProject: (slug: string) => void;
   moveFavoriteProject: (from: number, to: number) => void;
   addApprovedProject: (slug: string, name: string) => void;
-  removeProject: (slug: string) => void;
+  removeApprovedProject: (slug: string) => void;
+  setVoted: (voted: boolean) => void;
+};
+
+const removeProject = (projects: Project[], slug: string) => {
+  const clone = [...projects];
+
+  const isIncluded = clone.findIndex((project) => project.slug === slug);
+
+  if (isIncluded > -1) {
+    clone.splice(isIncluded, 1);
+    return clone;
+  }
+
+  return projects;
 };
 
 const useBallot = create<State>((set, get) => ({
@@ -43,6 +62,11 @@ const useBallot = create<State>((set, get) => ({
   isFull: () => {
     const { user } = get();
     return user ? user.favorites.length >= 3 : false;
+  },
+
+  isValid: () => {
+    const { user } = get();
+    return user ? user.favorites.length === 3 : false;
   },
 
   isFavorite: (slug: string) => {
@@ -82,19 +106,12 @@ const useBallot = create<State>((set, get) => ({
       const { user } = state;
       if (!user) return state;
 
-      const { favorites } = user;
+      const newFavorites = removeProject(user.favorites, slug);
 
-      const isFavorite = favorites.findIndex(
-        (project) => project.slug === slug
-      );
-
-      if (isFavorite > -1) {
-        const clone = [...favorites];
-        clone.splice(isFavorite, 1);
-        return { ...state, user: { ...user, favorites: clone } };
-      }
-
-      return state;
+      return {
+        ...state,
+        user: { ...user, favorites: newFavorites },
+      };
     });
   },
 
@@ -126,37 +143,49 @@ const useBallot = create<State>((set, get) => ({
     });
   },
 
-  removeProject: (slug: string) => {
+  removeApprovedProject: (slug: string) => {
+    const { removeFavoriteProject } = get();
+    removeFavoriteProject(slug);
+
     set((state) => {
       const { user } = state;
       if (!user) return state;
 
-      const { favorites, approved } = user;
-      const userClone = { ...user };
-
-      const searchCriteria = (project: { slug: string; name: string }) => {
-        return project.slug === slug;
+      return {
+        ...state,
+        user: { ...user, approved: removeProject(user.approved, slug) },
       };
+    });
+  },
 
-      const isFavorite = favorites.findIndex(searchCriteria);
+  setVoted: (voted) => {
+    set((state) => {
+      const { user } = state;
+      if (!user) return state;
 
-      if (isFavorite > -1) {
-        const clone = [...favorites];
-        clone.splice(isFavorite, 1);
-        userClone.favorites = clone;
-      }
-
-      const isApproved = approved.findIndex(searchCriteria);
-
-      if (isApproved > -1) {
-        const clone = [...approved];
-        clone.splice(isApproved, 1);
-        userClone.approved = clone;
-      }
-
-      return { ...state, user: userClone };
+      return {
+        ...state,
+        user: { ...user, voted },
+      };
     });
   },
 }));
+
+const { discordToken } = useAuth.getState();
+
+if (discordToken) {
+  getUser(discordToken)
+    .then((user) =>
+      unstable_batchedUpdates(() => {
+        useBallot.getState().init(user);
+      })
+    )
+    .catch((error) => {
+      /* TODO: HANDLE UNAUTHERIZED USER */
+      unstable_batchedUpdates(() => {
+        useAuth.getState().clearAuth();
+      });
+    });
+}
 
 export default useBallot;

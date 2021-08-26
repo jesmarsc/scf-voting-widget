@@ -31,9 +31,8 @@ const Button = styled(
   forwardRef
 )([
   tw`flex items-center justify-center py-2 px-4 font-bold rounded border-none cursor-pointer tracking-wide transition-all text-white shadow-purple bg-stellar-purple`,
-  tw`disabled:(cursor-not-allowed)`,
+  tw`disabled:(cursor-not-allowed filter[grayscale(0.5)])`,
   ({ danger }: Props) => (danger ? tw`shadow-salmon bg-stellar-salmon` : ''),
-  ({ isLoading }: Props) => (isLoading ? tw`filter[grayscale(0.5)]` : ''),
 ]);
 
 const Spinner = styled(SVGSpinner)(tw`mr-2`);

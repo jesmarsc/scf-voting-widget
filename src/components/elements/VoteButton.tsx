@@ -13,7 +13,8 @@ const ButtonWrapper = styled(Button)(tw`min-width[20ch]`);
 
 const VoteButton = ({ name, slug }: { name: string; slug: string }) => {
   const discordToken = useAuth((state) => state.discordToken);
-  const { user, isApproved, addApprovedProject, removeProject } = useBallot();
+  const { user, isApproved, addApprovedProject, removeApprovedProject } =
+    useBallot();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,7 +32,7 @@ const VoteButton = ({ name, slug }: { name: string; slug: string }) => {
   const handleRemoveProject = async () => {
     setIsLoading(true);
     unapproveProject(slug, discordToken)
-      .then(() => removeProject(slug))
+      .then(() => removeApprovedProject(slug))
       .finally(() => setIsLoading(false));
   };
 

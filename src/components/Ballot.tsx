@@ -1,5 +1,5 @@
-import { h } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { Fragment, h } from 'preact';
+import { useState } from 'preact/hooks';
 import { forwardRef, memo } from 'preact/compat';
 import define from 'preact-custom-element';
 
@@ -9,9 +9,9 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import tw, { styled } from 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
-import useBallot from 'src/stores/useBallot';
+import useBallot, { Project } from 'src/stores/useBallot';
 import Button from 'src/components/elements/Button';
-import { getUser, unapproveProject, saveFavorites } from 'src/utils/api';
+import { unapproveProject, saveFavorites, submitVote } from 'src/utils/api';
 import SVGCaretForward from 'src/assets/SVGCaretForward';
 import SVGSpinner from 'src/assets/SVGSpinner';
 
@@ -27,56 +27,63 @@ const ITEM_HEIGHT = 42;
 const Ballot = () => {
   const {
     user,
-    init,
     isFull,
+    isValid,
     isExpanded,
     isFavorite,
     addFavoriteProject,
     removeFavoriteProject,
     moveFavoriteProject,
-    removeProject,
+    removeApprovedProject,
+    setVoted,
   } = useBallot();
 
   const discordToken = useAuth((state) => state.discordToken);
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (discordToken) {
-      getUser(discordToken).then((user) => init(user));
-    }
-    return () => {};
-  }, [discordToken]);
 
   if (!user || !discordToken) return null;
 
-  const handleSubmit = async () => {
-    // const res = await submitFavorites(
-    //   favoriteProjects.map((project) => project.id)
-    // );
-  };
+  const { favorites, approved, voted } = user;
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    await saveFavorites(
+  const approvedFiltered = approved.filter(
+    (project) => !isFavorite(project.slug)
+  );
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    submitVote(
       favorites.map((project) => project.slug),
       discordToken
-    ).finally(() => setIsSaving(false));
+    )
+      .then(() => {
+        setVoted(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsConfirming(false);
+      });
+  };
+
+  const handleSave = async (projects: Project[] = favorites) => {
+    setIsLoading(true);
+    saveFavorites(
+      projects.map((project) => project.slug),
+      discordToken
+    )
+      .catch((error) => {
+        /* TODO: REVERT FAVORITES ON ERRORS */
+        console.log(error);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const handleRemove = async (slug: string) => {
     setIsLoading(true);
     unapproveProject(slug, discordToken)
-      .then(() => removeProject(slug))
+      .then(() => removeApprovedProject(slug))
       .finally(() => setIsLoading(false));
   };
-
-  const { favorites, approved } = user;
-
-  const approvedFiltered = approved.filter(
-    (project) => !isFavorite(project.slug)
-  );
 
   return (
     <BallotContainer>
@@ -90,33 +97,46 @@ const Ballot = () => {
       </BallotTitle>
 
       <BallotContent isExpanded={isExpanded}>
-        <LoadingOverlay isLoading={isLoading}>
-          <SVGSpinner />
-        </LoadingOverlay>
+        {!voted ? (
+          <Fragment>
+            {isFull() && (
+              <BallotSubtitle>Your favorites are full.</BallotSubtitle>
+            )}
 
-        {isFull() && <BallotSubtitle>Your favorites are full.</BallotSubtitle>}
-
-        <List
-          transitionDuration={100}
-          values={favorites}
-          onChange={({ oldIndex, newIndex }) =>
-            moveFavoriteProject(oldIndex, newIndex)
-          }
-          renderList={({ children, props }) => <div {...props}>{children}</div>}
-          renderItem={({ value: { slug, name }, props, index }) => {
-            return (
-              <ProjectItem key={slug} isFavorite {...props}>
-                <ProjectFavorite onClick={() => removeFavoriteProject(slug)}>
-                  ★
-                </ProjectFavorite>
+            <List
+              transitionDuration={100}
+              values={favorites}
+              onChange={({ oldIndex, newIndex }) => {
+                moveFavoriteProject(oldIndex, newIndex);
+                handleSave(useBallot.getState().user?.favorites);
+              }}
+              renderList={({ children, props }) => (
+                <div {...props}>{children}</div>
+              )}
+              renderItem={({ value: { slug, name }, props, index }) => (
+                <ProjectItem key={slug} isFavorite {...props}>
+                  <ProjectFavorite
+                    onClick={() => {
+                      removeFavoriteProject(slug);
+                      handleSave(useBallot.getState().user?.favorites);
+                    }}
+                  >
+                    ★
+                  </ProjectFavorite>
+                  <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
+                </ProjectItem>
+              )}
+            />
+          </Fragment>
+        ) : (
+          <div>
+            {favorites.map(({ slug, name }, index) => (
+              <ProjectItem key={slug} isFavorite>
                 <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
-                <ProjectDelete onClick={() => handleRemove(slug)}>
-                  x
-                </ProjectDelete>
               </ProjectItem>
-            );
-          }}
-        />
+            ))}
+          </div>
+        )}
 
         <ApprovedContainer>
           <AutoSizer disableWidth>
@@ -131,10 +151,13 @@ const Ballot = () => {
                 {memo(({ index, data, style }: any) => {
                   const { slug, name } = data[index];
 
-                  return (
+                  return !voted ? (
                     <ProjectItem key={slug} style={style}>
                       <ProjectFavorite
-                        onClick={() => addFavoriteProject(slug, name)}
+                        onClick={() => {
+                          addFavoriteProject(slug, name);
+                          handleSave(useBallot.getState().user?.favorites);
+                        }}
                       >
                         ☆
                       </ProjectFavorite>
@@ -143,6 +166,10 @@ const Ballot = () => {
                         x
                       </ProjectDelete>
                     </ProjectItem>
+                  ) : (
+                    <ProjectItem key={slug} style={style}>
+                      <ProjectName>{name}</ProjectName>
+                    </ProjectItem>
                   );
                 }, areEqual)}
               </FixedSizeList>
@@ -150,45 +177,42 @@ const Ballot = () => {
           </AutoSizer>
         </ApprovedContainer>
 
-        <Footer>
-          <BallotButton onClick={handleSave}>Save</BallotButton>
-          <BallotButton onClick={() => setIsConfirming(true)}>
-            Submit
-          </BallotButton>
-        </Footer>
-
-        {isConfirming && (
-          <Confirmation>
-            <div>
-              <p>
-                <strong>Are you sure?</strong>
-              </p>
-              <p>You will be unable to change your vote once submitted.</p>
-            </div>
-            <ButtonGroup>
-              <BallotButton onClick={handleSubmit}>Confirm</BallotButton>
-              <BallotButton danger onClick={() => setIsConfirming(false)}>
-                Cancel
+        {!voted && (
+          <Fragment>
+            <Footer>
+              <BallotButton
+                disabled={!isValid()}
+                title={!isValid() ? 'You need at least 3 favorites.' : ''}
+                onClick={() => setIsConfirming(true)}
+              >
+                Submit
               </BallotButton>
-            </ButtonGroup>
-          </Confirmation>
+            </Footer>
+
+            <LoadingOverlay isVisible={isLoading}>
+              <SVGSpinner />
+            </LoadingOverlay>
+
+            <ConfirmingOverlay isVisible={isConfirming}>
+              <div>
+                <p>
+                  <strong>Are you sure?</strong>
+                </p>
+                <p>You will be unable to change your vote once submitted.</p>
+              </div>
+              <ButtonGroup>
+                <BallotButton onClick={handleSubmit}>Confirm</BallotButton>
+                <BallotButton danger onClick={() => setIsConfirming(false)}>
+                  Cancel
+                </BallotButton>
+              </ButtonGroup>
+            </ConfirmingOverlay>
+          </Fragment>
         )}
       </BallotContent>
     </BallotContainer>
   );
 };
-
-const LoadingOverlay = styled('div')([
-  tw`absolute flex justify-center items-center text-center inset-0 bg-black bg-opacity-50 z-index[2000] text-white text-2xl transition-all opacity-0`,
-  ({ isLoading }: { isLoading: boolean }) =>
-    isLoading ? tw`opacity-100` : tw`invisible`,
-]);
-
-const Confirmation = styled('div')(
-  tw`absolute inset-0 flex flex-col p-4 items-center justify-center bg-gray-100 text-center`
-);
-
-const ButtonGroup = styled('div')(tw`flex mt-4 gap-2`);
 
 const BallotContainer = styled('div')([
   tw`fixed bottom-4 right-4 font-sans rounded-lg overflow-hidden shadow-lg border border-solid border-gray-200 bg-white z-index[1000]`,
@@ -242,8 +266,22 @@ const ProjectDelete = styled(ProjectButton)([
   tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-40) active:(bg-opacity-60)`,
 ]);
 
-const Footer = styled('div')([tw`flex p-2 justify-between`]);
-
 const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none`]);
+
+const Footer = styled('div')([tw`flex p-2 justify-end`]);
+
+const Overlay = styled('div')([
+  tw`absolute inset-0 p-4! flex flex-col justify-center items-center text-center transition-all opacity-0`,
+  ({ isVisible }: { isVisible: boolean }) =>
+    isVisible ? tw`opacity-100` : tw`invisible`,
+]);
+
+const LoadingOverlay = styled(Overlay)(
+  tw`text-white text-2xl bg-black bg-opacity-10`
+);
+
+const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);
+
+const ButtonGroup = styled('div')(tw`flex mt-4 gap-2`);
 
 define(Ballot, 'vote-ballot');
