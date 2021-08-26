@@ -3,12 +3,12 @@ import { h } from 'preact';
 const SVGArrowAlignV = (props: any) => {
   return (
     <svg
+      {...props}
       width="1em"
       height="1em"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
     >
       <path d="M7 11L7 13H17V11H7Z" fill="currentColor" />
       <path

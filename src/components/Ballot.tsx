@@ -131,6 +131,7 @@ const Ballot = () => {
               renderItem={({ value: { slug, name }, props, index }) => (
                 <ProjectItem key={slug} isFavorite {...props}>
                   <ProjectFavorite
+                    title="Unfavorite"
                     onClick={() => {
                       const rollback = favorites;
                       removeFavoriteProject(slug);
@@ -171,6 +172,7 @@ const Ballot = () => {
                   return !voted ? (
                     <ProjectItem key={slug} style={style}>
                       <ProjectFavorite
+                        title="Favorite"
                         onClick={() => {
                           const rollback = favorites;
                           addFavoriteProject(slug, name);
@@ -180,7 +182,10 @@ const Ballot = () => {
                         <SVGStarOutline />
                       </ProjectFavorite>
                       <ProjectName>{name}</ProjectName>
-                      <ProjectDelete onClick={() => handleRemove(slug)}>
+                      <ProjectDelete
+                        title="Remove"
+                        onClick={() => handleRemove(slug)}
+                      >
                         <SVGClose />
                       </ProjectDelete>
                     </ProjectItem>
