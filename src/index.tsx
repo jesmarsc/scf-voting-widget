@@ -11,6 +11,7 @@ import 'src/components/elements/DiscordButton';
 import 'src/components/DiscordCollector';
 import 'src/components/Projects';
 import 'src/components/Panelists';
+import 'src/components/ErrorBanner';
 
 if (process.env.NODE_ENV === 'development') {
   const { discordToken } = useAuth.getState();

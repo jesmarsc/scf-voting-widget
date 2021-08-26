@@ -86,7 +86,7 @@ export const submitVote = async (favorites: string[], discordToken: string) => {
     },
     body: JSON.stringify({
       favorites,
-      submitted: true,
+      submitting: true,
     }),
   }).then(handleResponse);
 };

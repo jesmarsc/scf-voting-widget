@@ -4,10 +4,13 @@ import { useMemo, useEffect, useState, useCallback } from 'preact/hooks';
 import { getPanelists } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import { ExpandableTable } from 'src/components/elements/ExpandableTable';
+import useBallot from 'src/stores/useBallot';
 
 function Panelists() {
   const discordToken = useAuth((state) => state.discordToken);
   const [panelistsData, setpanelistsData] = useState<any>();
+
+  const { user } = useBallot();
 
   const columns = useMemo(
     () => [
@@ -78,6 +81,8 @@ function Panelists() {
   }, []);
 
   return (
+    user &&
+    user.role === 'admin' &&
     panelistsData && (
       <ExpandableTable
         data={panelistsData}
