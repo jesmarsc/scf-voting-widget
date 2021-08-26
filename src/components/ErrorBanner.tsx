@@ -13,7 +13,7 @@ const ErrorBanner = () => {
   return (
     <Container danger>
       {error}
-      <CloseButton onClick={() => clearError()}>
+      <CloseButton title="Close" onClick={() => clearError()}>
         <SVGClose />
       </CloseButton>
     </Container>
