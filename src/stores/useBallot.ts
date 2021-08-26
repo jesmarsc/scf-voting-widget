@@ -19,6 +19,7 @@ export type User = {
   avatar: string;
   username: string;
   discriminator: string;
+  role: 'admin' | 'verified';
 };
 
 export type State = {
@@ -183,6 +184,11 @@ if (discordToken) {
     .catch((error) => {
       /* TODO: HANDLE UNAUTHERIZED USER */
       unstable_batchedUpdates(() => {
+        if (!error.message) {
+          useAuth.getState().setError('Something went wrong');
+        } else {
+          useAuth.getState().setError(error.message);
+        }
         useAuth.getState().clearAuth();
       });
     });

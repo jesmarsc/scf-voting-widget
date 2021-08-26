@@ -1,15 +1,10 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import define from 'preact-custom-element';
-import tw, { styled } from 'twin.macro';
-
+import { Container } from './elements/Container';
 import useAuth from 'src/stores/useAuth';
 
 type Status = 'valid' | 'invalid' | 'loading';
-
-const Container = styled('div')([
-  tw`block py-2 px-4 font-bold font-sans rounded border-none cursor-pointer tracking-wide transition-colors text-white shadow-purple bg-stellar-purple`,
-]);
 
 const DiscordCollector = () => {
   const [status, setStatus] = useState<Status>('loading');
