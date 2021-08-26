@@ -184,12 +184,12 @@ if (discordToken) {
     .catch((error) => {
       /* TODO: HANDLE UNAUTHERIZED USER */
       unstable_batchedUpdates(() => {
+        useAuth.getState().clearAuth();
         if (!error.message) {
           useAuth.getState().setError('Something went wrong');
         } else {
           useAuth.getState().setError(error.message);
         }
-        useAuth.getState().clearAuth();
       });
     });
 }
