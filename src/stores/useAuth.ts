@@ -13,6 +13,7 @@ const useAuth = create(
   persist<State>(
     (set) => ({
       discordToken: undefined,
+      error: undefined,
       setDiscordToken: (discordToken: string) => set({ discordToken }),
       setError: (error: string) => set({ error }),
       clearAuth: () => set({}, true),
