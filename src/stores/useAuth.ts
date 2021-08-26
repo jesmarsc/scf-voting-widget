@@ -16,7 +16,7 @@ const useAuth = create(
       error: undefined,
       setDiscordToken: (discordToken: string) => set({ discordToken }),
       setError: (error: string) => set({ error }),
-      clearAuth: () => set({}, true),
+      clearAuth: () => set(({ discordToken, error, ...restState }) => restState, true),
     }),
     { name: 'auth-store' }
   )
