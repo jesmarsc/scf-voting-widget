@@ -206,11 +206,6 @@ const Ballot = () => {
                 Submit
               </BallotButton>
             </Footer>
-
-            <LoadingOverlay isVisible={isLoading}>
-              <SVGSpinner />
-            </LoadingOverlay>
-
             <ConfirmingOverlay isVisible={isConfirming}>
               <div>
                 <p>
@@ -225,6 +220,9 @@ const Ballot = () => {
                 </BallotButton>
               </ButtonGroup>
             </ConfirmingOverlay>
+            <LoadingOverlay isVisible={isLoading}>
+              <SVGSpinner />
+            </LoadingOverlay>
           </Fragment>
         )}
       </BallotContent>
@@ -295,7 +293,7 @@ const Overlay = styled('div')([
 ]);
 
 const LoadingOverlay = styled(Overlay)(
-  tw`text-white text-2xl bg-black bg-opacity-10`
+  tw`text-white text-2xl bg-black bg-opacity-10 z-index[2000]`
 );
 
 const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);
