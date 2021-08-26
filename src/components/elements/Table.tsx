@@ -8,6 +8,10 @@ const TableContainer = styled('table')([
   tw`border-2 border-black border-solid border-spacing[0]`,
 ]);
 
+const HeaderCell = styled('div')([tw`flex justify-center items-center p-2`]);
+
+const SpanIcon = styled('span')([tw`mr-2`]);
+
 const TrContainer = styled('tr')([tw`last:border-bottom[0]`]);
 
 const ThContainer = styled('th')([
@@ -15,7 +19,7 @@ const ThContainer = styled('th')([
 ]);
 
 const TdContainer = styled('td')([
-  tw`p-1 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-2 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
 ]);
 
 export default function TableWrap({ columns, data }: any) {
@@ -32,23 +36,23 @@ export default function TableWrap({ columns, data }: any) {
     <Wrap>
       <TableContainer {...getTableProps()}>
         <thead>
-          {headerGroups.map((headerGroup) => (
+          {headerGroups.map((headerGroup,i) => (
             <TrContainer {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column: any) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
                 <ThContainer
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                >
-                  {column.render('Header')}
-                  {/* Add a sort direction indicator */}
-                  <span>
+                > <HeaderCell>
+                   {i!==0 && <SpanIcon>
                     {column.isSorted
                       ? column.isSortedDesc
-                        ? ' 🔽'
-                        : ' 🔼'
-                      : ''}
-                  </span>
+                        ? '👇 '
+                        : '👆 '
+                      : '👉 '}
+                  </SpanIcon>}
+                  {column.render('Header')}
+                  </HeaderCell>
                 </ThContainer>
               ))}
             </TrContainer>

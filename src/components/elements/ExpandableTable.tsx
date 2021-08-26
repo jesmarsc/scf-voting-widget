@@ -11,11 +11,11 @@ const TableContainer = styled('table')([
 const TrContainer = styled('tr')([tw`last:border-bottom[0]`]);
 
 const ThContainer = styled('th')([
-  tw`p-1 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-2 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
 ]);
 
 const TdContainer = styled('td')([
-  tw`p-1 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-2 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
 ]);
 
 interface CustomRow extends Row {
