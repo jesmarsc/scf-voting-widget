@@ -1,8 +1,9 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import define from 'preact-custom-element';
-import { Container } from './elements/Container';
+
 import useAuth from 'src/stores/useAuth';
+import Container from 'src/components/elements/Container';
 
 type Status = 'valid' | 'invalid' | 'loading';
 
@@ -32,7 +33,7 @@ const DiscordCollector = () => {
   }, []);
 
   return (
-    <Container>
+    <Container danger={status === 'invalid'}>
       {
         {
           loading: 'Loading...',

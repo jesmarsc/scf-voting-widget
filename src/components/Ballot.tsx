@@ -1,6 +1,6 @@
 import { Fragment, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { forwardRef, memo, unstable_batchedUpdates } from 'preact/compat';
+import { forwardRef, memo } from 'preact/compat';
 import define from 'preact-custom-element';
 
 import { List } from 'react-movable';
@@ -117,10 +117,9 @@ const Ballot = () => {
               transitionDuration={100}
               values={favorites}
               onChange={({ oldIndex, newIndex }) => {
-                unstable_batchedUpdates(() => {
-                  moveFavoriteProject(oldIndex, newIndex);
-                  handleSave(favorites);
-                });
+                const rollback = favorites;
+                moveFavoriteProject(oldIndex, newIndex);
+                handleSave(rollback);
               }}
               renderList={({ children, props }) => (
                 <div {...props}>{children}</div>
@@ -129,8 +128,9 @@ const Ballot = () => {
                 <ProjectItem key={slug} isFavorite {...props}>
                   <ProjectFavorite
                     onClick={() => {
+                      const rollback = favorites;
                       removeFavoriteProject(slug);
-                      handleSave(favorites);
+                      handleSave(rollback);
                     }}
                   >
                     ★
@@ -168,8 +168,9 @@ const Ballot = () => {
                     <ProjectItem key={slug} style={style}>
                       <ProjectFavorite
                         onClick={() => {
+                          const rollback = favorites;
                           addFavoriteProject(slug, name);
-                          handleSave(favorites);
+                          handleSave(rollback);
                         }}
                       >
                         ☆
