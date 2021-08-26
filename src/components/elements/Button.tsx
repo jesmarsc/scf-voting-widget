@@ -1,5 +1,5 @@
-import { h, FunctionComponent, VNode } from 'preact';
-import React, { forwardRef } from 'preact/compat';
+import { h } from 'preact';
+import { forwardRef } from 'preact/compat';
 import tw, { styled } from 'twin.macro';
 
 import SVGSpinner from 'src/assets/SVGSpinner';
@@ -14,12 +14,7 @@ const SCFButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const { isLoading, loadingText, disabled, ...restProps } = props;
 
   return (
-    <Button
-      {...restProps}
-      disabled={disabled || isLoading}
-      isLoading={isLoading}
-      ref={ref}
-    >
+    <Button {...restProps} disabled={disabled || isLoading} ref={ref}>
       {isLoading && <Spinner />}
       {isLoading && loadingText ? loadingText : props.children}
     </Button>

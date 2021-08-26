@@ -1,6 +1,6 @@
 import { Fragment, h } from 'preact';
 import { useState } from 'preact/hooks';
-import { forwardRef, memo } from 'preact/compat';
+import { forwardRef, memo, unstable_batchedUpdates } from 'preact/compat';
 import define from 'preact-custom-element';
 
 import { List } from 'react-movable';
@@ -14,6 +14,7 @@ import Button from 'src/components/elements/Button';
 import { unapproveProject, saveFavorites, submitVote } from 'src/utils/api';
 import SVGCaretForward from 'src/assets/SVGCaretForward';
 import SVGSpinner from 'src/assets/SVGSpinner';
+import SVGArrowAlignV from 'src/assets/SVGArrowAlignV';
 
 const randomData = () => {
   return Array.from({ length: 100 }, () => ({
@@ -50,10 +51,13 @@ const Ballot = () => {
     (project) => !isFavorite(project.slug)
   );
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
+    const { user } = useBallot.getState();
+    if (!user) return;
+
     setIsLoading(true);
     submitVote(
-      favorites.map((project) => project.slug),
+      user.favorites.map((project) => project.slug),
       discordToken
     )
       .then(() => {
@@ -65,20 +69,26 @@ const Ballot = () => {
       });
   };
 
-  const handleSave = async (projects: Project[] = favorites) => {
+  const handleSave = (rollback: Project[]) => {
+    const { user } = useBallot.getState();
+    if (!user || user.favorites === rollback) return;
+
     setIsLoading(true);
     saveFavorites(
-      projects.map((project) => project.slug),
+      user.favorites.map((project) => project.slug),
       discordToken
     )
-      .catch((error) => {
-        /* TODO: REVERT FAVORITES ON ERRORS */
-        console.log(error);
+      .catch(() => {
+        useBallot.setState((state) => {
+          const { user } = state;
+          if (!user) return state;
+          return { ...state, user: { ...user, favorites: rollback } };
+        });
       })
       .finally(() => setIsLoading(false));
   };
 
-  const handleRemove = async (slug: string) => {
+  const handleRemove = (slug: string) => {
     setIsLoading(true);
     unapproveProject(slug, discordToken)
       .then(() => removeApprovedProject(slug))
@@ -107,8 +117,10 @@ const Ballot = () => {
               transitionDuration={100}
               values={favorites}
               onChange={({ oldIndex, newIndex }) => {
-                moveFavoriteProject(oldIndex, newIndex);
-                handleSave(useBallot.getState().user?.favorites);
+                unstable_batchedUpdates(() => {
+                  moveFavoriteProject(oldIndex, newIndex);
+                  handleSave(favorites);
+                });
               }}
               renderList={({ children, props }) => (
                 <div {...props}>{children}</div>
@@ -118,12 +130,13 @@ const Ballot = () => {
                   <ProjectFavorite
                     onClick={() => {
                       removeFavoriteProject(slug);
-                      handleSave(useBallot.getState().user?.favorites);
+                      handleSave(favorites);
                     }}
                   >
                     ★
                   </ProjectFavorite>
                   <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
+                  <SVGArrowAlignV />
                 </ProjectItem>
               )}
             />
@@ -156,7 +169,7 @@ const Ballot = () => {
                       <ProjectFavorite
                         onClick={() => {
                           addFavoriteProject(slug, name);
-                          handleSave(useBallot.getState().user?.favorites);
+                          handleSave(favorites);
                         }}
                       >
                         ☆
@@ -243,7 +256,7 @@ const ProjectItem = styled(
   'div',
   forwardRef
 )([
-  tw`flex items-center p-2 font-sans z-index[1010]`,
+  tw`flex items-center p-2 font-sans z-index[1010] svg:(text-xl)`,
   ({ isFavorite }: { isFavorite?: boolean }) =>
     isFavorite
       ? tw`m-2! rounded cursor-pointer bg-stellar-purple all-child:(text-white)`
