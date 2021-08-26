@@ -2,7 +2,8 @@ import { unstable_batchedUpdates } from 'preact/compat';
 import create from 'zustand';
 import { arrayMove } from 'react-movable';
 
-import useAuth from './useAuth';
+import useAuth from 'src/stores/useAuth';
+import useError from 'src/stores/useError';
 import { getUser } from 'src/utils/api';
 
 export type Project = {
@@ -186,9 +187,9 @@ if (discordToken) {
       unstable_batchedUpdates(() => {
         useAuth.getState().clearAuth();
         if (!error.message) {
-          useAuth.getState().setError('Something went wrong');
+          useError.getState().setError('Something went wrong');
         } else {
-          useAuth.getState().setError(error.message);
+          useError.getState().setError(error.message);
         }
       });
     });

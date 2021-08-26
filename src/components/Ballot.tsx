@@ -12,9 +12,13 @@ import useAuth from 'src/stores/useAuth';
 import useBallot, { Project } from 'src/stores/useBallot';
 import Button from 'src/components/elements/Button';
 import { unapproveProject, saveFavorites, submitVote } from 'src/utils/api';
+
 import SVGCaretForward from 'src/assets/SVGCaretForward';
 import SVGSpinner from 'src/assets/SVGSpinner';
 import SVGArrowAlignV from 'src/assets/SVGArrowAlignV';
+import SVGClose from 'src/assets/SVGClose';
+import SVGStar from 'src/assets/SVGStar';
+import SVGStarOutline from 'src/assets/SVGStarOutline';
 
 const randomData = () => {
   return Array.from({ length: 100 }, () => ({
@@ -133,7 +137,7 @@ const Ballot = () => {
                       handleSave(rollback);
                     }}
                   >
-                    ★
+                    <SVGStar />
                   </ProjectFavorite>
                   <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
                   <SVGArrowAlignV />
@@ -173,11 +177,11 @@ const Ballot = () => {
                           handleSave(rollback);
                         }}
                       >
-                        ☆
+                        <SVGStarOutline />
                       </ProjectFavorite>
                       <ProjectName>{name}</ProjectName>
                       <ProjectDelete onClick={() => handleRemove(slug)}>
-                        x
+                        <SVGClose />
                       </ProjectDelete>
                     </ProjectItem>
                   ) : (
@@ -257,7 +261,7 @@ const ProjectItem = styled(
   'div',
   forwardRef
 )([
-  tw`flex items-center p-2 font-sans z-index[1010] svg:(text-xl)`,
+  tw`flex items-center p-2 font-sans z-index[1010] svg:(text-xl fill-current)`,
   ({ isFavorite }: { isFavorite?: boolean }) =>
     isFavorite
       ? tw`m-2! rounded cursor-pointer bg-stellar-purple all-child:(text-white)`
@@ -270,14 +274,14 @@ const ProjectName = styled('span')([
 ]);
 
 const ProjectButton = styled('button')([
-  tw`flex items-center justify-center border-none cursor-pointer rounded text-base`,
+  tw`flex items-center justify-center border-none cursor-pointer rounded svg:(text-base!)`,
   tw`m-0! p-0! leading-none! w-5 h-5 bg-transparent`,
 ]);
 
 const ProjectFavorite = ProjectButton;
 
 const ProjectDelete = styled(ProjectButton)([
-  tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-40) active:(bg-opacity-60)`,
+  tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-20) active:(bg-opacity-30)`,
 ]);
 
 const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none`]);
