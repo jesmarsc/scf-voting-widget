@@ -7,13 +7,13 @@ import useError from 'src/stores/useError';
 import SVGClose from 'src/assets/SVGClose';
 
 const ErrorBanner = () => {
-  const { error, clearError } = useError();
-
+  const { error, cleanupError } = useError();
   if (!error) return null;
+
   return (
     <Container danger>
       {error}
-      <CloseButton title="Close" onClick={() => clearError()}>
+      <CloseButton title="Close" onClick={() => cleanupError()}>
         <SVGClose />
       </CloseButton>
     </Container>

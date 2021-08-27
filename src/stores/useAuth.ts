@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 type State = {
   discordToken?: string;
   setDiscordToken: (discordToken: string) => void;
-  clearAuth: () => void;
+  cleanupAuth: () => void;
 };
 
 const useAuth = create(
@@ -12,7 +12,8 @@ const useAuth = create(
     (set) => ({
       discordToken: undefined,
       setDiscordToken: (discordToken: string) => set({ discordToken }),
-      clearAuth: () => set(({ discordToken, ...restState }) => restState, true),
+      cleanupAuth: () =>
+        set(({ discordToken, ...restState }) => restState, true),
     }),
     { name: 'auth-store' }
   )

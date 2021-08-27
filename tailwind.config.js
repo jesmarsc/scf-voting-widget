@@ -2,7 +2,6 @@ const colors = require('tailwindcss/colors');
 
 module.exports = {
   purge: [],
-  presets: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
     screens: {
@@ -29,6 +28,7 @@ module.exports = {
       stellar: {
         purple: '#3e1bdb',
         salmon: '#ff434b',
+        green: '#009159',
       },
     },
     spacing: {
@@ -176,6 +176,7 @@ module.exports = {
       none: 'none',
       purple: `0px 8px 16px -8px ${theme('colors.stellar.purple')}`,
       salmon: `0px 8px 16px -8px ${theme('colors.stellar.salmon')}`,
+      green: `0px 8px 16px -8px ${theme('colors.stellar.green')}`,
     }),
     caretColor: (theme) => theme('colors'),
     contrast: {
