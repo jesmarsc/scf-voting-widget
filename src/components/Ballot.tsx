@@ -113,8 +113,12 @@ const Ballot = () => {
       <BallotContent isExpanded={isExpanded}>
         {!voted ? (
           <Fragment>
-            {isFull() && (
+            {isFull() ? (
               <BallotSubtitle>Your favorites are full.</BallotSubtitle>
+            ) : (
+              <BallotSubtitle danger>
+                You need at least 3 favorites.
+              </BallotSubtitle>
             )}
 
             <List
@@ -205,7 +209,9 @@ const Ballot = () => {
             <Footer>
               <BallotButton
                 disabled={!isValid()}
-                title={!isValid() ? 'You need at least 3 favorites.' : ''}
+                title={
+                  !isValid() ? 'You need at least 3 favorites.' : undefined
+                }
                 onClick={() => setIsConfirming(true)}
               >
                 Submit
@@ -245,7 +251,10 @@ const BallotTitle = styled('h3')([
   tw`flex items-center text-2xl p-2 font-bold tracking-tight cursor-pointer`,
 ]);
 
-const BallotSubtitle = styled('p')([tw`bg-red-100 py-1 px-4`]);
+const BallotSubtitle = styled('p')([
+  tw`bg-green-100 py-1 px-4`,
+  ({ danger }: { danger?: boolean }) => (danger ? tw`bg-red-100` : ''),
+]);
 
 const BallotCaret = styled(SVGCaretForward)<{ isExpanded?: boolean }>([
   tw`transition-transform mt-1 mr-2`,
