@@ -6,7 +6,7 @@ import define from 'preact-custom-element';
 import { List } from 'react-movable';
 import { FixedSizeList, areEqual } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import tw, { styled } from 'twin.macro';
+import tw, { styled, theme } from 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
 import useBallot, { Project } from 'src/stores/useBallot';
@@ -219,7 +219,10 @@ const Ballot = () => {
               </div>
               <ButtonGroup>
                 <BallotButton onClick={handleSubmit}>Confirm</BallotButton>
-                <BallotButton danger onClick={() => setIsConfirming(false)}>
+                <BallotButton
+                  color={theme`colors.stellar.salmon`}
+                  onClick={() => setIsConfirming(false)}
+                >
                   Cancel
                 </BallotButton>
               </ButtonGroup>
