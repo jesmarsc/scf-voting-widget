@@ -22,7 +22,17 @@ import SVGStarOutline from 'src/assets/SVGStarOutline';
 
 const ITEM_HEIGHT = 42;
 
-const Ballot = () => {
+type Props = {
+  ballotTitle: string;
+  warningText: string;
+  successText: string;
+};
+
+const Ballot = ({
+  ballotTitle = 'Your Ballot',
+  warningText = 'You need to star at least 3 favorites.',
+  successText = 'Your favorites are full.',
+}: Props) => {
   const {
     user,
     isFull,
@@ -100,18 +110,16 @@ const Ballot = () => {
         }
       >
         <BallotCaret isExpanded={isExpanded} />
-        <span>Your Ballot</span>
+        <span>{ballotTitle}</span>
       </BallotTitle>
 
       <BallotContent isExpanded={isExpanded}>
         {!voted ? (
           <Fragment>
             {isFull() ? (
-              <BallotSubtitle>Your favorites are full.</BallotSubtitle>
+              <BallotSubtitle>{successText}</BallotSubtitle>
             ) : (
-              <BallotSubtitle danger>
-                You need at least 3 favorites.
-              </BallotSubtitle>
+              <BallotSubtitle danger>{warningText}</BallotSubtitle>
             )}
 
             <List
