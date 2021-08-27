@@ -1,6 +1,7 @@
 import { unstable_batchedUpdates } from 'preact/compat';
 import create from 'zustand';
 import { arrayMove } from 'react-movable';
+import { persist } from 'zustand/middleware';
 
 import useAuth from 'src/stores/useAuth';
 import useError from 'src/stores/useError';
@@ -27,6 +28,7 @@ export type State = {
   user?: User;
   isExpanded: boolean;
   init: (user: User) => void;
+  cleanupBallot: () => void;
   isFull: () => boolean;
   isValid: () => boolean;
   isApproved: (slug: string) => boolean;
@@ -52,126 +54,134 @@ const removeProject = (projects: Project[], slug: string) => {
   return projects;
 };
 
-const useBallot = create<State>((set, get) => ({
-  user: undefined,
-  isExpanded: true,
+const useBallot = create(
+  persist<State>(
+    (set, get) => ({
+      user: undefined,
+      isExpanded: false,
 
-  init: (user: User) => {
-    user.approved.sort((a, b) => a.name.localeCompare(b.name));
-    set({ user });
-  },
+      init: (user: User) => {
+        user.approved.sort((a, b) => a.name.localeCompare(b.name));
+        set({ user });
+      },
 
-  isFull: () => {
-    const { user } = get();
-    return user ? user.favorites.length >= 3 : false;
-  },
+      cleanupBallot: () =>
+        set(({ user, isExpanded, ...restState }) => restState, true),
 
-  isValid: () => {
-    const { user } = get();
-    return user ? user.favorites.length === 3 : false;
-  },
+      isFull: () => {
+        const { user } = get();
+        return user ? user.favorites.length >= 3 : false;
+      },
 
-  isFavorite: (slug: string) => {
-    const { user } = get();
-    return user
-      ? user.favorites.some((project) => project.slug === slug)
-      : false;
-  },
+      isValid: () => {
+        const { user } = get();
+        return user ? user.favorites.length === 3 : false;
+      },
 
-  isApproved: (slug: string) => {
-    const { user } = get();
-    return user
-      ? [...user.favorites, ...user.approved].some(
-          (project) => project.slug === slug
-        )
-      : false;
-  },
+      isFavorite: (slug: string) => {
+        const { user } = get();
+        return user
+          ? user.favorites.some((project) => project.slug === slug)
+          : false;
+      },
 
-  addFavoriteProject: (slug: string, name: string) => {
-    set((state) => {
-      const { user, isFull, isFavorite, isApproved } = state;
-      if (!user) return state;
-      if (isFull() || isFavorite(slug) || !isApproved(slug)) return state;
+      isApproved: (slug: string) => {
+        const { user } = get();
+        return user
+          ? [...user.favorites, ...user.approved].some(
+              (project) => project.slug === slug
+            )
+          : false;
+      },
 
-      const project = { slug, name };
-      const favoritesClone = [...user.favorites, project];
+      addFavoriteProject: (slug: string, name: string) => {
+        set((state) => {
+          const { user, isFull, isFavorite, isApproved } = state;
+          if (!user) return state;
+          if (isFull() || isFavorite(slug) || !isApproved(slug)) return state;
 
-      return {
-        ...state,
-        user: { ...user, favorites: favoritesClone },
-      };
-    });
-  },
+          const project = { slug, name };
+          const favoritesClone = [...user.favorites, project];
 
-  removeFavoriteProject: (slug: string) => {
-    set((state) => {
-      const { user } = state;
-      if (!user) return state;
+          return {
+            ...state,
+            user: { ...user, favorites: favoritesClone },
+          };
+        });
+      },
 
-      const newFavorites = removeProject(user.favorites, slug);
+      removeFavoriteProject: (slug: string) => {
+        set((state) => {
+          const { user } = state;
+          if (!user) return state;
 
-      return {
-        ...state,
-        user: { ...user, favorites: newFavorites },
-      };
-    });
-  },
+          const newFavorites = removeProject(user.favorites, slug);
 
-  moveFavoriteProject: (from: number, to: number) => {
-    set((state) => {
-      const { user } = state;
-      if (!user) return state;
+          return {
+            ...state,
+            user: { ...user, favorites: newFavorites },
+          };
+        });
+      },
 
-      return {
-        ...state,
-        user: {
-          ...user,
-          favorites: arrayMove(user.favorites, from, to),
-        },
-      };
-    });
-  },
+      moveFavoriteProject: (from: number, to: number) => {
+        set((state) => {
+          const { user } = state;
+          if (!user) return state;
 
-  addApprovedProject: (slug: string, name: string) => {
-    set((state) => {
-      const { user, isApproved } = state;
-      if (isApproved(slug) || !user) return state;
+          return {
+            ...state,
+            user: {
+              ...user,
+              favorites: arrayMove(user.favorites, from, to),
+            },
+          };
+        });
+      },
 
-      const project = { slug, name };
-      const approvedClone = [...user.approved, project];
-      approvedClone.sort((a, b) => a.name.localeCompare(b.name));
+      addApprovedProject: (slug: string, name: string) => {
+        set((state) => {
+          const { user, isApproved } = state;
+          if (isApproved(slug) || !user) return state;
 
-      return { ...state, user: { ...user, approved: approvedClone } };
-    });
-  },
+          const project = { slug, name };
+          const approvedClone = [...user.approved, project];
+          approvedClone.sort((a, b) => a.name.localeCompare(b.name));
 
-  removeApprovedProject: (slug: string) => {
-    const { removeFavoriteProject } = get();
-    removeFavoriteProject(slug);
+          return { ...state, user: { ...user, approved: approvedClone } };
+        });
+      },
 
-    set((state) => {
-      const { user } = state;
-      if (!user) return state;
+      removeApprovedProject: (slug: string) => {
+        const { removeFavoriteProject } = get();
+        removeFavoriteProject(slug);
 
-      return {
-        ...state,
-        user: { ...user, approved: removeProject(user.approved, slug) },
-      };
-    });
-  },
+        set((state) => {
+          const { user } = state;
+          if (!user) return state;
 
-  setVoted: (voted) => {
-    set((state) => {
-      const { user } = state;
-      if (!user) return state;
+          return {
+            ...state,
+            user: { ...user, approved: removeProject(user.approved, slug) },
+          };
+        });
+      },
 
-      return {
-        ...state,
-        user: { ...user, voted },
-      };
-    });
-  },
-}));
+      setVoted: (voted) => {
+        set((state) => {
+          const { user } = state;
+          if (!user) return state;
+
+          return {
+            ...state,
+            user: { ...user, voted },
+          };
+        });
+      },
+    }),
+    { name: 'ballot-store' }
+  )
+);
 
 const { discordToken } = useAuth.getState();
 
@@ -185,7 +195,7 @@ if (discordToken) {
     .catch((error) => {
       /* TODO: HANDLE UNAUTHERIZED USER */
       unstable_batchedUpdates(() => {
-        useAuth.getState().clearAuth();
+        useAuth.getState().cleanupAuth();
         if (!error.message) {
           useError.getState().setError('Something went wrong');
         } else {

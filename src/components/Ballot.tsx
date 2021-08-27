@@ -20,13 +20,6 @@ import SVGClose from 'src/assets/SVGClose';
 import SVGStar from 'src/assets/SVGStar';
 import SVGStarOutline from 'src/assets/SVGStarOutline';
 
-const randomData = () => {
-  return Array.from({ length: 100 }, () => ({
-    id: Math.random().toString(36).substr(2),
-    name: Math.random().toString(36).substr(2),
-  }));
-};
-
 const ITEM_HEIGHT = 42;
 
 const Ballot = () => {
@@ -282,7 +275,6 @@ const ProjectItem = styled(
 
 const ProjectName = styled('span')([
   tw`flex-1 whitespace-nowrap overflow-hidden overflow-ellipsis mx-2`,
-  // tw`relative after:(content absolute top-0 right-0 w-1/4 h-full pointer-events-none bg-gradient-to-l from-stellar-purple to-transparent)`,
 ]);
 
 const ProjectButton = styled('button')([
