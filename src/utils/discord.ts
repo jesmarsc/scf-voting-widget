@@ -4,7 +4,7 @@ export const redirectUrl =
     ? window.location.origin
     : `${window.location.origin}/auth`;
 
-export const discordAuthUrl = `${discordApiUrl}/oauth2/authorize?client_id=876286801944387605&redirect_uri=${encodeURIComponent(
+export const discordAuthUrl = `${discordApiUrl}/oauth2/authorize?client_id=917408694822658160&redirect_uri=${encodeURIComponent(
   redirectUrl
 )}&response_type=token&scope=identify%20email%20connections`;
 
