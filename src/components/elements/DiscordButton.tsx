@@ -1,5 +1,4 @@
 import { h } from 'preact';
-import define from 'preact-custom-element';
 import { theme } from 'twin.macro';
 
 import { openDiscordAuth } from 'src/utils/discord';
@@ -36,4 +35,4 @@ const DiscordButton = ({
   );
 };
 
-define(DiscordButton, 'discord-button');
+export default DiscordButton;

@@ -71,6 +71,7 @@ const Ballot = ({
     )
       .then(() => {
         setVoted(true);
+        window.open(routes.AIRTABLE, '__blank');
       })
       .finally(() => {
         setIsLoading(false);
@@ -244,9 +245,13 @@ const Ballot = ({
           </Fragment>
         ) : (
           <Footer>
-            <FooterLink href={routes.AIRTABLE} target="__blank">
+            <a
+              tw="flex gap-1 items-end justify-center font-semibold"
+              href={routes.AIRTABLE}
+              target="__blank"
+            >
               <SVGLinkOutline /> Submit project feedback.
-            </FooterLink>
+            </a>
           </Footer>
         )}
       </BallotContent>
@@ -312,8 +317,6 @@ const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none ml-auto`]);
 
 const Footer = styled('div')([tw`p-2`]);
 
-const FooterLink = styled('a')(tw`flex items-end gap-1`);
-
 const Overlay = styled('div')([
   tw`absolute inset-0 p-4! flex flex-col justify-center items-center text-center transition-all opacity-0`,
   ({ isVisible }: { isVisible: boolean }) =>
@@ -328,4 +331,4 @@ const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);
 
 const ButtonGroup = styled('div')(tw`flex mt-4 gap-2`);
 
-define(Ballot, 'vote-ballot');
+export default Ballot;
