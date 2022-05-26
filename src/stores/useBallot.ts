@@ -7,23 +7,6 @@ import useAuth from 'src/stores/useAuth';
 import useError from 'src/stores/useError';
 import { getUser } from 'src/utils/api';
 
-export type Project = {
-  name: string;
-  slug: string;
-};
-
-export type User = {
-  id: string;
-  email: string;
-  voted: boolean;
-  favorites: Project[];
-  approved: Project[];
-  avatar: string;
-  username: string;
-  discriminator: string;
-  role: 'admin' | 'verified';
-};
-
 export type State = {
   user?: User;
   isExpanded: boolean;

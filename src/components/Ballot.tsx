@@ -9,9 +9,10 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import tw, { styled, theme } from 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
-import useBallot, { Project } from 'src/stores/useBallot';
+import useBallot from 'src/stores/useBallot';
 import Button from 'src/components/elements/Button';
 import { unapproveProject, saveFavorites, submitVote } from 'src/utils/api';
+import { routes } from 'src/constants/routes';
 
 import SVGCaretForward from 'src/assets/SVGCaretForward';
 import SVGSpinner from 'src/assets/SVGSpinner';
@@ -19,6 +20,7 @@ import SVGArrowAlignV from 'src/assets/SVGArrowAlignV';
 import SVGClose from 'src/assets/SVGClose';
 import SVGStar from 'src/assets/SVGStar';
 import SVGStarOutline from 'src/assets/SVGStarOutline';
+import SVGLinkOutline from 'src/assets/SVGLinkOutline';
 
 const ITEM_HEIGHT = 42;
 
@@ -205,7 +207,7 @@ const Ballot = ({
           </AutoSizer>
         </ApprovedContainer>
 
-        {!voted && (
+        {!voted ? (
           <Fragment>
             <Footer>
               <BallotButton
@@ -218,6 +220,7 @@ const Ballot = ({
                 Submit
               </BallotButton>
             </Footer>
+
             <ConfirmingOverlay isVisible={isConfirming}>
               <div>
                 <p>
@@ -239,6 +242,12 @@ const Ballot = ({
               <SVGSpinner />
             </LoadingOverlay>
           </Fragment>
+        ) : (
+          <Footer>
+            <FooterLink href={routes.AIRTABLE} target="__blank">
+              <SVGLinkOutline /> Submit project feedback.
+            </FooterLink>
+          </Footer>
         )}
       </BallotContent>
     </BallotContainer>
@@ -299,9 +308,11 @@ const ProjectDelete = styled(ProjectButton)([
   tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-20) active:(bg-opacity-30)`,
 ]);
 
-const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none`]);
+const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none ml-auto`]);
 
-const Footer = styled('div')([tw`flex p-2 justify-end`]);
+const Footer = styled('div')([tw`p-2`]);
+
+const FooterLink = styled('a')(tw`flex items-end gap-1`);
 
 const Overlay = styled('div')([
   tw`absolute inset-0 p-4! flex flex-col justify-center items-center text-center transition-all opacity-0`,

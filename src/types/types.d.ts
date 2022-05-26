@@ -1,26 +1,16 @@
-import { styled as styledImport, css as cssImport } from 'goober';
+type User = {
+  id: string;
+  email: string;
+  voted: boolean;
+  favorites: Project[];
+  approved: Project[];
+  avatar: string;
+  username: string;
+  discriminator: string;
+  role: 'admin' | 'verified';
+};
 
-declare module 'twin.macro' {
-  // The styled and css imports
-  const styled: typeof styledImport;
-  const css: typeof cssImport;
-}
-
-declare module 'preact' {
-  namespace JSX {
-    interface HTMLAttributes {
-      tw?: string;
-      css?: CSSProp;
-    }
-
-    interface IntrinsicAttributes {
-      tw?: string;
-      css?: CSSProp;
-    }
-  }
-}
-
-declare module '*.css' {
-  const mapping: Record<string, string>;
-  export default mapping;
-}
+type Project = {
+  name: string;
+  slug: string;
+};
