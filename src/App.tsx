@@ -1,4 +1,9 @@
 import { h } from 'preact';
+import { useEffect, useState } from 'preact/hooks';
+import 'twin.macro';
+
+import { getProjects } from './utils/api';
+import useAuth from './stores/useAuth';
 
 import VoteButton from './components/elements/VoteButton';
 import DiscordButton from 'src/components/elements/DiscordButton';
@@ -11,7 +16,35 @@ import ErrorBanner from 'src/components/ErrorBanner';
 /* Used strictly to test all components locally */
 
 const App = () => {
-  return <div>App</div>;
+  const [projects, setProjects] = useState<any[]>([]);
+  const { discordToken } = useAuth.getState();
+
+  useEffect(() => {
+    if (discordToken) {
+      getProjects(discordToken).then(({ projects }) => setProjects(projects));
+    }
+  }, []);
+
+  return (
+    <div tw="space-y-8">
+      <div tw="space-y-4">
+        <ErrorBanner />
+        <DiscordCollector />
+        <DiscordButton />
+      </div>
+
+      <div tw="grid gap-2 grid-template-columns[repeat(auto-fit, minmax(25ch, 1fr))]">
+        {projects.map((project, index) => (
+          <div key={index}>
+            <p>{project.name.substring(0, 20)}</p>
+            <VoteButton name={project.name} slug={project.slug} />
+          </div>
+        ))}
+      </div>
+
+      <Ballot />
+    </div>
+  );
 };
 
 export default App;

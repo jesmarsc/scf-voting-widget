@@ -6,26 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Voting Widget</title>
     <% preact.headEnd %>
-    <style>
-      .container {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        margin: 1rem 0;
-        height: 200vh;
-      }
-    </style>
   </head>
   <body>
-    <div id="container" class="container">
-      <error-banner></error-banner>
-      <discord-collector></discord-collector>
-      <discord-button></discord-button>
-    </div>
-
-    <vote-ballot></vote-ballot>
-    <projects-data></projects-data>
-    <panelists-data></panelists-data>
+    <div id="container"></div>
     <% preact.bodyEnd %>
   </body>
 </html>

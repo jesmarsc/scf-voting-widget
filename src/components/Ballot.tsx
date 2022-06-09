@@ -23,9 +23,9 @@ import SVGLinkOutline from 'src/assets/SVGLinkOutline';
 const ITEM_HEIGHT = 42;
 
 type Props = {
-  ballotTitle: string;
-  warningText: string;
-  successText: string;
+  ballotTitle?: string;
+  warningText?: string;
+  successText?: string;
 };
 
 const Ballot = ({

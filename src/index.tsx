@@ -1,9 +1,9 @@
-import { getProjects } from 'src/utils/api';
-import useAuth from 'src/stores/useAuth';
+import { h, render } from 'preact';
 import define from 'preact-custom-element';
 
 /* REQUIRED: Goober Setup for Styles */
 import 'src/styles/goober';
+import App from './App';
 
 /* Web Components */
 import VoteButton from './components/elements/VoteButton';
@@ -23,22 +23,8 @@ define(Panelists, 'panelists-data');
 define(ErrorBanner, 'error-banner');
 
 if (process.env.NODE_ENV === 'development') {
-  const { discordToken } = useAuth.getState();
-
-  if (discordToken) {
-    getProjects(discordToken).then(({ projects }) => {
-      const container = document.getElementById('container')!;
-
-      for (const project of projects) {
-        const nameElement = document.createElement('p');
-        nameElement.innerText = project.name;
-
-        const voteButton = document.createElement('vote-button');
-        voteButton.setAttribute('name', project.name);
-        voteButton.setAttribute('slug', project.slug);
-        voteButton.appendChild(nameElement);
-        container.appendChild(voteButton);
-      }
-    });
+  const container = document.getElementById('container');
+  if (container) {
+    render(<App />, container);
   }
 }
