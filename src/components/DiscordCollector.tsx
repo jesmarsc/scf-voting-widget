@@ -1,6 +1,5 @@
 import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
-import define from 'preact-custom-element';
 
 import useAuth from 'src/stores/useAuth';
 import Container from 'src/components/elements/Container';
@@ -45,4 +44,4 @@ const DiscordCollector = () => {
   );
 };
 
-define(DiscordCollector, 'discord-collector');
+export default DiscordCollector;

@@ -1,6 +1,6 @@
 import { h } from 'preact';
-import define from 'preact-custom-element';
 import { useMemo, useEffect, useState } from 'preact/hooks';
+
 import { getProjects } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import Table from 'src/components/elements/Table';
@@ -60,4 +60,4 @@ function Projects() {
   );
 }
 
-define(Projects, 'projects-data');
+export default Projects;

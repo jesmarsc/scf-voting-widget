@@ -93,4 +93,4 @@ function Panelists() {
   );
 }
 
-define(Panelists, 'panelists-data');
+export default Panelists;

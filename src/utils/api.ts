@@ -79,7 +79,7 @@ export const saveFavorites = async (
 };
 
 export const submitVote = async (favorites: string[], discordToken: string) => {
-  return await fetch(`${apiUrl}/favorites`, {
+  return await fetch(`${apiUrl}/submit`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,

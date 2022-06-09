@@ -1,6 +1,5 @@
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
-import define from 'preact-custom-element';
 import tw, { styled, theme } from 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
@@ -66,4 +65,4 @@ const VoteButton = ({
   );
 };
 
-define(VoteButton, 'vote-button');
+export default VoteButton;

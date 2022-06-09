@@ -1,8 +1,6 @@
 import { Fragment, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { forwardRef, memo } from 'preact/compat';
-import define from 'preact-custom-element';
-
 import { List } from 'react-movable';
 import { FixedSizeList, areEqual } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';

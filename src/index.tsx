@@ -6,16 +6,21 @@ import define from 'preact-custom-element';
 import 'src/styles/goober';
 
 /* Web Components */
-import Ballot from 'src/components/Ballot';
-import 'src/components/elements/VoteButton';
+import VoteButton from './components/elements/VoteButton';
 import DiscordButton from 'src/components/elements/DiscordButton';
-import 'src/components/DiscordCollector';
-import 'src/components/Projects';
-import 'src/components/Panelists';
-import 'src/components/ErrorBanner';
+import Ballot from 'src/components/Ballot';
+import DiscordCollector from './components/DiscordCollector';
+import Projects from 'src/components/admin/Projects';
+import Panelists from 'src/components/admin/Panelists';
+import ErrorBanner from 'src/components/ErrorBanner';
 
+define(VoteButton, 'vote-button');
 define(DiscordButton, 'discord-button');
 define(Ballot, 'vote-ballot');
+define(DiscordCollector, 'discord-collector');
+define(Projects, 'projects-data');
+define(Panelists, 'panelists-data');
+define(ErrorBanner, 'error-banner');
 
 if (process.env.NODE_ENV === 'development') {
   const { discordToken } = useAuth.getState();
