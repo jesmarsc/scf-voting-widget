@@ -35,7 +35,7 @@ const VoteButton = ({
   const handleAddApprovedProject = async () => {
     setIsLoading(true);
     approveProject(slug, discordToken)
-      .then(() => addApprovedProject(slug, name))
+      .then(() => addApprovedProject({ name, slug }))
       .finally(() => setIsLoading(false));
   };
 

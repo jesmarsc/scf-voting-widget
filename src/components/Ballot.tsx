@@ -63,10 +63,7 @@ const Ballot = ({
     if (!user) return;
 
     setIsLoading(true);
-    submitVote(
-      user.favorites.map((project) => project.slug),
-      discordToken
-    )
+    submitVote(discordToken)
       .then(() => {
         setVoted(true);
         window.open(routes.AIRTABLE, '__blank');
@@ -181,7 +178,7 @@ const Ballot = ({
                         title="Favorite"
                         onClick={() => {
                           const rollback = favorites;
-                          addFavoriteProject(slug, name);
+                          addFavoriteProject({ name, slug });
                           handleSave(rollback);
                         }}
                       >
