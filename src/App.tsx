@@ -33,6 +33,10 @@ const App = () => {
         <DiscordButton />
       </div>
 
+      <Panelists />
+
+      <Projects />
+
       <div tw="grid gap-2 grid-template-columns[repeat(auto-fit, minmax(25ch, 1fr))]">
         {projects.map((project, index) => (
           <div key={index}>

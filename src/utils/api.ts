@@ -1,5 +1,5 @@
-export const apiUrl =
-  'https://wrangler-scf-voting.stellarcommunity.workers.dev';
+export const apiUrl = 'https://scf-voting-dev.stellarcommunity.workers.dev';
+
 export async function handleResponse(response: Response) {
   const { headers, ok } = response;
   const contentType = headers.get('content-type');

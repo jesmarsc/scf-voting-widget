@@ -33,10 +33,6 @@ function Projects() {
             Header: 'Slug',
             accessor: 'slug',
           },
-          {
-            Header: 'Site',
-            accessor: 'site',
-          },
         ],
       },
     ],
@@ -55,7 +51,7 @@ function Projects() {
 
   return (
     user &&
-    user.role === 'admin' &&
+    user.isAdmin &&
     projectsData && <Table data={projectsData} columns={columns} />
   );
 }
