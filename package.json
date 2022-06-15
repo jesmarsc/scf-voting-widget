@@ -17,6 +17,7 @@
     "goober": "^2.0.41",
     "preact": "^10.3.1",
     "preact-custom-element": "^4.2.1",
+    "react-icons": "^4.4.0",
     "react-movable": "^2.5.4",
     "react-table": "^7.7.0",
     "react-virtualized-auto-sizer": "^1.0.6",

@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { forwardRef } from 'preact/compat';
 import tw, { styled } from 'twin.macro';
 
-import SVGSpinner from 'src/assets/SVGSpinner';
+import SVGSpinner from 'src/components/icons/SVGSpinner';
 
 export type Variant = 'primary' | 'outline';
 

@@ -6,19 +6,17 @@ import { FixedSizeList, areEqual } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import tw, { styled, theme } from 'twin.macro';
 
+import { FaCaretRight } from 'react-icons/fa';
+import { IoStar, IoStarOutline, IoClose } from 'react-icons/io5';
+import { CgArrowAlignV } from 'react-icons/cg';
+
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import Button from 'src/components/elements/Button';
 import { unapproveProject, saveFavorites, submitVote } from 'src/utils/api';
 import { routes } from 'src/constants/routes';
 
-import SVGCaretForward from 'src/assets/SVGCaretForward';
-import SVGSpinner from 'src/assets/SVGSpinner';
-import SVGArrowAlignV from 'src/assets/SVGArrowAlignV';
-import SVGClose from 'src/assets/SVGClose';
-import SVGStar from 'src/assets/SVGStar';
-import SVGStarOutline from 'src/assets/SVGStarOutline';
-import SVGLinkOutline from 'src/assets/SVGLinkOutline';
+import SVGSpinner from 'src/components/icons/SVGSpinner';
 
 const ITEM_HEIGHT = 42;
 
@@ -107,8 +105,10 @@ const Ballot = ({
           useBallot.setState((state) => ({ isExpanded: !state.isExpanded }))
         }
       >
-        <BallotCaret isExpanded={isExpanded} />
-        <span>{ballotTitle}</span>
+        <div tw="flex items-center gap-2 text-xl">
+          <FaCaretRight css={isExpanded && tw`transform rotate-90`} />
+          <span>{ballotTitle}</span>
+        </div>
       </BallotTitle>
 
       <BallotContent isExpanded={isExpanded}>
@@ -141,10 +141,10 @@ const Ballot = ({
                       handleSave(rollback);
                     }}
                   >
-                    <SVGStar />
+                    <IoStar />
                   </ProjectFavorite>
                   <ProjectName>{`${index! + 1}. ${name}`}</ProjectName>
-                  <SVGArrowAlignV />
+                  <CgArrowAlignV />
                 </ProjectItem>
               )}
             />
@@ -182,14 +182,14 @@ const Ballot = ({
                           handleSave(rollback);
                         }}
                       >
-                        <SVGStarOutline />
+                        <IoStarOutline />
                       </ProjectFavorite>
                       <ProjectName>{name}</ProjectName>
                       <ProjectDelete
                         title="Remove"
                         onClick={() => handleRemove(slug)}
                       >
-                        <SVGClose />
+                        <IoClose />
                       </ProjectDelete>
                     </ProjectItem>
                   ) : (
@@ -224,8 +224,10 @@ const Ballot = ({
                 </p>
                 <p>You will be unable to change your vote once submitted.</p>
               </div>
+
               <ButtonGroup>
                 <BallotButton onClick={handleSubmit}>Confirm</BallotButton>
+
                 <BallotButton
                   color={theme`colors.stellar.salmon`}
                   onClick={() => setIsConfirming(false)}
@@ -234,19 +236,16 @@ const Ballot = ({
                 </BallotButton>
               </ButtonGroup>
             </ConfirmingOverlay>
+
             <LoadingOverlay isVisible={isLoading}>
               <SVGSpinner />
             </LoadingOverlay>
           </Fragment>
         ) : (
           <Footer>
-            <a
-              tw="flex gap-1 items-end justify-center font-semibold"
-              href={routes.AIRTABLE}
-              target="__blank"
-            >
-              <SVGLinkOutline /> Submit project feedback.
-            </a>
+            <FeedbackLink href={routes.AIRTABLE} target="__blank">
+              Submit project feedback
+            </FeedbackLink>
           </Footer>
         )}
       </BallotContent>
@@ -260,18 +259,13 @@ const BallotContainer = styled('div')([
   tw`box-border all:(m-0 p-0 box-sizing[inherit])`,
 ]);
 
-const BallotTitle = styled('h3')([
-  tw`flex items-center text-2xl p-2 font-bold tracking-tight cursor-pointer`,
+const BallotTitle = styled('div')([
+  tw`flex items-center justify-between p-2 font-bold tracking-tight cursor-pointer`,
 ]);
 
 const BallotSubtitle = styled('p')([
   tw`bg-green-100 py-1 px-4`,
   ({ danger }: { danger?: boolean }) => (danger ? tw`bg-red-100` : ''),
-]);
-
-const BallotCaret = styled(SVGCaretForward)<{ isExpanded?: boolean }>([
-  tw`transition-transform mt-1 mr-2`,
-  ({ isExpanded }) => (isExpanded ? tw`transform rotate-90` : ''),
 ]);
 
 const BallotContent = styled('div')([
@@ -308,10 +302,6 @@ const ProjectDelete = styled(ProjectButton)([
   tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-20) active:(bg-opacity-30)`,
 ]);
 
-const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none ml-auto`]);
-
-const Footer = styled('div')([tw`p-2`]);
-
 const Overlay = styled('div')([
   tw`absolute inset-0 p-4! flex flex-col justify-center items-center text-center transition-all opacity-0`,
   ({ isVisible }: { isVisible: boolean }) =>
@@ -325,5 +315,13 @@ const LoadingOverlay = styled(Overlay)(
 const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);
 
 const ButtonGroup = styled('div')(tw`flex mt-4 gap-2`);
+
+const Footer = styled('div')(tw`p-2`);
+
+const FeedbackLink = styled('a')(
+  tw`block p-2 rounded text-center text-white bg-stellar-green no-underline`
+);
+
+const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none ml-auto`]);
 
 export default Ballot;

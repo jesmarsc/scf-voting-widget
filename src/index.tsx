@@ -6,20 +6,18 @@ import 'src/styles/goober';
 import App from './App';
 
 /* Web Components */
-import VoteButton from './components/elements/VoteButton';
+import VoteButton from 'src/components/elements/VoteButton';
 import DiscordButton from 'src/components/elements/DiscordButton';
 import Ballot from 'src/components/Ballot';
-import DiscordCollector from './components/DiscordCollector';
-import Projects from 'src/components/admin/Projects';
-import Panelists from 'src/components/admin/Panelists';
+import DiscordCollector from 'src/components/DiscordCollector';
+import AdminPanel from 'src/components/admin/AdminPanel';
 import ErrorBanner from 'src/components/ErrorBanner';
 
 define(VoteButton, 'vote-button');
 define(DiscordButton, 'discord-button');
 define(Ballot, 'vote-ballot');
 define(DiscordCollector, 'discord-collector');
-define(Projects, 'projects-data');
-define(Panelists, 'panelists-data');
+define(AdminPanel, 'admin-panel');
 define(ErrorBanner, 'error-banner');
 
 if (process.env.NODE_ENV === 'development') {

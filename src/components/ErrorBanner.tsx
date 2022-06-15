@@ -3,7 +3,8 @@ import tw, { styled } from 'twin.macro';
 
 import Container from 'src/components/elements/Container';
 import useError from 'src/stores/useError';
-import SVGClose from 'src/assets/SVGClose';
+
+import { IoClose } from 'react-icons/io5';
 
 const ErrorBanner = () => {
   const { error, cleanupError } = useError();
@@ -13,7 +14,7 @@ const ErrorBanner = () => {
     <Container danger>
       {error}
       <CloseButton title="Close" onClick={() => cleanupError()}>
-        <SVGClose />
+        <IoClose />
       </CloseButton>
     </Container>
   );

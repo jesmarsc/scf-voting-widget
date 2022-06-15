@@ -2,8 +2,6 @@ import { h } from 'preact';
 import tw, { styled } from 'twin.macro';
 import { useTable, useSortBy } from 'react-table';
 
-const Wrap = styled('div')([tw`p-1`]);
-
 const TableContainer = styled('table')([
   tw`border-2 border-black border-solid border-spacing[0]`,
 ]);
@@ -33,25 +31,28 @@ export default function TableWrap({ columns, data }: any) {
     );
 
   return (
-    <Wrap>
+    <div>
       <TableContainer {...getTableProps()}>
         <thead>
-          {headerGroups.map((headerGroup,i) => (
+          {headerGroups.map((headerGroup, i) => (
             <TrContainer {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column: any) => (
                 // Add the sorting props to control sorting. For this example
                 // we can add them into the header props
                 <ThContainer
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                > <HeaderCell>
-                   {i!==0 && <SpanIcon>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? '👇 '
-                        : '👆 '
-                      : '👉 '}
-                  </SpanIcon>}
-                  {column.render('Header')}
+                >
+                  <HeaderCell>
+                    {i !== 0 && (
+                      <SpanIcon>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? '👇 '
+                            : '👆 '
+                          : '👉 '}
+                      </SpanIcon>
+                    )}
+                    {column.render('Header')}
                   </HeaderCell>
                 </ThContainer>
               ))}
@@ -76,6 +77,6 @@ export default function TableWrap({ columns, data }: any) {
         </tbody>
       </TableContainer>
       <br />
-    </Wrap>
+    </div>
   );
 }
