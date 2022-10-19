@@ -14,9 +14,11 @@ export type State = {
   cleanupBallot: () => void;
   isFull: () => boolean;
   isValid: () => boolean;
-  isApproved: (slug: string) => boolean;
   isFavorite: (slug: string) => boolean;
-  addFavoriteProject: (project: Project) => void;
+  isApproved: (slug: string) => boolean;
+  isWithinBudget: (amount: number) => boolean;
+  getAllocation: () => number;
+  addFavoriteProject: (slug: string) => void;
   removeFavoriteProject: (slug: string) => void;
   moveFavoriteProject: (from: number, to: number) => void;
   addApprovedProject: (project: Project) => void;
@@ -62,13 +64,34 @@ const useBallot = create(
           : false;
       },
 
-      addFavoriteProject: (project: Project) => {
+      isWithinBudget: (amount: number) => {
+        const { getAllocation, user } = get();
+
+        if (!user) return false;
+
+        return getAllocation() + amount <= user.budget;
+      },
+
+      getAllocation: () => {
+        const { user } = get();
+
+        if (!user) return 0;
+
+        return user.approved.reduce((acc, val) => (acc += val.awardAmount), 0);
+      },
+
+      addFavoriteProject: (slug: string) => {
         set((state) => {
-          const { slug } = project;
           const { user, isFull, isFavorite, isApproved } = state;
 
           if (!user) return state;
           if (isFull() || isFavorite(slug) || !isApproved(slug)) return state;
+
+          const project = user.approved.find(
+            (project) => project.slug === slug
+          );
+
+          if (!project) return state;
 
           const favorites = [...user.favorites, project];
 
@@ -175,6 +198,7 @@ if (discordToken) {
       /* TODO: HANDLE UNAUTHERIZED USER */
       unstable_batchedUpdates(() => {
         useAuth.getState().cleanupAuth();
+        useBallot.getState().cleanupBallot();
         if (!error.message) {
           useError.getState().setError('Something went wrong');
         } else {

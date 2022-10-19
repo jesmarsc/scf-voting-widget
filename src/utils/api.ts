@@ -62,7 +62,10 @@ export const getPanelistsCsv = async (
   }).then(handleResponse);
 };
 
-export const approveProject = async (slug: string, discordToken: string) => {
+export const approveProject = async (
+  slug: string,
+  discordToken: string
+): Promise<{ project: Project }> => {
   return await fetch(`${apiUrl}/approve`, {
     method: 'POST',
     headers: {

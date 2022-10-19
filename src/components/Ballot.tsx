@@ -14,6 +14,7 @@ import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import Button from 'src/components/elements/Button';
 import { unapproveProject, saveFavorites, submitVote } from 'src/utils/api';
+import { numberToUsdString } from 'src/utils';
 import { routes } from 'src/constants/routes';
 
 import SVGSpinner from 'src/components/icons/SVGSpinner';
@@ -37,6 +38,7 @@ const Ballot = ({
     isValid,
     isExpanded,
     isFavorite,
+    getAllocation,
     addFavoriteProject,
     removeFavoriteProject,
     moveFavoriteProject,
@@ -77,6 +79,7 @@ const Ballot = ({
     if (!user || user.favorites === rollback) return;
 
     setIsLoading(true);
+
     saveFavorites(
       user.favorites.map((project) => project.slug),
       discordToken
@@ -93,6 +96,7 @@ const Ballot = ({
 
   const handleRemove = (slug: string) => {
     setIsLoading(true);
+
     unapproveProject(slug, discordToken)
       .then(() => removeApprovedProject(slug))
       .finally(() => setIsLoading(false));
@@ -178,7 +182,7 @@ const Ballot = ({
                         title="Favorite"
                         onClick={() => {
                           const rollback = favorites;
-                          addFavoriteProject({ name, slug });
+                          addFavoriteProject(slug);
                           handleSave(rollback);
                         }}
                       >
@@ -206,6 +210,11 @@ const Ballot = ({
         {!voted ? (
           <Fragment>
             <Footer>
+              <div tw="flex gap-1">
+                <span tw="font-semibold">Available:</span>
+                <span>{numberToUsdString(user.budget - getAllocation())}</span>
+              </div>
+
               <BallotButton
                 disabled={!isValid()}
                 title={
@@ -316,10 +325,10 @@ const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);
 
 const ButtonGroup = styled('div')(tw`flex mt-4 gap-2`);
 
-const Footer = styled('div')(tw`p-2`);
+const Footer = styled('div')(tw`p-2 flex items-center`);
 
 const FeedbackLink = styled('a')(
-  tw`block p-2 rounded text-center text-white bg-stellar-green no-underline`
+  tw`block p-2 rounded text-center text-white bg-stellar-green no-underline w-full`
 );
 
 const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none ml-auto`]);
