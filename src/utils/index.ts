@@ -10,3 +10,13 @@ export const downloadCsv = (csv: string, name?: string) => {
   anchor.click();
   anchor.remove();
 };
+
+export const usdStringToNumber = (amount: string) =>
+  parseFloat(amount.replace(/,/g, ''));
+
+export const numberToUsdString = (amount: number) => {
+  return Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(amount);
+};

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { ComponentChildren, h } from 'preact';
 import { forwardRef } from 'preact/compat';
 import tw, { styled } from 'twin.macro';
 
@@ -16,17 +16,37 @@ type Props = {
   danger?: boolean;
   isLoading?: boolean;
   loadingText?: string;
+  isDisabled?: boolean;
+  disabledText?: string;
   variant?: Variant;
   color?: string;
 } & JSX.IntrinsicElements['button'];
 
 const SCFButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
-  const { isLoading, loadingText, disabled, ...restProps } = props;
+  const {
+    isLoading,
+    loadingText,
+    isDisabled,
+    disabledText,
+    disabled,
+    ...restProps
+  } = props;
 
   return (
-    <Button {...restProps} disabled={disabled || isLoading} ref={ref}>
+    <Button
+      {...restProps}
+      disabled={isDisabled || isLoading || disabled}
+      ref={ref}
+    >
       {isLoading && <Spinner />}
-      {isLoading && loadingText ? loadingText : props.children}
+
+      <Wrapper>
+        {isLoading && loadingText
+          ? loadingText
+          : isDisabled && disabledText
+          ? disabledText
+          : props.children}
+      </Wrapper>
     </Button>
   );
 });
@@ -58,5 +78,10 @@ const Button = styled(
 ]);
 
 const Spinner = styled(SVGSpinner)(tw`mr-2`);
+
+const Wrapper = ({ children }: { children: ComponentChildren }) =>
+  children ? (
+    <span tw="flex items-center pointer-events-none">{children}</span>
+  ) : null;
 
 export default SCFButton;

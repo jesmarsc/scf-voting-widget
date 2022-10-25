@@ -1,3 +1,9 @@
+interface Project {
+  name: string;
+  slug: string;
+  awardAmount: number;
+}
+
 interface DiscordUser {
   id: string;
   username: string;
@@ -21,11 +27,8 @@ interface User extends DiscordUser {
   favorites: Project[];
   approved: Project[];
   isAdmin: boolean;
-}
-
-interface Project {
-  name: string;
-  slug: string;
+  budget: number;
+  timestamp?: number;
 }
 
 interface DetailedProject extends Project {

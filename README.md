@@ -4,7 +4,7 @@
 
 - `npm install`: Installs dependencies
 
-- `npm run dev`: Run a development, HMR server
+- `npm run start`: Run a development, HMR server
 
 - `npm run build`: Production-ready build
 

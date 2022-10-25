@@ -15,7 +15,7 @@ import AdminPanel from './components/admin/AdminPanel';
 /* Used strictly to test all components locally */
 
 const App = () => {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<DetailedProject[]>([]);
   const { discordToken } = useAuth.getState();
 
   useEffect(() => {
@@ -37,8 +37,8 @@ const App = () => {
       <div tw="grid gap-2 grid-template-columns[repeat(auto-fit, minmax(25ch, 1fr))]">
         {projects.map((project, index) => (
           <div key={index}>
-            <p>{project.name.substring(0, 20)}</p>
-            <VoteButton name={project.name} slug={project.slug} />
+            <p>{`${project.name.substring(0, 20)} $${project.awardAmount}`}</p>
+            <VoteButton slug={project.slug} awardAmount={project.awardAmount} />
           </div>
         ))}
       </div>

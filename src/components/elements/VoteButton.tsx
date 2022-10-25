@@ -11,20 +11,26 @@ import { approveProject, unapproveProject } from 'src/utils/api';
 const ButtonWrapper = styled(Button)(tw`min-width[20ch]`);
 
 type Props = {
-  name: string;
   slug: string;
+  awardAmount?: number;
 } & WebComponentProps;
 
 const VoteButton = ({
-  name,
   slug,
+  awardAmount = 0,
   variant,
   activeColor,
   inactiveColor,
 }: Props) => {
   const discordToken = useAuth((state) => state.discordToken);
-  const { user, isApproved, addApprovedProject, removeApprovedProject } =
-    useBallot();
+
+  const {
+    user,
+    isApproved,
+    isWithinBudget,
+    addApprovedProject,
+    removeApprovedProject,
+  } = useBallot();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,13 +40,15 @@ const VoteButton = ({
 
   const handleAddApprovedProject = async () => {
     setIsLoading(true);
+
     approveProject(slug, discordToken)
-      .then(() => addApprovedProject({ name, slug }))
+      .then(({ project }) => addApprovedProject(project))
       .finally(() => setIsLoading(false));
   };
 
   const handleRemoveProject = async () => {
     setIsLoading(true);
+
     unapproveProject(slug, discordToken)
       .then(() => removeApprovedProject(slug))
       .finally(() => setIsLoading(false));
@@ -54,6 +62,8 @@ const VoteButton = ({
           ? activeColor || theme`colors.stellar.green`
           : inactiveColor || theme`colors.stellar.purple`
       }
+      isDisabled={!isSelected && !isWithinBudget(awardAmount)}
+      disabledText="Exceeds Budget"
       isLoading={isLoading}
       loadingText={isSelected ? 'Removing' : 'Adding'}
       onClick={() =>
