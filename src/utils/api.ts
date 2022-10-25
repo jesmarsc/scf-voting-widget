@@ -1,5 +1,4 @@
-export const apiUrl =
-  'https://wrangler-scf-voting.stellarcommunity.workers.dev';
+export const apiUrl = 'https://scf-voting.stellarcommunity.workers.dev';
 
 export async function handleResponse(response: Response) {
   const { headers, ok } = response;
@@ -15,7 +14,7 @@ export async function handleResponse(response: Response) {
   else throw await content;
 }
 
-export const getUser = async (discordToken: string) => {
+export const getUser = async (discordToken: string): Promise<User> => {
   return await fetch(`${apiUrl}/auth`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -23,7 +22,9 @@ export const getUser = async (discordToken: string) => {
   }).then(handleResponse);
 };
 
-export const getProjects = async (discordToken: string) => {
+export const getProjects = async (
+  discordToken: string
+): Promise<{ total: number; projects: DetailedProject[] }> => {
   return await fetch(`${apiUrl}/projects`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -31,7 +32,19 @@ export const getProjects = async (discordToken: string) => {
   }).then(handleResponse);
 };
 
-export const getPanelists = async (discordToken: string) => {
+export const getProjectsCsv = async (
+  discordToken: string
+): Promise<{ csv: string }> => {
+  return await fetch(`${apiUrl}/projects/csv`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
+export const getPanelists = async (
+  discordToken: string
+): Promise<{ panelists: User[] }> => {
   return await fetch(`${apiUrl}/panelists`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -39,14 +52,27 @@ export const getPanelists = async (discordToken: string) => {
   }).then(handleResponse);
 };
 
-export const approveProject = async (slug: string, discordToken: string) => {
+export const getPanelistsCsv = async (
+  discordToken: string
+): Promise<{ csv: string }> => {
+  return await fetch(`${apiUrl}/panelists/csv`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
+export const approveProject = async (
+  slug: string,
+  discordToken: string
+): Promise<{ project: Project }> => {
   return await fetch(`${apiUrl}/approve`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
     body: JSON.stringify({
-      slug: slug,
+      slug,
     }),
   }).then(handleResponse);
 };
@@ -58,7 +84,7 @@ export const unapproveProject = async (slug: string, discordToken: string) => {
       Authorization: `Bearer ${discordToken}`,
     },
     body: JSON.stringify({
-      slug: slug,
+      slug,
     }),
   }).then(handleResponse);
 };
@@ -66,7 +92,7 @@ export const unapproveProject = async (slug: string, discordToken: string) => {
 export const saveFavorites = async (
   favorites: string[],
   discordToken: string
-) => {
+): Promise<Project[]> => {
   return await fetch(`${apiUrl}/favorites`, {
     method: 'POST',
     headers: {
@@ -78,15 +104,11 @@ export const saveFavorites = async (
   }).then(handleResponse);
 };
 
-export const submitVote = async (favorites: string[], discordToken: string) => {
-  return await fetch(`${apiUrl}/favorites`, {
+export const submitVote = async (discordToken: string) => {
+  return await fetch(`${apiUrl}/submit`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
-    body: JSON.stringify({
-      favorites,
-      submitting: true,
-    }),
   }).then(handleResponse);
 };

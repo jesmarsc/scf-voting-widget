@@ -1,6 +1,6 @@
 import { h } from 'preact';
-import define from 'preact-custom-element';
 import { useMemo, useEffect, useState } from 'preact/hooks';
+
 import { getProjects } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import Table from 'src/components/elements/Table';
@@ -33,10 +33,6 @@ function Projects() {
             Header: 'Slug',
             accessor: 'slug',
           },
-          {
-            Header: 'Site',
-            accessor: 'site',
-          },
         ],
       },
     ],
@@ -55,9 +51,9 @@ function Projects() {
 
   return (
     user &&
-    user.role === 'admin' &&
+    user.isAdmin &&
     projectsData && <Table data={projectsData} columns={columns} />
   );
 }
 
-define(Projects, 'projects-data');
+export default Projects;

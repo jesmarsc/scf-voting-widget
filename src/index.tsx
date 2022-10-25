@@ -1,35 +1,28 @@
-import { getProjects } from 'src/utils/api';
-import useAuth from 'src/stores/useAuth';
+import { h, render } from 'preact';
+import define from 'preact-custom-element';
 
 /* REQUIRED: Goober Setup for Styles */
 import 'src/styles/goober';
+import App from './App';
 
 /* Web Components */
-import 'src/components/Ballot';
-import 'src/components/elements/VoteButton';
-import 'src/components/elements/DiscordButton';
-import 'src/components/DiscordCollector';
-import 'src/components/Projects';
-import 'src/components/Panelists';
-import 'src/components/ErrorBanner';
+import VoteButton from 'src/components/elements/VoteButton';
+import DiscordButton from 'src/components/elements/DiscordButton';
+import Ballot from 'src/components/Ballot';
+import DiscordCollector from 'src/components/DiscordCollector';
+import AdminPanel from 'src/components/admin/AdminPanel';
+import ErrorBanner from 'src/components/ErrorBanner';
+
+define(VoteButton, 'vote-button');
+define(DiscordButton, 'discord-button');
+define(Ballot, 'vote-ballot');
+define(DiscordCollector, 'discord-collector');
+define(AdminPanel, 'admin-panel');
+define(ErrorBanner, 'error-banner');
 
 if (process.env.NODE_ENV === 'development') {
-  const { discordToken } = useAuth.getState();
-
-  if (discordToken) {
-    getProjects(discordToken).then(({ projects }) => {
-      const container = document.getElementById('container')!;
-
-      for (const project of projects) {
-        const nameElement = document.createElement('p');
-        nameElement.innerText = project.name;
-
-        const voteButton = document.createElement('vote-button');
-        voteButton.setAttribute('name', project.name);
-        voteButton.setAttribute('slug', project.slug);
-        voteButton.appendChild(nameElement);
-        container.appendChild(voteButton);
-      }
-    });
+  const container = document.getElementById('container');
+  if (container) {
+    render(<App />, container);
   }
 }

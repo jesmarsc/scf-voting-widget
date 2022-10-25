@@ -7,23 +7,6 @@ import useAuth from 'src/stores/useAuth';
 import useError from 'src/stores/useError';
 import { getUser } from 'src/utils/api';
 
-export type Project = {
-  name: string;
-  slug: string;
-};
-
-export type User = {
-  id: string;
-  email: string;
-  voted: boolean;
-  favorites: Project[];
-  approved: Project[];
-  avatar: string;
-  username: string;
-  discriminator: string;
-  role: 'admin' | 'verified';
-};
-
 export type State = {
   user?: User;
   isExpanded: boolean;
@@ -31,27 +14,16 @@ export type State = {
   cleanupBallot: () => void;
   isFull: () => boolean;
   isValid: () => boolean;
-  isApproved: (slug: string) => boolean;
   isFavorite: (slug: string) => boolean;
-  addFavoriteProject: (slug: string, name: string) => void;
+  isApproved: (slug: string) => boolean;
+  isWithinBudget: (amount: number) => boolean;
+  getAllocation: () => number;
+  addFavoriteProject: (slug: string) => void;
   removeFavoriteProject: (slug: string) => void;
   moveFavoriteProject: (from: number, to: number) => void;
-  addApprovedProject: (slug: string, name: string) => void;
+  addApprovedProject: (project: Project) => void;
   removeApprovedProject: (slug: string) => void;
   setVoted: (voted: boolean) => void;
-};
-
-const removeProject = (projects: Project[], slug: string) => {
-  const clone = [...projects];
-
-  const isIncluded = clone.findIndex((project) => project.slug === slug);
-
-  if (isIncluded > -1) {
-    clone.splice(isIncluded, 1);
-    return clone;
-  }
-
-  return projects;
 };
 
 const useBallot = create(
@@ -88,24 +60,44 @@ const useBallot = create(
       isApproved: (slug: string) => {
         const { user } = get();
         return user
-          ? [...user.favorites, ...user.approved].some(
-              (project) => project.slug === slug
-            )
+          ? user.approved.some((project) => project.slug === slug)
           : false;
       },
 
-      addFavoriteProject: (slug: string, name: string) => {
+      isWithinBudget: (amount: number) => {
+        const { getAllocation, user } = get();
+
+        if (!user) return false;
+
+        return getAllocation() + amount <= user.budget;
+      },
+
+      getAllocation: () => {
+        const { user } = get();
+
+        if (!user) return 0;
+
+        return user.approved.reduce((acc, val) => (acc += val.awardAmount), 0);
+      },
+
+      addFavoriteProject: (slug: string) => {
         set((state) => {
           const { user, isFull, isFavorite, isApproved } = state;
+
           if (!user) return state;
           if (isFull() || isFavorite(slug) || !isApproved(slug)) return state;
 
-          const project = { slug, name };
-          const favoritesClone = [...user.favorites, project];
+          const project = user.approved.find(
+            (project) => project.slug === slug
+          );
+
+          if (!project) return state;
+
+          const favorites = [...user.favorites, project];
 
           return {
             ...state,
-            user: { ...user, favorites: favoritesClone },
+            user: { ...user, favorites },
           };
         });
       },
@@ -115,11 +107,13 @@ const useBallot = create(
           const { user } = state;
           if (!user) return state;
 
-          const newFavorites = removeProject(user.favorites, slug);
+          const favorites = user.favorites.filter(
+            (project) => project.slug !== slug
+          );
 
           return {
             ...state,
-            user: { ...user, favorites: newFavorites },
+            user: { ...user, favorites },
           };
         });
       },
@@ -129,26 +123,29 @@ const useBallot = create(
           const { user } = state;
           if (!user) return state;
 
+          const favorites = arrayMove(user.favorites, from, to);
+
           return {
             ...state,
             user: {
               ...user,
-              favorites: arrayMove(user.favorites, from, to),
+              favorites,
             },
           };
         });
       },
 
-      addApprovedProject: (slug: string, name: string) => {
+      addApprovedProject: (project: Project) => {
         set((state) => {
+          const { slug } = project;
           const { user, isApproved } = state;
-          if (isApproved(slug) || !user) return state;
 
-          const project = { slug, name };
-          const approvedClone = [...user.approved, project];
-          approvedClone.sort((a, b) => a.name.localeCompare(b.name));
+          if (!user || isApproved(slug)) return state;
 
-          return { ...state, user: { ...user, approved: approvedClone } };
+          const approved = [...user.approved, project];
+          approved.sort((a, b) => a.name.localeCompare(b.name));
+
+          return { ...state, user: { ...user, approved } };
         });
       },
 
@@ -160,14 +157,18 @@ const useBallot = create(
           const { user } = state;
           if (!user) return state;
 
+          const approved = user.approved.filter(
+            (project) => project.slug !== slug
+          );
+
           return {
             ...state,
-            user: { ...user, approved: removeProject(user.approved, slug) },
+            user: { ...user, approved },
           };
         });
       },
 
-      setVoted: (voted) => {
+      setVoted: (voted: boolean) => {
         set((state) => {
           const { user } = state;
           if (!user) return state;
@@ -183,6 +184,7 @@ const useBallot = create(
   )
 );
 
+/* Fetch user if logged in. */
 const { discordToken } = useAuth.getState();
 
 if (discordToken) {
@@ -196,6 +198,7 @@ if (discordToken) {
       /* TODO: HANDLE UNAUTHERIZED USER */
       unstable_batchedUpdates(() => {
         useAuth.getState().cleanupAuth();
+        useBallot.getState().cleanupBallot();
         if (!error.message) {
           useError.getState().setError('Something went wrong');
         } else {

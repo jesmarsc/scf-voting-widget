@@ -1,26 +1,38 @@
-import { styled as styledImport, css as cssImport } from 'goober';
-
-declare module 'twin.macro' {
-  // The styled and css imports
-  const styled: typeof styledImport;
-  const css: typeof cssImport;
+interface Project {
+  name: string;
+  slug: string;
+  awardAmount: number;
 }
 
-declare module 'preact' {
-  namespace JSX {
-    interface HTMLAttributes {
-      tw?: string;
-      css?: CSSProp;
-    }
-
-    interface IntrinsicAttributes {
-      tw?: string;
-      css?: CSSProp;
-    }
-  }
+interface DiscordUser {
+  id: string;
+  username: string;
+  discriminator: string;
+  avatar: string;
+  bot?: boolean;
+  system?: boolean;
+  mfa_enabled?: boolean;
+  banner?: string;
+  accent_color?: number;
+  locale?: string;
+  verified?: boolean;
+  email?: string;
+  flags?: number;
+  premium_type?: number;
+  public_flags?: number;
 }
 
-declare module '*.css' {
-  const mapping: Record<string, string>;
-  export default mapping;
+interface User extends DiscordUser {
+  voted: boolean;
+  favorites: Project[];
+  approved: Project[];
+  isAdmin: boolean;
+  budget: number;
+  timestamp?: number;
+}
+
+interface DetailedProject extends Project {
+  id: string;
+  score: number;
+  approved_count: number;
 }

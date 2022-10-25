@@ -2,8 +2,6 @@ import { h, Fragment } from 'preact';
 import tw, { styled } from 'twin.macro';
 import { useTable, useExpanded, Row } from 'react-table';
 
-const Wrap = styled('div')([tw`p-1`]);
-
 const TableContainer = styled('table')([
   tw`border-2 border-black border-solid border-spacing[0]`,
 ]);
@@ -48,7 +46,7 @@ export function ExpandableTable({
   );
 
   return (
-    <Wrap>
+    <div>
       <TableContainer {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -99,6 +97,6 @@ export function ExpandableTable({
           })}
         </tbody>
       </TableContainer>
-    </Wrap>
+    </div>
   );
 }
