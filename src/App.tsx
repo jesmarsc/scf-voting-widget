@@ -38,7 +38,10 @@ const App = () => {
         {projects.map((project, index) => (
           <div key={index}>
             <p>{`${project.name.substring(0, 20)} $${project.budget}`}</p>
-            <VoteButton slug={project.slug} budget={project.budget} />
+            <VoteButton
+              slug={project.slug}
+              budget={project.budget.toString()}
+            />
           </div>
         ))}
       </div>
