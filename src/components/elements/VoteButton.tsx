@@ -12,12 +12,12 @@ const ButtonWrapper = styled(Button)(tw`min-width[20ch]`);
 
 type Props = {
   slug: string;
-  awardAmount?: number;
+  budget?: number;
 } & WebComponentProps;
 
 const VoteButton = ({
   slug,
-  awardAmount = 0,
+  budget = 0,
   variant,
   activeColor,
   inactiveColor,
@@ -62,7 +62,7 @@ const VoteButton = ({
           ? activeColor || theme`colors.stellar.green`
           : inactiveColor || theme`colors.stellar.purple`
       }
-      isDisabled={!isSelected && !isWithinBudget(awardAmount)}
+      isDisabled={!isSelected && !isWithinBudget(budget)}
       disabledText="Exceeds Budget"
       isLoading={isLoading}
       loadingText={isSelected ? 'Removing' : 'Adding'}

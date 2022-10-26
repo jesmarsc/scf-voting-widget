@@ -77,7 +77,7 @@ const useBallot = create(
 
         if (!user) return 0;
 
-        return user.approved.reduce((acc, val) => (acc += val.awardAmount), 0);
+        return user.approved.reduce((acc, val) => (acc += val.budget), 0);
       },
 
       addFavoriteProject: (slug: string) => {

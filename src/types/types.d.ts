@@ -1,7 +1,7 @@
 interface Project {
   name: string;
   slug: string;
-  awardAmount: number;
+  budget: number;
 }
 
 interface DiscordUser {

@@ -37,8 +37,8 @@ const App = () => {
       <div tw="grid gap-2 grid-template-columns[repeat(auto-fit, minmax(25ch, 1fr))]">
         {projects.map((project, index) => (
           <div key={index}>
-            <p>{`${project.name.substring(0, 20)} $${project.awardAmount}`}</p>
-            <VoteButton slug={project.slug} awardAmount={project.awardAmount} />
+            <p>{`${project.name.substring(0, 20)} $${project.budget}`}</p>
+            <VoteButton slug={project.slug} budget={project.budget} />
           </div>
         ))}
       </div>
