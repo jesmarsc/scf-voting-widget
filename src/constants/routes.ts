@@ -1,3 +1,3 @@
 export enum routes {
-  AIRTABLE = 'https://airtable.com/shrftwRBECJVK1ktO',
+  AIRTABLE = 'https://airtable.com/shrmv4OPWq9JEYqIr',
 }
