@@ -130,9 +130,9 @@ interface BallotProps {
 }
 
 const BallotContainer = styled('div')([
-  tw`fixed bottom-4 right-4 font-sans rounded-lg overflow-hidden shadow-lg border border-solid border-gray-200 bg-white z-index[1000]`,
-  tw`flex flex-col w-72 max-height[min(30rem, calc(100vh - 2rem))]`,
-  tw`box-border all:(m-0 p-0 box-sizing[inherit])`,
+  tw`fixed bottom-4 right-4 font-sans rounded-lg overflow-hidden shadow-lg border border-solid border-gray-200 bg-white [z-index: 1000]`,
+  tw`flex flex-col w-72 max-h-[min(30rem, calc(100vh - 2rem))]`,
+  tw`box-border all:(m-0 p-0 [box-sizing: inherit])`,
 ]);
 
 const BallotTitle = styled('div')([
@@ -140,9 +140,9 @@ const BallotTitle = styled('div')([
 ]);
 
 const BallotContent = styled('div')([
-  tw`relative flex flex-col height[32rem] overflow-hidden`,
+  tw`relative flex flex-col h-[32rem] overflow-hidden`,
   ({ isExpanded }: { isExpanded: boolean }) =>
-    isExpanded ? tw` max-height[32rem]` : tw`max-h-0`,
+    isExpanded ? tw` max-h-[32rem]` : tw`max-h-0`,
 ]);
 
 const ApprovedWrapper = styled('div')([
@@ -153,7 +153,7 @@ const ProjectItem = styled(
   'div',
   forwardRef
 )([
-  tw`flex items-center p-2 font-sans z-index[1010] svg:(text-xl fill-current)`,
+  tw`flex items-center p-2 font-sans [z-index: 1000] svg:(text-xl fill-current)`,
   ({ isFavorite }: { isFavorite?: boolean }) =>
     isFavorite
       ? tw`m-2! rounded cursor-pointer bg-stellar-purple all-child:(text-white)`
@@ -161,7 +161,7 @@ const ProjectItem = styled(
 ]);
 
 const ProjectName = styled('span')([
-  tw`flex-1 whitespace-nowrap overflow-hidden overflow-ellipsis mx-2`,
+  tw`flex-1 whitespace-nowrap overflow-hidden text-ellipsis mx-2`,
 ]);
 
 const ProjectButton = styled('button')([
@@ -180,7 +180,7 @@ const Overlay = styled('div')([
 ]);
 
 const LoadingOverlay = styled(Overlay)(
-  tw`text-white text-2xl bg-black bg-opacity-10 z-index[2000]`
+  tw`text-white text-2xl bg-black bg-opacity-10 [z-index: 2000]`
 );
 
 const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);

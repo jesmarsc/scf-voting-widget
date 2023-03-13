@@ -3,17 +3,17 @@ import tw, { styled } from 'twin.macro';
 import { useTable, useExpanded, Row } from 'react-table';
 
 const TableContainer = styled('table')([
-  tw`border-2 border-black border-solid border-spacing[0]`,
+  tw`border-2 border-black border-solid border-spacing-0`,
 ]);
 
-const TrContainer = styled('tr')([tw`last:border-bottom[0]`]);
+const TrContainer = styled('tr')([tw`last:border-b-0`]);
 
 const ThContainer = styled('th')([
-  tw`p-2 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-1 last:border-r-0 border-r border-b border-black`,
 ]);
 
 const TdContainer = styled('td')([
-  tw`p-2 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-2 last:border-r-0 border-r border-b border-black`,
 ]);
 
 interface CustomRow extends Row {

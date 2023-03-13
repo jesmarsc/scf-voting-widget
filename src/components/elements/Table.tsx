@@ -3,21 +3,21 @@ import tw, { styled } from 'twin.macro';
 import { useTable, useSortBy } from 'react-table';
 
 const TableContainer = styled('table')([
-  tw`border-2 border-black border-solid border-spacing[0]`,
+  tw`border-2 border-black border-solid border-spacing-0`,
 ]);
 
 const HeaderCell = styled('div')([tw`flex justify-center items-center p-2`]);
 
 const SpanIcon = styled('span')([tw`mr-2`]);
 
-const TrContainer = styled('tr')([tw`last:border-bottom[0]`]);
+const TrContainer = styled('tr')([tw`last:border-b-0`]);
 
 const ThContainer = styled('th')([
-  tw`p-1 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-1 last:border-r-0 border-r border-b border-black`,
 ]);
 
 const TdContainer = styled('td')([
-  tw`p-2 last:border-right[0] border-right[1px solid black] border-bottom[1px solid black]`,
+  tw`p-2 last:border-r-0 border-r border-b border-black`,
 ]);
 
 export default function TableWrap({ columns, data }: any) {

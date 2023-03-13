@@ -8,7 +8,7 @@ import useBallot from 'src/stores/useBallot';
 import Button, { WebComponentProps } from 'src/components/elements/Button';
 import { approveProject, unapproveProject } from 'src/utils/api';
 
-const ButtonWrapper = styled(Button)(tw`min-width[20ch]`);
+const ButtonWrapper = styled(Button)(tw`min-w-[20ch]`);
 
 type Props = {
   slug: string;
