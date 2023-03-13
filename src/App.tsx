@@ -23,7 +23,6 @@ const App = () => {
       getProjects(discordToken).then(({ projects }) => setProjects(projects));
     }
   }, []);
-
   return (
     <div tw="space-y-8">
       <div tw="space-y-4">

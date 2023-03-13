@@ -24,7 +24,6 @@ interface DiscordUser {
 
 interface User extends DiscordUser {
   voted: boolean;
-  favorites: Project[];
   approved: Project[];
   isAdmin: boolean;
   budget: number;
