@@ -14,7 +14,7 @@
     "build:analyze": "npm run build -- --analyze"
   },
   "dependencies": {
-    "goober": "^2.1.12",
+    "goober": "2.1.2",
     "preact": "^10.3.1",
     "preact-custom-element": "^4.2.1",
     "react-icons": "^4.4.0",
