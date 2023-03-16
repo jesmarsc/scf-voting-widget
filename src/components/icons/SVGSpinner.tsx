@@ -35,10 +35,11 @@ const StyledSpinnerAlt = styled('i')`
   }
 `;
 
-const SpinnerAlt = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>(
-  (props, ref) => {
-    return <StyledSpinnerAlt {...props} ref={ref} icon-role="spinner-alt" />;
-  }
-);
+const SpinnerAlt = forwardRef<
+  HTMLElement,
+  React.HTMLAttributes<HTMLElement, any>
+>((props, ref) => {
+  return <StyledSpinnerAlt {...props} ref={ref} icon-role="spinner-alt" />;
+});
 
 export default SpinnerAlt;

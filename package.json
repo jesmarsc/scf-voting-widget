@@ -14,17 +14,16 @@
     "build:analyze": "npm run build -- --analyze"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.7.9",
     "goober": "2.1.2",
     "preact": "^10.3.1",
     "preact-custom-element": "^4.2.1",
     "react-icons": "^4.4.0",
-    "react-table": "^7.7.0",
     "zustand": "^3.5.9"
   },
   "devDependencies": {
     "@agney/babel-plugin-goober-css-prop": "0.0.1",
     "@types/preact-custom-element": "^4.0.1",
-    "@types/react-table": "^7.7.2",
     "preact-cli": "^3.0.0",
     "tailwindcss": "^3.2.7",
     "twin.macro": "^3.1.0",

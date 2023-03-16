@@ -7,8 +7,9 @@ import { getPanelistsCsv, getProjectsCsv } from 'src/utils/api';
 import { downloadCsv } from 'src/utils';
 
 import Button from 'src/components/elements/Button';
-import Panelists from './Panelists';
-import Projects from './Projects';
+
+import PanelistsTable from './PanelistsTable';
+import ProjectsTable from './ProjectsTable';
 
 const AdminPanel = () => {
   const { user } = useBallot();
@@ -28,7 +29,8 @@ const AdminPanel = () => {
         >
           Download Panelists
         </Button>
-        <Panelists />
+
+        <PanelistsTable />
       </section>
 
       <section tw="space-y-4">
@@ -41,7 +43,8 @@ const AdminPanel = () => {
         >
           Download Projects
         </Button>
-        <Projects />
+
+        <ProjectsTable />
       </section>
     </div>
   );

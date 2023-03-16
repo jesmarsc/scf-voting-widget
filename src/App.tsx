@@ -10,7 +10,7 @@ import DiscordButton from 'src/components/elements/DiscordButton';
 import Ballot from 'src/components/Ballot';
 import DiscordCollector from './components/DiscordCollector';
 import ErrorBanner from 'src/components/ErrorBanner';
-import AdminPanel from './components/admin/AdminPanel';
+import AdminPanel from './components/AdminPanel';
 
 /* Used strictly to test all components locally */
 
@@ -31,7 +31,7 @@ const App = () => {
         <DiscordButton />
       </div>
 
-      {/* <AdminPanel /> */}
+      <AdminPanel />
 
       <div tw="grid gap-2 [grid-template-columns: repeat(auto-fit, minmax(25ch, 1fr))]">
         {projects.map((project, index) => (
