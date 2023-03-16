@@ -5,8 +5,8 @@ import 'twin.macro';
 import { getProjects } from './utils/api';
 import useAuth from './stores/useAuth';
 
-import VoteButton from './components/elements/VoteButton';
-import DiscordButton from 'src/components/elements/DiscordButton';
+import VoteButton from './components/Button/VoteButton';
+import DiscordButton from 'src/components/Button/DiscordButton';
 import Ballot from 'src/components/Ballot';
 import DiscordCollector from './components/DiscordCollector';
 import ErrorBanner from 'src/components/ErrorBanner';

@@ -6,7 +6,7 @@ import useBallot from 'src/stores/useBallot';
 import { getPanelistsCsv, getProjectsCsv } from 'src/utils/api';
 import { downloadCsv } from 'src/utils';
 
-import Button from 'src/components/elements/Button';
+import Button from 'src/components/Button';
 
 import PanelistsTable from './PanelistsTable';
 import ProjectsTable from './ProjectsTable';

@@ -11,7 +11,7 @@ import { unapproveProject, submitVote } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 
-import Button from 'src/components/elements/Button';
+import Button from 'src/components/Button';
 import SVGSpinner from 'src/components/icons/SVGSpinner';
 
 const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {

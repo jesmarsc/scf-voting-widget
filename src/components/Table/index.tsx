@@ -72,4 +72,5 @@ const StyledTable = styled('table')([
   tw`[tbody tr]:(odd:bg-black/10)`,
   tw`[th, td]:(p-2 text-left)`,
 ]);
+
 export default Table;

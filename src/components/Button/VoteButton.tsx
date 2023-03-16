@@ -5,7 +5,7 @@ import tw, { styled, theme } from 'twin.macro';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 
-import Button, { WebComponentProps } from 'src/components/elements/Button';
+import Button, { WebComponentProps } from 'src/components/Button';
 import { approveProject, unapproveProject } from 'src/utils/api';
 
 const ButtonWrapper = styled(Button)(tw`min-w-[20ch]`);
