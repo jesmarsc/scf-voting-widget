@@ -7,14 +7,16 @@ import { FaCaretRight } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 
 import { routes } from 'src/constants/routes';
-import { unapproveProject, submitVote } from 'src/utils/api';
+import { unapproveProject, submitVote, submitXdr } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
+import useWallet from 'src/utils/hooks/useWallet';
 
 import Button from 'src/components/Button';
 import SVGSpinner from 'src/components/icons/SVGSpinner';
 
 const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
+  const { wallet } = useWallet();
   const { user, isExpanded, isValid, removeApprovedProject, setVoted } =
     useBallot();
 
@@ -26,13 +28,18 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
 
   const { approved, voted } = user;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const { user } = useBallot.getState();
+
     if (!user) return;
 
     setIsLoading(true);
 
-    submitVote(discordToken)
+    const publicKey = await wallet.getPublicKey();
+
+    submitVote(discordToken, publicKey)
+      .then(({ xdr }) => wallet.signTransaction(xdr, { publicKey }))
+      .then((signedXdr) => submitXdr(discordToken, signedXdr))
       .then(() => {
         setVoted(true);
         window.open(routes.AIRTABLE, '__blank');
