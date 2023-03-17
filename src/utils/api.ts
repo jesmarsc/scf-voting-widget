@@ -24,7 +24,7 @@ export const getUser = async (discordToken: string): Promise<User> => {
 
 export const getProjects = async (
   discordToken: string
-): Promise<{ total: number; projects: DetailedProject[] }> => {
+): Promise<{ total: number; projects: Project[] }> => {
   return await fetch(`${SCF_API}/projects`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -65,7 +65,7 @@ export const getPanelistsCsv = async (
 export const approveProject = async (
   slug: string,
   discordToken: string
-): Promise<{ project: Project }> => {
+): Promise<{ project: PartialProject }> => {
   return await fetch(`${SCF_API}/approve`, {
     method: 'POST',
     headers: {

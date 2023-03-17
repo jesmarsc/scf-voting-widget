@@ -13,7 +13,7 @@ export type State = {
   cleanupBallot: () => void;
   isValid: () => boolean;
   isApproved: (slug: string) => boolean;
-  addApprovedProject: (project: Project) => void;
+  addApprovedProject: (project: PartialProject) => void;
   removeApprovedProject: (slug: string) => void;
   setVoted: (voted: boolean) => void;
 };
@@ -48,7 +48,7 @@ const useBallot = create(
         return user.approved.some((project) => project.slug === slug);
       },
 
-      addApprovedProject: (project: Project) => {
+      addApprovedProject: (project: PartialProject) => {
         set((state) => {
           const { slug } = project;
           const { user, isApproved } = state;

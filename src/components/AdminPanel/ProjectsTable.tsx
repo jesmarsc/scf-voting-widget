@@ -11,7 +11,7 @@ import Table from 'src/components/Table';
 function ProjectsTable() {
   const { user } = useBallot();
   const discordToken = useAuth((state) => state.discordToken);
-  const [projectsData, setProjectsData] = useState<DetailedProject[]>([]);
+  const [projectsData, setProjectsData] = useState<Project[]>([]);
 
   const handleGetProjects = async () => {
     if (!discordToken) return;
@@ -30,14 +30,13 @@ function ProjectsTable() {
   return <Table data={projectsData} columns={columns} />;
 }
 
-const columnHelper = createColumnHelper<DetailedProject>();
+const columnHelper = createColumnHelper<Project>();
 
 const columns = [
   columnHelper.group({
     header: 'Projects',
     columns: [
       columnHelper.accessor('name', { header: 'Name' }),
-      columnHelper.accessor('score', { header: 'Score' }),
       columnHelper.accessor('approved_count', { header: 'Approved' }),
       columnHelper.accessor('slug', { header: 'Slug' }),
     ],
