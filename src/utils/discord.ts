@@ -1,12 +1,4 @@
-export const discordApiUrl = 'https://discord.com/api';
-export const redirectUrl =
-  process.env.NODE_ENV === 'development'
-    ? window.location.origin
-    : `${window.location.origin}/auth`;
-
-export const discordAuthUrl = `${discordApiUrl}/oauth2/authorize?client_id=917408694822658160&redirect_uri=${encodeURIComponent(
-  redirectUrl
-)}&response_type=token&scope=identify%20email%20connections`;
+import { DISCORD_AUTH } from 'src/constants';
 
 export const randomString = (length: number) => {
   let charset =
@@ -33,7 +25,7 @@ export const randomString = (length: number) => {
 
 export const openDiscordAuth = () => {
   const state = randomString(32);
-  const url = new URL(discordAuthUrl);
+  const url = new URL(DISCORD_AUTH);
   url.searchParams.set('state', state);
 
   sessionStorage.setItem(state, window.location.pathname);
