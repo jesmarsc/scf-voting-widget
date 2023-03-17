@@ -104,11 +104,22 @@ export const saveFavorites = async (
   }).then(handleResponse);
 };
 
-export const submitVote = async (discordToken: string) => {
+export const submitVote = async (discordToken: string, publicKey: string) => {
   return await fetch(`${apiUrl}/submit`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
+    body: JSON.stringify({ publicKey }),
+  }).then(handleResponse);
+};
+
+export const submitXdr = async (discordToken: string, signedXdr: string) => {
+  return await fetch(`${apiUrl}/submit-xdr`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ xdr: signedXdr }),
   }).then(handleResponse);
 };
