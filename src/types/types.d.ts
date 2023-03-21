@@ -26,9 +26,10 @@ interface DiscordUser {
 }
 
 interface User extends DiscordUser {
-  voted: boolean;
   approved: PartialProject[];
+  hash?: string;
   isAdmin: boolean;
-  budget: number;
+  publicKey?: string;
   timestamp?: number;
+  voted: boolean;
 }

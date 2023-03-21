@@ -11,7 +11,7 @@ export const DISCORD_REDIRECT = isDev
   : `${window.location.origin}/auth`;
 
 const discordSearchParams = new URLSearchParams({
-  client_id: isDev ? '869940034428604476' : '917408694822658160',
+  client_id: '897514728459468821',
   redirect_uri: DISCORD_REDIRECT,
   response_type: 'token',
   scope: 'identify email connections',
