@@ -6,11 +6,11 @@ import 'src/styles/goober';
 import App from './App';
 
 /* Web Components */
-import VoteButton from 'src/components/elements/VoteButton';
-import DiscordButton from 'src/components/elements/DiscordButton';
+import VoteButton from 'src/components/Button/VoteButton';
+import DiscordButton from 'src/components/Button/DiscordButton';
 import Ballot from 'src/components/Ballot';
 import DiscordCollector from 'src/components/DiscordCollector';
-import AdminPanel from 'src/components/admin/AdminPanel';
+import AdminPanel from 'src/components/AdminPanel';
 import ErrorBanner from 'src/components/ErrorBanner';
 
 define(VoteButton, 'vote-button');

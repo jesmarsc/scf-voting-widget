@@ -1,7 +1,7 @@
 import { h } from 'preact';
 import tw, { styled } from 'twin.macro';
 
-import Container from 'src/components/elements/Container';
+import Container from 'src/components/Container';
 import useError from 'src/stores/useError';
 
 import { IoClose } from 'react-icons/io5';

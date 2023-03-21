@@ -1,8 +1,9 @@
 import path from 'path';
 
 export default (config, env, helpers) => {
-  const { rule } = helpers.getLoadersByName(config, 'babel-loader')[0];
-  const babelConfig = rule.options;
+  const {
+    loader: { options: babelConfig },
+  } = helpers.getLoadersByName(config, 'babel-loader')[0];
 
   /* Support css prop for styling with goober. */
   babelConfig.plugins.unshift(

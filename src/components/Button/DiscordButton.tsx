@@ -4,7 +4,7 @@ import { theme } from 'twin.macro';
 import { openDiscordAuth } from 'src/utils/discord';
 import useAuth from 'src/stores/useAuth';
 
-import Button, { WebComponentProps } from 'src/components/elements/Button';
+import Button, { WebComponentProps } from 'src/components/Button';
 import useBallot from 'src/stores/useBallot';
 
 const DiscordButton = ({

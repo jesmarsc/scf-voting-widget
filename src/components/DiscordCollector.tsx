@@ -2,7 +2,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 
 import useAuth from 'src/stores/useAuth';
-import Container from 'src/components/elements/Container';
+import Container from 'src/components/Container';
 
 type Status = 'valid' | 'invalid' | 'loading';
 

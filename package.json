@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "scf-voting",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "babelMacros": {
     "twin": {
@@ -14,25 +14,21 @@
     "build:analyze": "npm run build -- --analyze"
   },
   "dependencies": {
-    "goober": "^2.0.41",
-    "preact": "^10.3.1",
+    "@preact/signals": "^1.1.3",
+    "@stellar/freighter-api": "^1.3.1",
+    "@tanstack/react-table": "^8.7.9",
+    "goober": "2.1.2",
+    "preact": "^10.13.1",
     "preact-custom-element": "^4.2.1",
     "react-icons": "^4.4.0",
-    "react-movable": "^2.5.4",
-    "react-table": "^7.7.0",
-    "react-virtualized-auto-sizer": "^1.0.6",
-    "react-window": "^1.8.6",
     "zustand": "^3.5.9"
   },
   "devDependencies": {
     "@agney/babel-plugin-goober-css-prop": "0.0.1",
     "@types/preact-custom-element": "^4.0.1",
-    "@types/react-table": "^7.7.2",
-    "@types/react-virtualized-auto-sizer": "^1.0.1",
-    "@types/react-window": "^1.8.5",
-    "preact-cli": "^3.0.0",
-    "tailwindcss": "^2.2.7",
-    "twin.macro": "^2.6.2",
-    "typescript": "^3.7.5"
+    "preact-cli": "^3.4.5",
+    "tailwindcss": "^3.2.7",
+    "twin.macro": "^3.1.0",
+    "typescript": "^4.9.5"
   }
 }

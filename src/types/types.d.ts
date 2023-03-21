@@ -1,8 +1,11 @@
 interface Project {
+  id: string;
   name: string;
   slug: string;
-  budget: number;
+  approved_count: number;
 }
+
+type PartialProject = Pick<Project, 'id' | 'name' | 'slug'>;
 
 interface DiscordUser {
   id: string;
@@ -23,16 +26,10 @@ interface DiscordUser {
 }
 
 interface User extends DiscordUser {
-  voted: boolean;
-  favorites: Project[];
-  approved: Project[];
+  approved: PartialProject[];
+  hash?: string;
   isAdmin: boolean;
-  budget: number;
+  publicKey?: string;
   timestamp?: number;
-}
-
-interface DetailedProject extends Project {
-  id: string;
-  score: number;
-  approved_count: number;
+  voted: boolean;
 }

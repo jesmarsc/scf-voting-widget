@@ -5,32 +5,20 @@ import tw, { styled, theme } from 'twin.macro';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 
-import Button, { WebComponentProps } from 'src/components/elements/Button';
+import Button, { WebComponentProps } from 'src/components/Button';
 import { approveProject, unapproveProject } from 'src/utils/api';
 
-const ButtonWrapper = styled(Button)(tw`min-width[20ch]`);
+const ButtonWrapper = styled(Button)(tw`min-w-[20ch]`);
 
 type Props = {
   slug: string;
-  budget?: string;
 } & WebComponentProps;
 
-const VoteButton = ({
-  slug,
-  budget = '0',
-  variant,
-  activeColor,
-  inactiveColor,
-}: Props) => {
+const VoteButton = ({ slug, ...restProps }: Props) => {
   const discordToken = useAuth((state) => state.discordToken);
 
-  const {
-    user,
-    isApproved,
-    isWithinBudget,
-    addApprovedProject,
-    removeApprovedProject,
-  } = useBallot();
+  const { user, isApproved, addApprovedProject, removeApprovedProject } =
+    useBallot();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -56,19 +44,16 @@ const VoteButton = ({
 
   return (
     <ButtonWrapper
-      variant={variant}
       color={
-        isSelected
-          ? activeColor || theme`colors.stellar.green`
-          : inactiveColor || theme`colors.stellar.purple`
+        isSelected ? theme`colors.stellar.green` : theme`colors.stellar.purple`
       }
-      isDisabled={!isSelected && !isWithinBudget(parseInt(budget))}
       disabledText="Exceeds Budget"
       isLoading={isLoading}
       loadingText={isSelected ? 'Removing' : 'Adding'}
       onClick={() =>
         isSelected ? handleRemoveProject() : handleAddApprovedProject()
       }
+      {...restProps}
     >
       {isSelected ? 'Remove Vote' : 'Add Vote'}
     </ButtonWrapper>
