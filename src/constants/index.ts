@@ -1,18 +1,15 @@
-// export const isDev = process.env.NODE_ENV === 'development';
-export const isDev = true;
+export const isDev = process.env.NODE_ENV === 'development';
 
 // use http://localhost:8787 for local development
 export const SCF_API = isDev
-  ? 'https://scf-voting-dev.stellarcommunity.workers.dev'
+  ? 'http://localhost:8787'
   : 'https://scf-voting.stellarcommunity.workers.dev';
 
 export const DISCORD = 'https://discord.com/api';
 
-// export const DISCORD_REDIRECT = isDev
-//   ? window.location.origin
-//   : `${window.location.origin}/auth`;
-
-export const DISCORD_REDIRECT = `${window.location.origin}/auth`;
+export const DISCORD_REDIRECT = isDev
+  ? window.location.origin
+  : `${window.location.origin}/auth`;
 
 const discordSearchParams = new URLSearchParams({
   client_id: '869940034428604476',
@@ -24,3 +21,6 @@ const discordSearchParams = new URLSearchParams({
 export const DISCORD_AUTH = `${DISCORD}/oauth2/authorize?${discordSearchParams}`;
 
 export const stellarNetwork = isDev ? 'TESTNET' : 'PUBLIC';
+
+export const stellarExpertTxLink = (hash: string) =>
+  `https://stellar.expert/explorer/${stellarNetwork.toLowerCase()}/tx/${hash}`;

@@ -1,11 +1,11 @@
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
-import { forwardRef } from 'preact/compat';
 import tw, { styled, theme } from 'twin.macro';
 
 import { FaCaretRight } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 
+import { stellarExpertTxLink } from 'src/constants';
 import { routes } from 'src/constants/routes';
 import { unapproveProject, submitVote, submitXdr } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
@@ -29,25 +29,21 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
   const { approved, voted } = user;
 
   const handleSubmit = async () => {
-    const { user } = useBallot.getState();
-
-    if (!user) return;
-
+    const publicKey = await wallet.getPublicKey();
     setIsLoading(true);
 
-    const publicKey = await wallet.getPublicKey();
+    try {
+      const { xdr } = await submitVote(discordToken, publicKey);
 
-    submitVote(discordToken, publicKey)
-      .then(({ xdr }) => wallet.signTransaction(xdr, { publicKey }))
-      .then((signedXdr) => submitXdr(discordToken, signedXdr))
-      .then(() => {
-        setVoted(true);
-        window.open(routes.AIRTABLE, '__blank');
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setIsConfirming(false);
-      });
+      const signedXdr = await wallet.signTransaction(xdr, { publicKey });
+
+      await submitXdr(discordToken, signedXdr);
+
+      setVoted(true);
+    } finally {
+      setIsLoading(false);
+      setIsConfirming(false);
+    }
   };
 
   const handleRemove = (slug: string) => {
@@ -89,11 +85,26 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
           ))}
         </ApprovedWrapper>
 
-        <Footer>
+        <div tw="p-2">
           {voted ? (
-            <FeedbackLink href={routes.AIRTABLE} target="__blank">
-              Submit project feedback
-            </FeedbackLink>
+            <div tw="flex gap-2">
+              {user.hash && (
+                <ExternalLink
+                  href={stellarExpertTxLink(user.hash)}
+                  target="__blank"
+                >
+                  Transaction
+                </ExternalLink>
+              )}
+
+              <ExternalLink
+                href={routes.DEV_DISCORD}
+                target="__blank"
+                tw="bg-stellar-green"
+              >
+                Give feedback
+              </ExternalLink>
+            </div>
           ) : (
             <BallotButton
               isDisabled={!isValid()}
@@ -102,7 +113,7 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
               Submit
             </BallotButton>
           )}
-        </Footer>
+        </div>
 
         <ConfirmingOverlay isVisible={isConfirming}>
           <div>
@@ -139,7 +150,7 @@ interface BallotProps {
 const BallotContainer = styled('div')([
   tw`fixed bottom-4 right-4 font-sans rounded-lg overflow-hidden shadow-lg border border-solid border-gray-200 bg-white [z-index: 1000]`,
   tw`flex flex-col w-72 max-h-[min(30rem, calc(100vh - 2rem))]`,
-  tw`box-border all:(m-0 p-0 [box-sizing: inherit])`,
+  tw`box-border all:(m-0 [box-sizing: inherit])`,
 ]);
 
 const BallotTitle = styled('div')([
@@ -149,55 +160,39 @@ const BallotTitle = styled('div')([
 const BallotContent = styled('div')([
   tw`relative flex flex-col h-[32rem] overflow-hidden`,
   ({ isExpanded }: { isExpanded: boolean }) =>
-    isExpanded ? tw` max-h-[32rem]` : tw`max-h-0`,
+    isExpanded ? tw`max-h-[32rem]` : tw`max-h-0`,
 ]);
 
 const ApprovedWrapper = styled('div')([
   tw`flex-1 shadow-inner bg-gray-100 overflow-y-auto`,
 ]);
 
-const ProjectItem = styled(
-  'div',
-  forwardRef
-)([
-  tw`flex items-center p-2 font-sans [z-index: 1000] svg:(text-xl fill-current)`,
-  ({ isFavorite }: { isFavorite?: boolean }) =>
-    isFavorite
-      ? tw`m-2! rounded cursor-pointer bg-stellar-purple all-child:(text-white)`
-      : tw`not-first:(border-0 border-t-2 border-solid border-white) all-child:(text-gray-800)`,
+const ProjectItem = styled('div')([
+  tw`flex items-center gap-2 p-2 font-sans not-first:(border-0 border-t-2 border-solid border-white)`,
 ]);
 
 const ProjectName = styled('span')([
-  tw`flex-1 whitespace-nowrap overflow-hidden text-ellipsis mx-2`,
+  tw`flex-1 whitespace-nowrap overflow-hidden text-ellipsis`,
 ]);
 
-const ProjectButton = styled('button')([
-  tw`flex items-center justify-center border-none cursor-pointer rounded svg:(text-base!)`,
-  tw`m-0! p-0! leading-none! w-5 h-5 bg-transparent`,
+const ProjectDelete = styled('button')([
+  tw`flex items-center justify-center p-0.5 border-none cursor-pointer rounded svg:(text-base)`,
+  tw`bg-black/10 active:(bg-black/20) transition-colors`,
 ]);
 
-const ProjectDelete = styled(ProjectButton)([
-  tw`bg-black transition-colors bg-opacity-10 hover:(bg-opacity-20) active:(bg-opacity-30)`,
+const Overlay = styled('div')<{ isVisible: boolean }>([
+  tw`absolute inset-0 p-4 flex flex-col justify-center items-center text-center transition-all opacity-0`,
+  ({ isVisible }) => (isVisible ? tw`opacity-100` : tw`invisible`),
 ]);
 
-const Overlay = styled('div')([
-  tw`absolute inset-0 p-4! flex flex-col justify-center items-center text-center transition-all opacity-0`,
-  ({ isVisible }: { isVisible: boolean }) =>
-    isVisible ? tw`opacity-100` : tw`invisible`,
-]);
+const LoadingOverlay = styled(Overlay)(tw`text-white text-2xl bg-black/20`);
 
-const LoadingOverlay = styled(Overlay)(
-  tw`text-white text-2xl bg-black bg-opacity-10 [z-index: 2000]`
+const ConfirmingOverlay = styled(Overlay)(tw`bg-gray-100`);
+
+const ExternalLink = styled('a')(
+  tw`flex items-center justify-center p-2 rounded text-center text-white bg-stellar-purple no-underline w-full`
 );
 
-const ConfirmingOverlay = styled(Overlay)(tw` bg-gray-100`);
-
-const Footer = styled('div')(tw`p-2 flex items-center`);
-
-const FeedbackLink = styled('a')(
-  tw`block p-2 rounded text-center text-white bg-stellar-green no-underline w-full`
-);
-
-const BallotButton = styled(Button)([tw`px-4 py-2 shadow-none ml-auto`]);
+const BallotButton = styled(Button)([tw`p-2 shadow-none ml-auto`]);
 
 export default Ballot;

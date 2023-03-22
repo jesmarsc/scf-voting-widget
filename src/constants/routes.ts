@@ -1,3 +1,3 @@
 export enum routes {
-  AIRTABLE = 'https://airtable.com/shrmv4OPWq9JEYqIr',
+  DEV_DISCORD = 'https://discord.gg/stellardev',
 }

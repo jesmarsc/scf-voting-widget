@@ -104,7 +104,10 @@ export const saveFavorites = async (
   }).then(handleResponse);
 };
 
-export const submitVote = async (discordToken: string, publicKey: string) => {
+export const submitVote = async (
+  discordToken: string,
+  publicKey: string
+): Promise<{ xdr: string }> => {
   return await fetch(`${SCF_API}/submit`, {
     method: 'POST',
     headers: {
