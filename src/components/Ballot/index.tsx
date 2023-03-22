@@ -7,7 +7,12 @@ import { IoClose } from 'react-icons/io5';
 
 import { stellarExpertTxLink } from 'src/constants';
 import { routes } from 'src/constants/routes';
-import { unapproveProject, submitVote, submitXdr } from 'src/utils/api';
+import {
+  unapproveProject,
+  submitVote,
+  submitXdr,
+  getUser,
+} from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import useWallet from 'src/utils/hooks/useWallet';
@@ -17,8 +22,7 @@ import SVGSpinner from 'src/components/icons/SVGSpinner';
 
 const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
   const { wallet } = useWallet();
-  const { user, isExpanded, isValid, removeApprovedProject, setVoted } =
-    useBallot();
+  const { user, isExpanded, isValid, removeApprovedProject } = useBallot();
 
   const discordToken = useAuth((state) => state.discordToken);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +43,9 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
 
       await submitXdr(discordToken, signedXdr);
 
-      setVoted(true);
+      const user = await getUser(discordToken);
+
+      useBallot.getState().init(user);
     } finally {
       setIsLoading(false);
       setIsConfirming(false);
