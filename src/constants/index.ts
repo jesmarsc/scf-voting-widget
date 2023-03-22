@@ -3,7 +3,7 @@ export const isDev = true;
 
 // use http://localhost:8787 for local development
 export const SCF_API = isDev
-  ? 'http://scf-voting-dev.stellarcommunity.workers.dev'
+  ? 'https://scf-voting-dev.stellarcommunity.workers.dev'
   : 'https://scf-voting.stellarcommunity.workers.dev';
 
 export const DISCORD = 'https://discord.com/api';
