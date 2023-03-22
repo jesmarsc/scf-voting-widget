@@ -1,7 +1,8 @@
 export const isDev = process.env.NODE_ENV === 'development';
 
+// use http://localhost:8787 for local development
 export const SCF_API = isDev
-  ? 'http://localhost:8787'
+  ? 'http://scf-voting-dev.stellarcommunity.workers.dev'
   : 'https://scf-voting.stellarcommunity.workers.dev';
 
 export const DISCORD = 'https://discord.com/api';
@@ -11,7 +12,7 @@ export const DISCORD_REDIRECT = isDev
   : `${window.location.origin}/auth`;
 
 const discordSearchParams = new URLSearchParams({
-  client_id: isDev ? '869940034428604476' : '897514728459468821',
+  client_id: '897514728459468821',
   redirect_uri: DISCORD_REDIRECT,
   response_type: 'token',
   scope: 'identify email connections',
