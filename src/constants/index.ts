@@ -8,9 +8,11 @@ export const SCF_API = isDev
 
 export const DISCORD = 'https://discord.com/api';
 
-export const DISCORD_REDIRECT = isDev
-  ? window.location.origin
-  : `${window.location.origin}/auth`;
+// export const DISCORD_REDIRECT = isDev
+//   ? window.location.origin
+//   : `${window.location.origin}/auth`;
+
+export const DISCORD_REDIRECT = `${window.location.origin}/auth`;
 
 const discordSearchParams = new URLSearchParams({
   client_id: '869940034428604476',
