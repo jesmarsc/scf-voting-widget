@@ -1,5 +1,6 @@
 import { h } from 'preact';
 import { useState } from 'preact/hooks';
+import freighter from '@stellar/freighter-api';
 import tw, { styled, theme } from 'twin.macro';
 
 import { FaCaretRight } from 'react-icons/fa';
@@ -19,6 +20,8 @@ import useWallet from 'src/utils/hooks/useWallet';
 
 import Button from 'src/components/Button';
 import SVGSpinner from 'src/components/icons/SVGSpinner';
+
+//TODO: Potentially refactor freighter.isConnected() into wallet hook.
 
 const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
   const { wallet } = useWallet();
@@ -104,20 +107,36 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
               )}
 
               <ExternalLink
+                tw="bg-stellar-green"
                 href={routes.DEV_DISCORD}
                 target="__blank"
-                tw="bg-stellar-green"
               >
                 Give feedback
               </ExternalLink>
             </div>
           ) : (
-            <BallotButton
-              isDisabled={!isValid()}
-              onClick={() => setIsConfirming(true)}
-            >
-              Submit
-            </BallotButton>
+            <div tw="flex gap-2">
+              {!freighter.isConnected() && (
+                <span tw="bg-stellar-salmon text-white rounded p-1 text-center">
+                  Install
+                  <a
+                    tw="px-1 font-semibold text-white"
+                    href={wallet.metadata.url}
+                    target="__blank"
+                  >
+                    {wallet.metadata.name}
+                  </a>
+                  to submit your vote.
+                </span>
+              )}
+
+              <BallotButton
+                isDisabled={!isValid() || !freighter.isConnected()}
+                onClick={() => setIsConfirming(true)}
+              >
+                Submit
+              </BallotButton>
+            </div>
           )}
         </div>
 
