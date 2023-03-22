@@ -1,4 +1,5 @@
-export const isDev = process.env.NODE_ENV === 'development';
+// export const isDev = process.env.NODE_ENV === 'development';
+export const isDev = true;
 
 // use http://localhost:8787 for local development
 export const SCF_API = isDev
