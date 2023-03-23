@@ -9,7 +9,7 @@
     }
   },
   "scripts": {
-    "start": "preact watch --template=src/template.html",
+    "start": "preact watch --template=src/template.html --https",
     "build": "preact build --no-esm --no-sw --no-json --no-prerender --template=src/template.html",
     "build:analyze": "npm run build -- --analyze"
   },
