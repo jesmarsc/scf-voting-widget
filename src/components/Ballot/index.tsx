@@ -20,6 +20,7 @@ import useWallet from 'src/utils/hooks/useWallet';
 
 import Button from 'src/components/Button';
 import SVGSpinner from 'src/components/icons/SVGSpinner';
+import ErrorCard from 'src/components/Error/ErrorCard';
 
 //TODO: Potentially refactor freighter.isConnected() into wallet hook.
 
@@ -30,6 +31,7 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
   const discordToken = useAuth((state) => state.discordToken);
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
+  const [error, setError] = useState<any>(null);
 
   if (!user || !discordToken) return null;
 
@@ -49,18 +51,25 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
       const user = await getUser(discordToken);
 
       useBallot.getState().init(user);
+    } catch (e) {
+      setError(e);
     } finally {
       setIsLoading(false);
       setIsConfirming(false);
     }
   };
 
-  const handleRemove = (slug: string) => {
+  const handleRemove = async (slug: string) => {
     setIsLoading(true);
 
-    unapproveProject(slug, discordToken)
-      .then(() => removeApprovedProject(slug))
-      .finally(() => setIsLoading(false));
+    try {
+      await unapproveProject(slug, discordToken);
+      removeApprovedProject(slug);
+    } catch (e) {
+      setError(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -161,6 +170,10 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
         <LoadingOverlay isVisible={isLoading}>
           <SVGSpinner />
         </LoadingOverlay>
+
+        <Overlay isVisible={error} tw="block text-left bg-gray-200">
+          <ErrorCard tw="h-full" error={error} onClose={() => setError(null)} />
+        </Overlay>
       </BallotContent>
     </BallotContainer>
   );
