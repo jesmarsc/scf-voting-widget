@@ -27,6 +27,7 @@ interface DiscordUser {
 
 interface User extends DiscordUser {
   approved: PartialProject[];
+  needsWork: PartialProject[];
   hash?: string;
   isAdmin: boolean;
   publicKey?: string;

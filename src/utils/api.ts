@@ -89,6 +89,33 @@ export const unapproveProject = async (slug: string, discordToken: string) => {
   }).then(handleResponse);
 };
 
+export const needsWorkProject = async (
+  slug: string,
+  discordToken: string
+): Promise<{ project: PartialProject }> => {
+  return await fetch(`${SCF_API}/needs-work`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({
+      slug,
+    }),
+  }).then(handleResponse);
+};
+
+export const removeNeedsWork = async (slug: string, discordToken: string) => {
+  return await fetch(`${SCF_API}/remove-needs-work`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({
+      slug,
+    }),
+  }).then(handleResponse);
+};
+
 export const saveFavorites = async (
   favorites: string[],
   discordToken: string

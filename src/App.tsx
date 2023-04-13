@@ -33,7 +33,7 @@ const App = () => {
 
       <AdminPanel />
 
-      <div tw="grid gap-2 [grid-template-columns: repeat(auto-fit, minmax(25ch, 1fr))]">
+      <div tw="grid gap-2 [grid-template-columns: repeat(auto-fit, minmax(50ch, 1fr))]">
         {projects.map((project, index) => (
           <div key={index}>
             <p>{project.name.substring(0, 20)}</p>

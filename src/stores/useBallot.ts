@@ -13,8 +13,11 @@ export type State = {
   cleanupBallot: () => void;
   isValid: () => boolean;
   isApproved: (slug: string) => boolean;
+  needsWork: (slug: string) => boolean;
   addApprovedProject: (project: PartialProject) => void;
+  addNeedsWorkProject: (project: PartialProject) => void;
   removeApprovedProject: (slug: string) => void;
+  removeNeedsWorkProject: (slug: string) => void;
   setVoted: (voted: boolean) => void;
 };
 
@@ -46,6 +49,43 @@ const useBallot = create(
         if (!user) return false;
 
         return user.approved.some((project) => project.slug === slug);
+      },
+
+      needsWork: (slug: string) => {
+        const { user } = get();
+
+        if (!user) return false;
+
+        return user.needsWork?.some((project) => project.slug === slug);
+      },
+
+      addNeedsWorkProject: (project: PartialProject) => {
+        set((state) => {
+          const { slug } = project;
+          const { user, needsWork } = state;
+
+          if (!user || needsWork(slug)) return state;
+
+          const neutral = [...user.needsWork, project];
+
+          neutral.sort((a, b) => a.name.localeCompare(b.name));
+
+          return { ...state, user: { ...user, needsWork: neutral } };
+        });
+      },
+
+      removeNeedsWorkProject: (slug: string) => {
+        set((state) => {
+          const { user } = state;
+
+          if (!user) return state;
+
+          const neutral = user.needsWork.filter(
+            (project) => project.slug !== slug
+          );
+
+          return { ...state, user: { ...user, needsWork: neutral } };
+        });
       },
 
       addApprovedProject: (project: PartialProject) => {

@@ -7,6 +7,7 @@ module.exports = {
           purple: '#3e1bdb',
           salmon: '#ff434b',
           green: '#009159',
+          yellow: '#ffb200',
         },
       },
       boxShadow: (theme) => ({
