@@ -13,7 +13,7 @@ import {
   removeNeedsWork,
 } from 'src/utils/api';
 
-const ButtonWrapper = styled(Button)(tw`min-w-[20ch]`);
+const ButtonWrapper = styled(Button)(tw`min-w-[12ch]`);
 
 type Props = {
   slug: string;
