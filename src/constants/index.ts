@@ -3,7 +3,7 @@ export const isDev = process.env.NODE_ENV === 'development';
 // use http://localhost:8787 for local development
 export const SCF_API = isDev
   ? 'http://localhost:8787'
-  : 'https://scf-voting-dev.stellarcommunity.workers.dev';
+  : 'https://scf-voting.stellarcommunity.workers.dev';
 
 export const DISCORD = 'https://discord.com/api';
 
@@ -20,7 +20,7 @@ const discordSearchParams = new URLSearchParams({
 
 export const DISCORD_AUTH = `${DISCORD}/oauth2/authorize?${discordSearchParams}`;
 
-export const stellarNetwork = !isDev ? 'TESTNET' : 'PUBLIC';
+export const stellarNetwork = isDev ? 'TESTNET' : 'PUBLIC';
 
 export const stellarExpertTxLink = (hash: string) =>
   `https://stellar.expert/explorer/${stellarNetwork.toLowerCase()}/tx/${hash}`;
