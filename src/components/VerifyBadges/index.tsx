@@ -1,9 +1,12 @@
 import { h } from 'preact';
+import { useState } from 'preact/hooks';
 import tw, { styled, theme } from 'twin.macro';
 import Button from 'src/components/Button';
 import ConnectDiscord from '../Button/ConnectDiscord';
 import useDeveloper from 'src/stores/useDeveloper';
 import useWallet from 'src/utils/hooks/useWallet';
+import SVGSpinner from 'src/components/icons/SVGSpinner';
+
 import { updatePublicKeys } from 'src/utils/api';
 
 const Container = styled('div')([
@@ -14,6 +17,10 @@ const Container = styled('div')([
 
 const ExternalLink = styled('a')(
   tw`flex items-center justify-center px-2 py-1.5 rounded text-center border-2 border-solid border-stellar-purple no-underline text-sm`
+);
+
+const QuestKeyWrapper = styled('div')(
+  tw`relative flex flex-1 min-w-0 [p]:first:(overflow-hidden overflow-ellipsis) px-5 text-sm`
 );
 
 const DeveloperHandle = ({ developer }: { developer: Developer }) => {
@@ -29,21 +36,30 @@ const DeveloperHandle = ({ developer }: { developer: Developer }) => {
 
 const VerifyBadges = () => {
   const { developer, discordToken, refreshDeveloper } = useDeveloper();
+  const [isLoadingAdd, setIsLoadingAdd] = useState(false);
+  const [isLoadingRemove, setIsLoadingRemove] = useState<undefined | string>(
+    undefined
+  );
+
   const { wallet } = useWallet('albedo');
 
   const addPublicKey = async () => {
     if (!discordToken) return;
+    setIsLoadingAdd(true);
     console.log('adding wallet');
     const signedMessage = await wallet.signMessage();
     await updatePublicKeys(discordToken, signedMessage);
-    refreshDeveloper();
+    await refreshDeveloper();
+    setIsLoadingAdd(false);
   };
 
   const removePublicKey = async (pk: string) => {
     if (!discordToken) return;
+    setIsLoadingRemove(pk);
     console.log('adding wallet');
     await updatePublicKeys(discordToken, { pk: pk });
-    refreshDeveloper();
+    await refreshDeveloper();
+    setIsLoadingRemove(undefined);
   };
 
   return (
@@ -63,24 +79,30 @@ const VerifyBadges = () => {
         <ConnectDiscord />
       </div>
       <p tw="flex justify-between items-center">
-        2. Connect Wallets
+        2.{' '}
+        {developer?.publicKeys && developer.publicKeys.length > 0
+          ? 'Connected Public Keys'
+          : 'Connect Wallet'}
         <Button
           variant={'outline'}
           color={theme`colors.stellar.purple`}
           onClick={addPublicKey}
         >
-          {'Add Wallet'}
+          {isLoadingAdd ? <SVGSpinner /> : 'Add Public Key'}
         </Button>
       </p>
       {developer?.publicKeys.map((key) => (
         <p tw="flex justify-between items-center">
-          {key}
+          <QuestKeyWrapper>
+            <p>{key.slice(0, -3)}</p>
+            <p>{key.slice(-3)}</p>
+          </QuestKeyWrapper>
           <Button
             variant={'outline'}
-            color={theme`colors.stellar.purple`}
+            color={theme`colors.stellar.salmon`}
             onClick={() => removePublicKey(key)}
           >
-            {'Remove'}
+            {isLoadingRemove === key ? <SVGSpinner /> : 'Remove'}
           </Button>
         </p>
       ))}
