@@ -4,37 +4,37 @@ import { signal } from '@preact/signals';
 import { stellarNetwork } from 'src/constants';
 
 import FreighterAdapter from 'src/utils/wallet/FreighterAdapter';
-
-const walletAdapters = {
-  freighter: new FreighterAdapter(stellarNetwork),
-};
-
-const selectedWallet = walletAdapters.freighter;
+import AlbedoAdapter from '../wallet/AlbedoAdapter';
 
 const isWalletOpen = signal(false);
 
-const walletProxy = new Proxy(selectedWallet, {
-  get: (adapter, prop) => {
-    const value = Reflect.get(adapter, prop);
+const useWallet = (selectedWallet: 'freighter' | 'albedo' = 'freighter') => {
+  const walletAdapters = {
+    freighter: new FreighterAdapter(stellarNetwork),
+    albedo: new AlbedoAdapter(stellarNetwork),
+  };
 
-    if (typeof value === 'function') {
-      return function () {
-        const result = value.apply(adapter, arguments);
+  const walletProxy = new Proxy(walletAdapters[selectedWallet], {
+    get: (adapter, prop) => {
+      const value = Reflect.get(adapter, prop);
 
-        if (result instanceof Promise) {
-          isWalletOpen.value = true;
-          result.finally(() => (isWalletOpen.value = false));
-        }
+      if (typeof value === 'function') {
+        return function () {
+          const result = value.apply(adapter, arguments);
 
-        return result;
-      };
-    }
+          if (result instanceof Promise) {
+            isWalletOpen.value = true;
+            result.finally(() => (isWalletOpen.value = false));
+          }
 
-    return value;
-  },
-});
+          return result;
+        };
+      }
 
-const useWallet = () => {
+      return value;
+    },
+  });
+
   useEffect(() => {
     return () => {
       isWalletOpen.value = false;

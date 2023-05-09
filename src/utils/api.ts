@@ -22,6 +22,16 @@ export const getUser = async (discordToken: string): Promise<User> => {
   }).then(handleResponse);
 };
 
+export const getDeveloper = async (
+  discordToken: string
+): Promise<Developer> => {
+  return await fetch(`${SCF_API}/developer`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
 export const getProjects = async (
   discordToken: string
 ): Promise<{ total: number; projects: Project[] }> => {
@@ -151,5 +161,18 @@ export const submitXdr = async (discordToken: string, signedXdr: string) => {
       Authorization: `Bearer ${discordToken}`,
     },
     body: JSON.stringify({ xdr: signedXdr }),
+  }).then(handleResponse);
+};
+
+export const updatePublicKeys = async (
+  discordToken: string,
+  signedMessage: SignedMessage
+) => {
+  return await fetch(`${SCF_API}/update-public-keys`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ signedMessage: signedMessage }),
   }).then(handleResponse);
 };

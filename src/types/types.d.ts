@@ -34,3 +34,13 @@ interface User extends DiscordUser {
   timestamp?: number;
   voted: boolean;
 }
+
+interface Developer extends DiscordUser {
+  publicKeys: string[];
+}
+
+interface SignedMessage {
+  pk: string;
+  message?: string;
+  signature?: string;
+}
