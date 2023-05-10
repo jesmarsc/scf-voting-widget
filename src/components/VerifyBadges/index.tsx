@@ -11,13 +11,13 @@ import { getProofTxt, updatePublicKeys } from 'src/utils/api';
 import { downloadTxt } from 'src/utils';
 
 const Container = styled('div')([
-  tw`flex flex-col gap-2 py-2 px-4 font-bold font-sans rounded border-none tracking-wide transition-colors text-black shadow-purple mx-auto max-w-2xl`,
+  tw`flex flex-col gap-4 py-2 px-4 font-bold font-sans rounded border-none tracking-wide transition-colors text-black shadow-purple mx-auto max-w-2xl`,
   ({ danger }: { danger?: boolean }) =>
     danger ? tw`bg-stellar-salmon shadow-salmon` : '',
 ]);
 
 const ExternalLink = styled('a')(
-  tw`flex items-center justify-center px-2 py-1.5 rounded text-center border-2 border-solid border-stellar-purple no-underline text-sm`
+  tw`flex items-center justify-center px-2 py-2 rounded text-center border-2 border-solid border-stellar-purple no-underline text-sm text-black`
 );
 
 const QuestKeyWrapper = styled('div')(
@@ -133,7 +133,9 @@ const VerifyBadges = () => {
       </p>
       <p tw="flex justify-between items-center">
         4. Upload file on Submittable
-        <ExternalLink>{'Go to Submittable'}</ExternalLink>
+        <ExternalLink href="https://www.submittable.com" target="_blank">
+          {'Go to Submittable'}
+        </ExternalLink>
       </p>
     </Container>
   );
