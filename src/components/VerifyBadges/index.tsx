@@ -7,7 +7,8 @@ import useDeveloper from 'src/stores/useDeveloper';
 import useWallet from 'src/utils/hooks/useWallet';
 import SVGSpinner from 'src/components/icons/SVGSpinner';
 
-import { updatePublicKeys } from 'src/utils/api';
+import { getProofTxt, updatePublicKeys } from 'src/utils/api';
+import { downloadTxt } from 'src/utils';
 
 const Container = styled('div')([
   tw`block relative py-2 px-4 font-bold font-sans rounded border-none tracking-wide transition-colors text-black shadow-purple mx-auto max-w-2xl`,
@@ -40,6 +41,7 @@ const VerifyBadges = () => {
   const [isLoadingRemove, setIsLoadingRemove] = useState<undefined | string>(
     undefined
   );
+  const [isLoadingExport, setIsLoadingExport] = useState(false);
 
   const { wallet } = useWallet('albedo');
 
@@ -60,6 +62,18 @@ const VerifyBadges = () => {
     await updatePublicKeys(discordToken, { pk: pk });
     await refreshDeveloper();
     setIsLoadingRemove(undefined);
+  };
+
+  const exportProof = async () => {
+    if (!discordToken) return;
+    setIsLoadingExport(true);
+    console.log('adding wallet');
+    const { proofs } = await getProofTxt(discordToken);
+    for (const { txt, pk } of proofs) {
+      downloadTxt(txt, `${pk}.txt`);
+    }
+
+    setIsLoadingExport(false);
   };
 
   return (
@@ -109,8 +123,12 @@ const VerifyBadges = () => {
 
       <p tw="flex justify-between items-center">
         3. Export Proof
-        <Button variant={'outline'} color={theme`colors.stellar.purple`}>
-          {'Download File'}
+        <Button
+          variant={'outline'}
+          color={theme`colors.stellar.purple`}
+          onClick={exportProof}
+        >
+          {isLoadingExport ? <SVGSpinner /> : 'Download'}
         </Button>
       </p>
       <p tw="flex justify-between items-center">

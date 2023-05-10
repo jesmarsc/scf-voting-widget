@@ -176,3 +176,13 @@ export const updatePublicKeys = async (
     body: JSON.stringify({ signedMessage: signedMessage }),
   }).then(handleResponse);
 };
+
+export const getProofTxt = async (
+  discordToken: string
+): Promise<{ proofs: { txt: string; pk: string }[] }> => {
+  return await fetch(`${SCF_API}/export-proof`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
