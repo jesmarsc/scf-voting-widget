@@ -77,67 +77,69 @@ const VerifyBadges = () => {
   };
 
   return (
-    <Container>
-      <h1 tw="text-lg text-black font-bold text-center">
-        Prove ownership of your Stellar Network knowledge
-      </h1>
-      <div tw="flex justify-between items-center">
-        <p tw="flex gap-1">
-          {'1. '}
-          {developer ? (
-            <DeveloperHandle developer={developer} />
-          ) : (
-            'Connect Discord'
-          )}
-        </p>
-        <ConnectDiscord />
-      </div>
-      <p tw="flex justify-between items-center">
-        2.{' '}
-        {developer?.publicKeys && developer.publicKeys.length > 0
-          ? 'Connected Public Keys'
-          : 'Connect Wallet'}
-        <Button
-          variant={'outline'}
-          color={theme`colors.stellar.purple`}
-          onClick={addPublicKey}
-        >
-          {isLoadingAdd ? <SVGSpinner /> : 'Add Public Key'}
-        </Button>
-      </p>
-      {developer?.publicKeys.map((key) => (
+    <div tw="h-full flex flex-col items-center justify-center">
+      <Container>
+        <h1 tw="text-lg text-black font-bold text-center">
+          Prove ownership of your Stellar Network knowledge
+        </h1>
+        <div tw="flex justify-between items-center">
+          <p tw="flex gap-1">
+            {'1. '}
+            {developer ? (
+              <DeveloperHandle developer={developer} />
+            ) : (
+              'Connect Discord'
+            )}
+          </p>
+          <ConnectDiscord />
+        </div>
         <p tw="flex justify-between items-center">
-          <QuestKeyWrapper>
-            <p>{key.slice(0, -3)}</p>
-            <p>{key.slice(-3)}</p>
-          </QuestKeyWrapper>
+          2.{' '}
+          {developer?.publicKeys && developer.publicKeys.length > 0
+            ? 'Connected Public Keys'
+            : 'Connect Wallet'}
           <Button
             variant={'outline'}
-            color={theme`colors.stellar.salmon`}
-            onClick={() => removePublicKey(key)}
+            color={theme`colors.stellar.purple`}
+            onClick={addPublicKey}
           >
-            {isLoadingRemove === key ? <SVGSpinner /> : 'Remove'}
+            {isLoadingAdd ? <SVGSpinner /> : 'Add Public Key'}
           </Button>
         </p>
-      ))}
+        {developer?.publicKeys.map((key) => (
+          <p tw="flex justify-between items-center">
+            <QuestKeyWrapper>
+              <p>{key.slice(0, -3)}</p>
+              <p>{key.slice(-3)}</p>
+            </QuestKeyWrapper>
+            <Button
+              variant={'outline'}
+              color={theme`colors.stellar.salmon`}
+              onClick={() => removePublicKey(key)}
+            >
+              {isLoadingRemove === key ? <SVGSpinner /> : 'Remove'}
+            </Button>
+          </p>
+        ))}
 
-      <p tw="flex justify-between items-center">
-        3. Export Proof
-        <Button
-          variant={'outline'}
-          color={theme`colors.stellar.purple`}
-          onClick={exportProof}
-        >
-          {isLoadingExport ? <SVGSpinner /> : 'Download'}
-        </Button>
-      </p>
-      <p tw="flex justify-between items-center">
-        4. Upload on Submittable
-        <ExternalLink href="https://www.submittable.com" target="_blank">
-          {'Go to Submittable'}
-        </ExternalLink>
-      </p>
-    </Container>
+        <p tw="flex justify-between items-center">
+          3. Export Proof
+          <Button
+            variant={'outline'}
+            color={theme`colors.stellar.purple`}
+            onClick={exportProof}
+          >
+            {isLoadingExport ? <SVGSpinner /> : 'Download'}
+          </Button>
+        </p>
+        <p tw="flex justify-between items-center">
+          4. Upload on Submittable
+          <ExternalLink href="https://www.submittable.com" target="_blank">
+            {'Go to Submittable'}
+          </ExternalLink>
+        </p>
+      </Container>
+    </div>
   );
 };
 
