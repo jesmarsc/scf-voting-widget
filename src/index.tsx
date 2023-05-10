@@ -9,6 +9,7 @@ import Ballot from 'src/components/Ballot';
 import DiscordCollector from 'src/components/DiscordCollector';
 import AdminPanel from 'src/components/AdminPanel';
 import ErrorBanner from 'src/components/ErrorBanner';
+import VerifyBadges from './components/VerifyBadges';
 
 define(VoteButton, 'vote-button');
 define(DiscordButton, 'discord-button');
@@ -16,3 +17,4 @@ define(Ballot, 'vote-ballot');
 define(DiscordCollector, 'discord-collector');
 define(AdminPanel, 'admin-panel');
 define(ErrorBanner, 'error-banner');
+define(VerifyBadges, 'verify-badges');
