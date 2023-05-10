@@ -132,7 +132,7 @@ const VerifyBadges = () => {
         </Button>
       </p>
       <p tw="flex justify-between items-center">
-        4. Upload file on Submittable
+        4. Upload on Submittable
         <ExternalLink href="https://www.submittable.com" target="_blank">
           {'Go to Submittable'}
         </ExternalLink>
