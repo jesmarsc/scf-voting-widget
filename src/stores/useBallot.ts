@@ -1,10 +1,5 @@
-import { unstable_batchedUpdates } from 'preact/compat';
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import useAuth from 'src/stores/useAuth';
-import useError from 'src/stores/useError';
-import { getUser } from 'src/utils/api';
 
 export type State = {
   user?: User;
@@ -130,29 +125,5 @@ const useBallot = create(
     { name: 'ballot-store' }
   )
 );
-
-/* Fetch user if logged in. */
-const { discordToken } = useAuth.getState();
-
-if (discordToken) {
-  getUser(discordToken)
-    .then((user) =>
-      unstable_batchedUpdates(() => {
-        useBallot.getState().init(user);
-      })
-    )
-    .catch((error) => {
-      /* TODO: HANDLE UNAUTHERIZED USER */
-      unstable_batchedUpdates(() => {
-        useAuth.getState().cleanupAuth();
-        useBallot.getState().cleanupBallot();
-        if (!error.message) {
-          useError.getState().setError('Something went wrong');
-        } else {
-          useError.getState().setError(error.message);
-        }
-      });
-    });
-}
 
 export default useBallot;

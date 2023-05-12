@@ -21,10 +21,13 @@ import useWallet from 'src/utils/hooks/useWallet';
 import Button from 'src/components/Button';
 import SVGSpinner from 'src/components/icons/SVGSpinner';
 import ErrorCard from 'src/components/Error/ErrorCard';
+import useBallotState from 'src/stores/useBallotState';
 
 //TODO: Potentially refactor freighter.isConnected() into wallet hook.
 
 const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
+  useBallotState();
+
   const { wallet } = useWallet();
   const { user, isExpanded, isValid, removeApprovedProject } = useBallot();
 
