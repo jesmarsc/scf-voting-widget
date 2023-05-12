@@ -16,10 +16,6 @@ const Container = styled('div')([
     danger ? tw`bg-stellar-salmon shadow-salmon` : '',
 ]);
 
-const ExternalLink = styled('a')(
-  tw`flex items-center justify-center px-2 py-2 rounded text-center border-2 border-solid border-stellar-purple no-underline text-sm text-black`
-);
-
 const QuestKeyWrapper = styled('div')(
   tw`relative flex flex-1 min-w-0 [p]:first:(overflow-hidden overflow-ellipsis) px-5 text-sm`
 );
@@ -131,12 +127,6 @@ const VerifyBadges = () => {
           >
             {isLoadingExport ? <SVGSpinner /> : 'Download'}
           </Button>
-        </p>
-        <p tw="flex justify-between items-center">
-          4. Upload on Submittable
-          <ExternalLink href="https://www.submittable.com" target="_blank">
-            {'Go to Submittable'}
-          </ExternalLink>
         </p>
       </Container>
     </div>
