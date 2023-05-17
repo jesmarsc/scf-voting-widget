@@ -7,8 +7,11 @@ import useBallot from 'src/stores/useBallot';
 import { getProjects } from 'src/utils/api';
 
 import Table from 'src/components/Table';
+import useBallotState from 'src/stores/useBallotState';
 
 function ProjectsTable() {
+  useBallotState();
+
   const { user } = useBallot();
   const discordToken = useAuth((state) => state.discordToken);
   const [projectsData, setProjectsData] = useState<Project[]>([]);

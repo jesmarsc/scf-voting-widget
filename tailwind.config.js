@@ -6,7 +6,8 @@ module.exports = {
         stellar: {
           purple: '#3e1bdb',
           salmon: '#ff434b',
-          green: '#009159',
+          green: '#20bf6b',
+          yellow: '#ffb200',
         },
       },
       boxShadow: (theme) => ({

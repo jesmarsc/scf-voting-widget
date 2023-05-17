@@ -22,6 +22,16 @@ export const getUser = async (discordToken: string): Promise<User> => {
   }).then(handleResponse);
 };
 
+export const getDeveloper = async (
+  discordToken: string
+): Promise<Developer> => {
+  return await fetch(`${SCF_API}/developer`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
 export const getProjects = async (
   discordToken: string
 ): Promise<{ total: number; projects: Project[] }> => {
@@ -89,6 +99,33 @@ export const unapproveProject = async (slug: string, discordToken: string) => {
   }).then(handleResponse);
 };
 
+export const needsWorkProject = async (
+  slug: string,
+  discordToken: string
+): Promise<{ project: PartialProject }> => {
+  return await fetch(`${SCF_API}/needs-work`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({
+      slug,
+    }),
+  }).then(handleResponse);
+};
+
+export const removeNeedsWork = async (slug: string, discordToken: string) => {
+  return await fetch(`${SCF_API}/remove-needs-work`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({
+      slug,
+    }),
+  }).then(handleResponse);
+};
+
 export const saveFavorites = async (
   favorites: string[],
   discordToken: string
@@ -124,5 +161,28 @@ export const submitXdr = async (discordToken: string, signedXdr: string) => {
       Authorization: `Bearer ${discordToken}`,
     },
     body: JSON.stringify({ xdr: signedXdr }),
+  }).then(handleResponse);
+};
+
+export const updatePublicKeys = async (
+  discordToken: string,
+  signedMessage: SignedMessage
+) => {
+  return await fetch(`${SCF_API}/update-public-keys`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ signedMessage: signedMessage }),
+  }).then(handleResponse);
+};
+
+export const getProofTxt = async (
+  discordToken: string
+): Promise<{ proofs: { txt: string; pk: string }[] }> => {
+  return await fetch(`${SCF_API}/export-proof`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
   }).then(handleResponse);
 };

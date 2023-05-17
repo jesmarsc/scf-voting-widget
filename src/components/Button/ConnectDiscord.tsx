@@ -1,27 +1,37 @@
 import { h } from 'preact';
-import { theme } from 'twin.macro';
+import tw, { theme, styled } from 'twin.macro';
 
 import { openDiscordAuth } from 'src/utils/discord';
 import useAuth from 'src/stores/useAuth';
+import useError from 'src/stores/useError';
 
 import Button, { WebComponentProps } from 'src/components/Button';
-import useBallot from 'src/stores/useBallot';
-import useBallotState from 'src/stores/useBallotState';
+import { routes } from 'src/constants/routes';
+import { mustJoinError } from 'src/constants/errors';
 
-const DiscordButton = ({
+const ExternalLink = styled('a')(
+  tw`flex items-center justify-center p-2 rounded text-center text-white bg-stellar-purple no-underline`
+);
+
+const ConnectDiscord = ({
   variant,
   activeColor,
   inactiveColor,
 }: WebComponentProps) => {
-  useBallotState();
-
   const { discordToken, cleanupAuth } = useAuth();
-  const cleanupBallot = useBallot((state) => state.cleanupBallot);
+  const { error } = useError();
 
   const handleLogout = () => {
     cleanupAuth();
-    cleanupBallot();
   };
+
+  if (error === mustJoinError) {
+    return (
+      <ExternalLink href={routes.DEV_DISCORD} target="_blank">
+        Join Stellar Dev
+      </ExternalLink>
+    );
+  }
 
   return (
     <Button
@@ -33,9 +43,9 @@ const DiscordButton = ({
       }
       onClick={discordToken ? handleLogout : openDiscordAuth}
     >
-      {discordToken ? 'Log out' : 'Log in'}
+      {discordToken ? 'Disconnect' : 'Connect'}
     </Button>
   );
 };
 
-export default DiscordButton;
+export default ConnectDiscord;

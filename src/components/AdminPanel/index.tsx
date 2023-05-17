@@ -3,6 +3,7 @@ import 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
+import useBallotState from 'src/stores/useBallotState';
 import { getPanelistsCsv, getProjectsCsv } from 'src/utils/api';
 import { downloadCsv } from 'src/utils';
 
@@ -12,6 +13,8 @@ import PanelistsTable from './PanelistsTable';
 import ProjectsTable from './ProjectsTable';
 
 const AdminPanel = () => {
+  useBallotState();
+
   const { user } = useBallot();
   const discordToken = useAuth((state) => state.discordToken);
 

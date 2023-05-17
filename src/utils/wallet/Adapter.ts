@@ -13,6 +13,7 @@ abstract class Adapter {
   abstract getPublicKey(): Promise<string>;
 
   abstract signTransaction(xdr: string, options?: Options): Promise<string>;
+  abstract signMessage(message?: string): Promise<SignedMessage>;
 }
 
 type Network = 'PUBLIC' | 'TESTNET';

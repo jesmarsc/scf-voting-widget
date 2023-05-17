@@ -27,9 +27,20 @@ interface DiscordUser {
 
 interface User extends DiscordUser {
   approved: PartialProject[];
+  needsWork: PartialProject[];
   hash?: string;
   isAdmin: boolean;
   publicKey?: string;
   timestamp?: number;
   voted: boolean;
+}
+
+interface Developer extends DiscordUser {
+  publicKeys: string[];
+}
+
+interface SignedMessage {
+  pk: string;
+  message?: string;
+  signature?: string;
 }
