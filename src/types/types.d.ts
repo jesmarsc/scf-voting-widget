@@ -35,8 +35,19 @@ interface User extends DiscordUser {
   voted: boolean;
 }
 
+type DiscordConnection = {
+  id: string;
+  name: string;
+  type: string;
+  revoked?: boolean;
+  verified: boolean;
+  two_way_link: boolean;
+  visibility: number;
+};
+
 interface Developer extends DiscordUser {
   publicKeys: string[];
+  connections: DiscordConnection[];
 }
 
 interface SignedMessage {
