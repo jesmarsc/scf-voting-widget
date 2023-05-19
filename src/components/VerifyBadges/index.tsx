@@ -12,13 +12,13 @@ import { downloadTxt } from 'src/utils';
 import { routes } from 'src/constants/routes';
 
 const Container = styled('div')([
-  tw`flex flex-col gap-4 p-8 font-bold font-sans rounded border-none tracking-wide transition-colors text-black shadow-purple mx-auto max-w-2xl min-w-min`,
+  tw`flex flex-col gap-4 p-8 font-bold font-sans rounded border-none tracking-wide transition-colors text-black shadow-purple mx-auto max-w-2xl min-w-min w-full`,
   ({ danger }: { danger?: boolean }) =>
     danger ? tw`bg-stellar-salmon shadow-salmon` : '',
 ]);
 
 const QuestKeyWrapper = styled('div')(
-  tw`relative flex flex-1 min-w-0 [p]:first:(overflow-hidden overflow-ellipsis) px-5 text-sm`
+  tw`relative flex flex-1 min-w-0 [p]:first:(overflow-hidden overflow-ellipsis) px-0 text-sm`
 );
 
 const ExternalLink = styled('a')(
