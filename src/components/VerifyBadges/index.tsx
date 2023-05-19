@@ -146,7 +146,7 @@ const VerifyBadges = () => {
                 color={theme`colors.stellar.purple`}
                 disabled={!developer}
                 onClick={addPublicKey}
-                tw="shrink-0"
+                tw="shrink-0 ml-2"
               >
                 {isLoadingAdd ? <SVGSpinner /> : 'Connect Albedo Wallet(s)'}
               </Button>
