@@ -18,7 +18,7 @@ const Container = styled('div')([
 ]);
 
 const QuestKeyWrapper = styled('div')(
-  tw`relative flex flex-1 min-w-0 [p]:first:(overflow-hidden overflow-ellipsis) px-0 text-sm`
+  tw`relative flex flex-1 min-w-0 [p]:first:(overflow-hidden overflow-ellipsis) text-sm`
 );
 
 const ExternalLink = styled('a')(
@@ -153,7 +153,7 @@ const VerifyBadges = () => {
             </div>
           </ListItem>
           {developer?.publicKeys.map((key) => (
-            <p tw="flex justify-between items-center">
+            <p tw="flex justify-between items-center gap-2">
               <QuestKeyWrapper>
                 <p>{key.slice(0, -3)}</p>
                 <p>{key.slice(-3)}</p>
