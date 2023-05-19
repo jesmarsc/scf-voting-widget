@@ -96,13 +96,13 @@ const VerifyBadges = () => {
           prove ownership of your knowledge of Stellar and Soroban by following
           the below four steps. Active on Discord and/or Github? Amazing! Got
           all
-          <a href={routes.STELLAR_QUEST} target={'_blank'} tw="mx-1">
+          <SimpleLink href={routes.STELLAR_QUEST} target={'_blank'} tw="mx-1">
             SQ
-          </a>
+          </SimpleLink>
           and/or
-          <a href={routes.FCAOOC} target={'_blank'} tw="mx-1">
+          <SimpleLink href={routes.FCAOOC} target={'_blank'} tw="mx-1">
             FCA00C
-          </a>
+          </SimpleLink>
           NFT badges? Five stars!
         </p>
         <ol tw="flex flex-col px-4 font-normal leading-6">
@@ -134,7 +134,7 @@ const VerifyBadges = () => {
                   <SimpleLink href={routes.STELLAR_QUEST} target={'_blank'}>
                     Stellar Quest
                   </SimpleLink>
-                  and/or{' '}
+                  and/or
                   <SimpleLink href={routes.FCAOOC} target={'_blank'}>
                     FCA00C
                   </SimpleLink>
