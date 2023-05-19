@@ -81,7 +81,7 @@ const VerifyBadges = () => {
     setIsLoadingExport(false);
   };
 
-  const github = developer?.connections.filter(
+  const github = developer?.connections?.filter(
     ({ type, verified }) => type === 'github' && verified
   )[0];
 
