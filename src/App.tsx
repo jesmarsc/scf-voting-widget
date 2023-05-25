@@ -16,13 +16,13 @@ import AdminPanel from './components/AdminPanel';
 
 const App = () => {
   const [projects, setProjects] = useState<Project[]>([]);
-  const { discordToken } = useAuth.getState();
-
+  const { discordToken } = useAuth();
   useEffect(() => {
     if (discordToken) {
       getProjects(discordToken).then(({ projects }) => setProjects(projects));
     }
-  }, []);
+  }, [discordToken]);
+
   return (
     <div tw="space-y-8">
       <div tw="space-y-4">

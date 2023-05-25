@@ -7,11 +7,8 @@ import useBallot from 'src/stores/useBallot';
 import { getPanelists } from 'src/utils/api';
 
 import Table from 'src/components/Table';
-import useBallotState from 'src/stores/useBallotState';
 
 function PanelistsTable() {
-  useBallotState();
-
   const { user } = useBallot();
   const discordToken = useAuth((state) => state.discordToken);
   const [panelistsData, setPanelistsData] = useState<User[]>([]);
