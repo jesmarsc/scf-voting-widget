@@ -7,9 +7,11 @@ import useError from './useError';
 
 const useBallotState = () => {
   const { discordToken } = useAuth();
+  const { user } = useBallot();
 
   useEffect(() => {
     if (!discordToken) return;
+    if (user) return;
     getUser(discordToken)
       .then((user) =>
         unstable_batchedUpdates(() => {
