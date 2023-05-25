@@ -12,7 +12,6 @@ import {
   needsWorkProject,
   removeNeedsWork,
 } from 'src/utils/api';
-import useBallotState from 'src/stores/useBallotState';
 
 const ButtonWrapper = styled(Button)(tw`min-w-[12ch]`);
 
@@ -21,7 +20,6 @@ type Props = {
 } & WebComponentProps;
 
 const VoteButton = ({ slug, ...restProps }: Props) => {
-  useBallotState();
   const discordToken = useAuth((state) => state.discordToken);
 
   const {

@@ -6,15 +6,12 @@ import useAuth from 'src/stores/useAuth';
 
 import Button, { WebComponentProps } from 'src/components/Button';
 import useBallot from 'src/stores/useBallot';
-import useBallotState from 'src/stores/useBallotState';
 
 const DiscordButton = ({
   variant,
   activeColor,
   inactiveColor,
 }: WebComponentProps) => {
-  useBallotState();
-
   const { discordToken, cleanupAuth } = useAuth();
   const cleanupBallot = useBallot((state) => state.cleanupBallot);
 
