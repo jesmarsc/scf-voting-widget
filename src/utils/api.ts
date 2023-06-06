@@ -177,6 +177,31 @@ export const updatePublicKeys = async (
   }).then(handleResponse);
 };
 
+export const claimTier = async (
+  discordToken: string,
+  type: string,
+  location: string,
+  gender: string
+) => {
+  return await fetch(`${SCF_API}/tiers`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ type, location, gender }),
+  }).then(handleResponse);
+};
+
+export const updateEmail = async (discordToken: string, email: string) => {
+  return await fetch(`${SCF_API}/update-email`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ email: email }),
+  }).then(handleResponse);
+};
+
 export const getProofTxt = async (
   discordToken: string
 ): Promise<{ proofs: { txt: string; pk: string }[] }> => {

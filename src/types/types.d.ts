@@ -48,6 +48,10 @@ type DiscordConnection = {
 interface Developer extends DiscordUser {
   publicKeys: string[];
   connections: DiscordConnection[];
+  tier: number;
+  type: 'developer' | 'entrepreneur' | 'community-member';
+  location: string;
+  gender: 'male' | 'female' | 'non';
 }
 
 interface SignedMessage {

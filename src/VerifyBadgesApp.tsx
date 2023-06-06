@@ -3,7 +3,8 @@ import 'twin.macro';
 
 import DiscordCollector from './components/DiscordCollector';
 import ErrorBanner from 'src/components/ErrorBanner';
-import VerifyBadges from './components/VerifyBadges';
+// import VerifyBadges from './components/VerifyBadges';
+import Tiers from './components/Tiers';
 
 /* Used strictly to test all components locally */
 
@@ -15,7 +16,8 @@ const VerifyBadgesApp = () => {
         <DiscordCollector />
       </div>
 
-      <VerifyBadges />
+      {/* <VerifyBadges /> */}
+      <Tiers />
     </div>
   );
 };
