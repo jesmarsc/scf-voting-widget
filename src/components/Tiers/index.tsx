@@ -373,7 +373,7 @@ const Tiers = () => {
 
                   <input
                     name="email"
-                    tw="flex flex-grow h-5 py-2 px-2 outline-stellar-purple border-stellar-purple [border-right: none] rounded-l"
+                    tw="flex flex-grow text-base py-2 px-2 outline-stellar-purple border-stellar-purple [border-right: none] rounded-l"
                     value={email}
                     onChange={(e) => {
                       const target = e.target as HTMLTextAreaElement;

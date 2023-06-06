@@ -42,7 +42,7 @@ export interface ButtonProps extends HTMLButtonProps {
 }
 
 const ButtonContainer = styled<ButtonProps>('button')([
-  tw`flex items-center justify-center py-2 px-4 font-bold rounded cursor-pointer tracking-wide transition-all [min-height: 2.5rem]`,
+  tw`flex items-center justify-center py-2 px-4 font-bold rounded cursor-pointer tracking-wide transition-all [min-height: 2.75rem]`,
   tw`border-none text-white shadow-purple border-stellar-purple bg-stellar-purple`,
   tw`disabled:(cursor-not-allowed [filter: grayscale(0.5)])`,
   ({ color }) => {
