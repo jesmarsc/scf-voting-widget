@@ -19,4 +19,4 @@ define(DiscordCollector, 'discord-collector');
 define(AdminPanel, 'admin-panel');
 define(ErrorBanner, 'error-banner');
 define(VerifyBadges, 'verify-badges');
-define(Tiers, 'tiers');
+define(Tiers, 'verify-tiers');
