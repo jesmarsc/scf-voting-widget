@@ -307,7 +307,7 @@ const Tiers = () => {
             </div>
           </ListItem>
           {developer?.publicKeys.map((key) => (
-            <p tw="flex justify-between items-center gap-2">
+            <p tw="flex justify-between items-center gap-2 my-2">
               <IoKey tw="text-gray-500" />
               <QuestKeyWrapper>
                 <p>{key.slice(0, -3)}</p>
