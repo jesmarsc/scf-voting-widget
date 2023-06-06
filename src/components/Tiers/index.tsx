@@ -25,7 +25,7 @@ const ExternalLink = styled('a')(
 );
 
 const Checkbox = styled('input')(
-  tw`w-4 h-4 accent-stellar-purple disabled:accent-stellar-purple  text-stellar-purple rounded focus:ring-stellar-purple focus:ring-2`
+  tw`w-4 h-4 mr-1 accent-stellar-purple disabled:accent-stellar-purple  text-stellar-purple rounded focus:ring-stellar-purple focus:ring-2`
 );
 
 const SimpleLink = styled('a')(tw`mx-1 text-stellar-purple no-underline`);
@@ -373,7 +373,7 @@ const Tiers = () => {
 
                   <input
                     name="email"
-                    tw="flex flex-grow h-full py-2 px-2 outline-stellar-purple border-stellar-purple [border-right: none] rounded-l"
+                    tw="flex flex-grow h-5 py-2 px-2 outline-stellar-purple border-stellar-purple [border-right: none] rounded-l"
                     value={email}
                     onChange={(e) => {
                       const target = e.target as HTMLTextAreaElement;
