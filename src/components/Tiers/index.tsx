@@ -269,7 +269,7 @@ const Tiers = () => {
                     <SimpleLink href={routes.DEV_DISCORD} target={'_blank'}>
                       Stellar Developers Discord
                     </SimpleLink>
-                    server and connect your Discord account.
+                    server and connect your Discord account
                   </p>
                 )}
               </div>
@@ -352,7 +352,7 @@ const Tiers = () => {
                     >
                       instructions
                     </SimpleLink>
-                    ).
+                    )
                   </p>
                 )}
               </div>
