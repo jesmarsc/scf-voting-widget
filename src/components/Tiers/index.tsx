@@ -242,7 +242,7 @@ const Tiers = () => {
         <h1 tw="text-lg text-black font-bold text-center">
           Get verified in the Stellar Community Fund (SCF)
         </h1>
-        <p tw="font-normal leading-6 p-0 m-0">
+        <p tw="font-normal leading-6 p-0 m-0 text-black">
           As your first entry into being SCF verified, get exclusive access to
           the #verified-members channel to keep up to date with SCF round,
           influence governance and structure updates, and more (coming soon).
@@ -370,7 +370,7 @@ const Tiers = () => {
               />
               {verifiedEmail ? (
                 <div tw="flex justify-between items-center flex-grow">
-                  <p tw="pr-4">Email address:*</p>
+                  <p tw="pr-4 text-black">Email address:*</p>
 
                   <input
                     name="email"
@@ -452,7 +452,7 @@ const Tiers = () => {
             )}
           </Button>
         </ol>
-        <p tw="font-normal leading-6 p-0 m-0">
+        <p tw="font-normal leading-6 p-0 m-0 text-black">
           * We will not reach out except for any necessary direct communication,
           and your email address will not be shared with anyone outside of the
           Stellar Development Foundation. <br /> <br /> ** We’re striving
