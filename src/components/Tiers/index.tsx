@@ -70,7 +70,7 @@ const userTypes = {
 
 const genderOptions = {
   id: 'gender',
-  title: 'I identify as:',
+  title: 'I identify as:**',
   list: [
     { value: 'non', option: 'Non-binary / non-gender conforming' },
     { value: 'male', option: 'Male' },
@@ -87,7 +87,7 @@ const LocationSelect = ({
 }) => {
   const [location, setLocation] = useState({
     id: 'location',
-    title: "I'm based in:",
+    title: "I'm based in:**",
     list: [] as Country[],
   });
 
@@ -125,17 +125,14 @@ const Select = ({
 }) => {
   return (
     <div tw="my-2">
-      <label
-        for={id}
-        tw="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >
+      <label for={id} tw="block mb-2 text-sm font-medium text-gray-900">
         {title}
       </label>
       <select
         id={id}
         onChange={onChange}
         defaultValue={defaultValue}
-        tw="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-stellar-purple focus:border-stellar-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-stellar-purple dark:focus:border-stellar-purple"
+        tw="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-stellar-purple focus:border-stellar-purple block w-full p-2.5 outline-0"
       >
         <option selected>Select one</option>
         {list.map(({ option, value }) => (
@@ -251,7 +248,7 @@ const Tiers = () => {
           influence governance and structure updates, and more (coming soon).
           <br />
           <br />
-          Claim the SCF Pathfinder role on Discord by filling out the below:
+          Claim the SCF Verified role on Discord by filling out the below:
         </p>
         <ol tw="flex flex-col px-4 font-normal leading-6">
           <ListItem>
@@ -292,7 +289,11 @@ const Tiers = () => {
                 {hasOneStellarAccount ? (
                   'Connected Stellar Account'
                 ) : (
-                  <p>Connect at least one Stellar</p>
+                  <p>
+                    Connect at least one Stellar wallet (ideally an Albedo
+                    wallet you’ve used to acquire badges of Stellar and Soroban
+                    Quest, FCA00C and/or RPCiege)
+                  </p>
                 )}
               </div>
               <Button
@@ -369,7 +370,7 @@ const Tiers = () => {
               />
               {verifiedEmail ? (
                 <div tw="flex justify-between items-center flex-grow">
-                  <p tw="pr-4">Email address:</p>
+                  <p tw="pr-4">Email address:*</p>
 
                   <input
                     name="email"
