@@ -26,7 +26,7 @@ const developerStore = create(
 );
 
 const useDeveloper = () => {
-  const { discordToken } = useAuth();
+  const { discordToken, cleanupAuth } = useAuth();
   const { developer, setDeveloper, cleanupDeveloper } = developerStore();
 
   const refreshDeveloper = async () => {
@@ -37,6 +37,10 @@ const useDeveloper = () => {
       console.log('error from auth', e);
       if (e.message === 'Unknown Member' && e.code === 10007) {
         useError.getState().setError(mustJoinError);
+      }
+      if (e.message === '401: Unauthorized' && e.status === 400) {
+        cleanupDeveloper();
+        cleanupAuth();
       }
     }
   };
