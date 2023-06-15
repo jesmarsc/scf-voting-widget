@@ -4,7 +4,11 @@ import 'twin.macro';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import useBallotState from 'src/stores/useBallotState';
-import { getPanelistsCsv, getProjectsCsv } from 'src/utils/api';
+import {
+  getDevelopersCsv,
+  getPanelistsCsv,
+  getProjectsCsv,
+} from 'src/utils/api';
 import { downloadCsv } from 'src/utils';
 
 import Button from 'src/components/Button';
@@ -48,6 +52,18 @@ const AdminPanel = () => {
         </Button>
 
         <ProjectsTable />
+      </section>
+
+      <section tw="space-y-4">
+        <Button
+          onClick={() =>
+            getDevelopersCsv(discordToken).then(({ csv }) =>
+              downloadCsv(csv, 'developers.csv')
+            )
+          }
+        >
+          Download Developers
+        </Button>
       </section>
     </div>
   );

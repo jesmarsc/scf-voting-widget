@@ -52,6 +52,16 @@ export const getProjectsCsv = async (
   }).then(handleResponse);
 };
 
+export const getDevelopersCsv = async (
+  discordToken: string
+): Promise<{ csv: string }> => {
+  return await fetch(`${SCF_API}/developers/csv`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
 export const getPanelists = async (
   discordToken: string
 ): Promise<{ panelists: User[] }> => {
