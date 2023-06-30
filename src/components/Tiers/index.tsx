@@ -332,7 +332,7 @@ const Tiers = () => {
                 <Checkbox
                   id="default-checkbox"
                   type="checkbox"
-                  defaultChecked={!!developer}
+                  defaultChecked={!!social}
                   readOnly={true}
                   onClick={(e) => e.preventDefault()}
                 />
