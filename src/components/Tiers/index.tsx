@@ -241,9 +241,9 @@ const Tiers = () => {
   useEffect(() => {
     if (claimed) {
       if (hasRequiredData) {
-        setSubmitMessage('Update');
-      } else {
         setSubmitMessage('You are a verified member!');
+      } else {
+        setSubmitMessage('Update info (already verified)');
       }
     }
   }, [hasRequiredData, claimed]);
