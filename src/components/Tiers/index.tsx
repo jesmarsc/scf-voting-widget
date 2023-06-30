@@ -211,7 +211,7 @@ const Tiers = () => {
   };
 
   const isValidSocialAccount = (type: string) =>
-    type === ('github' || 'youtube' || 'twitter');
+    type === 'github' || type === 'youtube' || type === 'twitter';
 
   const social = developer?.connections?.filter(
     ({ type, verified }) => isValidSocialAccount(type) && verified
