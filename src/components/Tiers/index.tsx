@@ -173,6 +173,8 @@ const Tiers = () => {
   );
   const [gender, setGender] = useState<undefined | string>(developer?.gender);
 
+  const [submitMessage, setSubmitMessage] = useState<string>('Claim Role');
+
   const { wallet } = useWallet('albedo');
 
   const addPublicKey = async () => {
@@ -217,7 +219,7 @@ const Tiers = () => {
     ({ type, verified }) => isValidSocialAccount(type) && verified
   )[0];
 
-  const claimed = !!developer && developer.tier > 0;
+  const claimed = !!developer && developer.tier > -1;
   const verifiedEmail =
     !!developer && !!developer.email && !!developer.verified;
 
@@ -235,6 +237,16 @@ const Tiers = () => {
   useEffect(() => {
     verifiedEmail && setEmail(developer.email);
   }, [verifiedEmail]);
+
+  useEffect(() => {
+    if (claimed) {
+      if (hasRequiredData) {
+        setSubmitMessage('Update');
+      } else {
+        setSubmitMessage('You are a verified member!');
+      }
+    }
+  }, [hasRequiredData, claimed]);
 
   return (
     <div tw="h-screen flex flex-col items-center justify-center">
@@ -441,15 +453,7 @@ const Tiers = () => {
               !gender
             }
           >
-            {isLoadingTier ? (
-              <SVGSpinner />
-            ) : hasRequiredData ? (
-              'You are a verified member!'
-            ) : claimed ? (
-              'Update'
-            ) : (
-              'Claim Role'
-            )}
+            {isLoadingTier ? <SVGSpinner /> : submitMessage}
           </Button>
         </ol>
         <p tw="font-normal leading-6 p-0 m-0 text-black">
