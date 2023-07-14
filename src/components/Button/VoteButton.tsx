@@ -3,111 +3,129 @@ import { useState } from 'preact/hooks';
 import tw, { styled, theme } from 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
-import useBallot from 'src/stores/useBallot';
 
 import Button, { WebComponentProps } from 'src/components/Button';
-import {
-  approveProject,
-  unapproveProject,
-  needsWorkProject,
-  removeNeedsWork,
-} from 'src/utils/api';
+import useBallotState from 'src/stores/useBallotState';
 
 const ButtonWrapper = styled(Button)(tw`min-w-[12ch]`);
 
 type Props = {
-  slug: string;
+  id: string;
 } & WebComponentProps;
 
-const VoteButton = ({ slug, ...restProps }: Props) => {
+const VoteButton = ({ id, ...restProps }: Props) => {
   const discordToken = useAuth((state) => state.discordToken);
 
   const {
     user,
     needsWork,
     isApproved,
+    isUnapproved,
     addApprovedProject,
     removeApprovedProject,
+    addUnapprovedProject,
+    removeUnapprovedProject,
     addNeedsWorkProject,
     removeNeedsWorkProject,
-  } = useBallot();
+  } = useBallotState();
 
-  const [isLoadingVote, setIsLoadingVote] = useState(false);
+  const [isLoadingApproved, setIsLoadingApproved] = useState(false);
+  const [isLoadingUnapproved, setIsLoadingUnapproved] = useState(false);
   const [isLoadingNeedsWork, setIsLoadingNeedsWork] = useState(false);
 
   if (!discordToken || !user || user.voted) return null;
 
-  const isSelected = isApproved(slug);
-  const isNeutral = needsWork(slug);
+  const approved = isApproved(id);
+  const needs = needsWork(id);
+  const unapproved = isUnapproved(id);
 
   const handleAddApprovedProject = async () => {
-    setIsLoadingVote(true);
+    setIsLoadingApproved(true);
 
-    approveProject(slug, discordToken)
-      .then(({ project }) => addApprovedProject(project))
-      .finally(() => setIsLoadingVote(false));
+    addApprovedProject(id).finally(() => setIsLoadingApproved(false));
   };
 
   const handleRemoveProject = async () => {
-    setIsLoadingVote(true);
+    setIsLoadingApproved(true);
 
-    unapproveProject(slug, discordToken)
-      .then(() => removeApprovedProject(slug))
-      .finally(() => setIsLoadingVote(false));
+    removeApprovedProject(id).finally(() => setIsLoadingApproved(false));
+  };
+
+  const handleAddUnapprovedProject = async () => {
+    setIsLoadingUnapproved(true);
+
+    addUnapprovedProject(id).finally(() => setIsLoadingUnapproved(false));
+  };
+
+  const handleRemoveUnapprovedProject = async () => {
+    setIsLoadingUnapproved(true);
+
+    removeUnapprovedProject(id).finally(() => setIsLoadingUnapproved(false));
   };
 
   const handleAddNeedsWorkProject = async () => {
     setIsLoadingNeedsWork(true);
 
-    needsWorkProject(slug, discordToken)
-      .then(({ project }) => addNeedsWorkProject(project))
-      .finally(() => setIsLoadingNeedsWork(false));
+    addNeedsWorkProject(id).finally(() => setIsLoadingNeedsWork(false));
   };
 
   const handleRemoveNeedsWorkProject = async () => {
     setIsLoadingNeedsWork(true);
 
-    removeNeedsWork(slug, discordToken)
-      .then(() => removeNeedsWorkProject(slug))
-      .finally(() => setIsLoadingNeedsWork(false));
+    removeNeedsWorkProject(id).finally(() => setIsLoadingNeedsWork(false));
   };
 
   return (
     <div tw="flex gap-2">
       <ButtonWrapper
         color={
-          isSelected
-            ? theme`colors.stellar.green`
-            : theme`colors.stellar.purple`
+          approved ? theme`colors.stellar.salmon` : theme`colors.stellar.purple`
         }
-        disabledText="Exceeds Budget"
-        isLoading={isLoadingVote}
-        loadingText={isSelected ? 'Removing' : 'Adding'}
+        isLoading={isLoadingApproved}
+        loadingText={''}
         onClick={() =>
-          isSelected ? handleRemoveProject() : handleAddApprovedProject()
+          approved ? handleRemoveProject() : handleAddApprovedProject()
         }
         {...restProps}
-        disabled={isNeutral}
+        disabled={
+          needs || unapproved || isLoadingUnapproved || isLoadingNeedsWork
+        }
       >
-        {isSelected ? 'Remove Vote' : 'Add Vote'}
+        {approved ? 'Remove' : '👍'}
       </ButtonWrapper>
       <ButtonWrapper
         color={
-          isNeutral
+          unapproved
             ? theme`colors.stellar.salmon`
-            : theme`colors.stellar.yellow`
+            : theme`colors.stellar.purple`
         }
-        isLoading={isLoadingNeedsWork}
-        loadingText={isNeutral ? 'Removing' : 'Adding'}
+        isLoading={isLoadingUnapproved}
+        loadingText={''}
         onClick={() =>
-          isNeutral
-            ? handleRemoveNeedsWorkProject()
-            : handleAddNeedsWorkProject()
+          unapproved
+            ? handleRemoveUnapprovedProject()
+            : handleAddUnapprovedProject()
         }
         {...restProps}
-        disabled={isSelected}
+        disabled={needs || approved || isLoadingApproved || isLoadingNeedsWork}
       >
-        {isNeutral ? 'Remove Needs Work' : 'Needs Work'}
+        {unapproved ? 'Remove' : '👎'}
+      </ButtonWrapper>
+      <ButtonWrapper
+        color={
+          needs ? theme`colors.stellar.salmon` : theme`colors.stellar.yellow`
+        }
+        isLoading={isLoadingNeedsWork}
+        loadingText={''}
+        onClick={() =>
+          needs ? handleRemoveNeedsWorkProject() : handleAddNeedsWorkProject()
+        }
+        {...restProps}
+        disabled={
+          approved || unapproved || isLoadingApproved || isLoadingUnapproved
+        }
+      >
+        {needs ? 'Remove Needs Work' : 'Needs Work'}
       </ButtonWrapper>
     </div>
   );

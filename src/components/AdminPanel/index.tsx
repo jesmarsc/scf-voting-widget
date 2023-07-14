@@ -2,7 +2,6 @@ import { h } from 'preact';
 import 'twin.macro';
 
 import useAuth from 'src/stores/useAuth';
-import useBallot from 'src/stores/useBallot';
 import useBallotState from 'src/stores/useBallotState';
 import {
   getDevelopersCsv,
@@ -12,17 +11,17 @@ import {
 import { downloadCsv } from 'src/utils';
 
 import Button from 'src/components/Button';
-
-import PanelistsTable from './PanelistsTable';
-import ProjectsTable from './ProjectsTable';
+import { useEffect } from 'preact/hooks';
 
 const AdminPanel = () => {
-  useBallotState();
-
-  const { user } = useBallot();
+  const { user, fetchData } = useBallotState();
   const discordToken = useAuth((state) => state.discordToken);
 
-  if (!discordToken || !user || !user.isAdmin) return null;
+  if (!discordToken || !user) return null;
+
+  useEffect(() => {
+    fetchData();
+  }, [discordToken]);
 
   return (
     <div tw="space-y-8">
@@ -36,8 +35,6 @@ const AdminPanel = () => {
         >
           Download Panelists
         </Button>
-
-        <PanelistsTable />
       </section>
 
       <section tw="space-y-4">
@@ -50,8 +47,6 @@ const AdminPanel = () => {
         >
           Download Projects
         </Button>
-
-        <ProjectsTable />
       </section>
 
       <section tw="space-y-4">

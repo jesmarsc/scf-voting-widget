@@ -12,8 +12,8 @@ const Button: FunctionComponent<ButtonProps> = (props) => {
       {isLoading && <Spinner />}
 
       <Wrapper>
-        {isLoading && loadingText
-          ? loadingText
+        {isLoading
+          ? null
           : isDisabled && disabledText
           ? disabledText
           : props.children}

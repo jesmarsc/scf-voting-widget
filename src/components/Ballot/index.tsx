@@ -1,5 +1,5 @@
 import { h } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import freighter from '@stellar/freighter-api';
 import tw, { styled, theme } from 'twin.macro';
 
@@ -8,12 +8,7 @@ import { IoClose } from 'react-icons/io5';
 
 import { stellarExpertTxLink } from 'src/constants';
 import { routes } from 'src/constants/routes';
-import {
-  unapproveProject,
-  submitVote,
-  submitXdr,
-  getUser,
-} from 'src/utils/api';
+import { submitVote, submitXdr, getUser } from 'src/utils/api';
 import useAuth from 'src/stores/useAuth';
 import useBallot from 'src/stores/useBallot';
 import useWallet from 'src/utils/hooks/useWallet';
@@ -26,19 +21,28 @@ import useBallotState from 'src/stores/useBallotState';
 //TODO: Potentially refactor freighter.isConnected() into wallet hook.
 
 const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
-  useBallotState();
-
   const { wallet } = useWallet();
-  const { user, isExpanded, isValid, removeApprovedProject } = useBallot();
+  const {
+    user,
+    isExpanded,
+    isValid,
+    removeApprovedProject,
+    approved,
+    fetchData,
+  } = useBallotState();
 
   const discordToken = useAuth((state) => state.discordToken);
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirming, setIsConfirming] = useState(false);
   const [error, setError] = useState<any>(null);
 
+  useEffect(() => {
+    fetchData();
+  }, [discordToken]);
+
   if (!user || !discordToken) return null;
 
-  const { approved, voted } = user;
+  const { voted } = user;
 
   const handleSubmit = async () => {
     const publicKey = await wallet.getPublicKey();
@@ -53,7 +57,7 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
 
       const user = await getUser(discordToken);
 
-      useBallot.getState().init(user);
+      useBallot.getState().setUser(user);
     } catch (e) {
       setError(e);
     } finally {
@@ -62,12 +66,11 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
     }
   };
 
-  const handleRemove = async (slug: string) => {
+  const handleRemove = async (id: string) => {
     setIsLoading(true);
 
     try {
-      await unapproveProject(slug, discordToken);
-      removeApprovedProject(slug);
+      await removeApprovedProject(id);
     } catch (e) {
       setError(e);
     } finally {
@@ -90,15 +93,12 @@ const Ballot = ({ ballotTitle = 'Your Ballot' }: BallotProps) => {
 
       <BallotContent isExpanded={isExpanded}>
         <ApprovedWrapper>
-          {approved.map(({ slug, name }) => (
-            <ProjectItem key={slug}>
+          {approved().map(({ id, name }) => (
+            <ProjectItem key={id}>
               <ProjectName>{name}</ProjectName>
 
               {!voted && (
-                <ProjectDelete
-                  title="Remove"
-                  onClick={() => handleRemove(slug)}
-                >
+                <ProjectDelete title="Remove" onClick={() => handleRemove(id)}>
                   <IoClose />
                 </ProjectDelete>
               )}

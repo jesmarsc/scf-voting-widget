@@ -19,7 +19,7 @@ const App = () => {
   const { discordToken } = useAuth();
   useEffect(() => {
     if (discordToken) {
-      getProjects(discordToken).then(({ projects }) => setProjects(projects));
+      getProjects(discordToken).then((projects) => setProjects(projects));
     }
   }, [discordToken]);
 
@@ -37,7 +37,7 @@ const App = () => {
         {projects.map((project, index) => (
           <div key={index}>
             <p>{project.name.substring(0, 20)}</p>
-            <VoteButton slug={project.slug} />
+            <VoteButton id={project.id} />
           </div>
         ))}
       </div>
