@@ -28,8 +28,8 @@ interface DiscordUser {
 
 interface User extends DiscordUser {
   hash?: string;
-  isAdmin: boolean;
-  publicKey?: string;
+  admin: boolean;
+  public_key?: string;
   timestamp?: number;
   voted: boolean;
 }
@@ -45,7 +45,7 @@ type DiscordConnection = {
 };
 
 interface Developer extends DiscordUser {
-  publicKeys: string[];
+  public_keys: string[];
   connections: DiscordConnection[];
   tier: number;
   type: 'developer' | 'entrepreneur' | 'community-member';

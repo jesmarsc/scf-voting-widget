@@ -223,7 +223,7 @@ const Tiers = () => {
   const verifiedEmail =
     !!developer && !!developer.email && !!developer.verified;
 
-  const hasOneStellarAccount = !!developer && developer.publicKeys.length > 0;
+  const hasOneStellarAccount = !!developer && developer.public_keys.length > 0;
 
   const hasRequiredData =
     !!developer &&
@@ -233,6 +233,14 @@ const Tiers = () => {
     verifiedEmail &&
     !!social &&
     hasOneStellarAccount;
+
+  const disableClaim =
+    !verifiedEmail ||
+    !hasOneStellarAccount ||
+    !social ||
+    !userType ||
+    !location ||
+    !gender;
 
   useEffect(() => {
     verifiedEmail && setEmail(developer.email);
@@ -294,7 +302,7 @@ const Tiers = () => {
                 <Checkbox
                   id="default-checkbox"
                   type="checkbox"
-                  defaultChecked={!!developer}
+                  defaultChecked={!!hasOneStellarAccount}
                   readOnly={true}
                   onClick={(e) => e.preventDefault()}
                 />
@@ -319,14 +327,14 @@ const Tiers = () => {
               </Button>
             </div>
           </ListItem>
-          {developer?.publicKeys.map((key) => (
+          {developer?.public_keys.map((key) => (
             <p tw="flex justify-between items-center gap-2 my-2">
               <IoKey tw="text-gray-500" />
               <QuestKeyWrapper>
                 <p>{key.slice(0, -3)}</p>
                 <p>{key.slice(-3)}</p>
               </QuestKeyWrapper>
-              {developer?.publicKeys.length > 1 && (
+              {developer?.public_keys.length > 1 && (
                 <Button
                   variant={'outline'}
                   color={theme`colors.stellar.salmon`}
@@ -444,14 +452,7 @@ const Tiers = () => {
             color={theme`colors.stellar.purple`}
             onClick={() => handleClaimTier()}
             tw="shrink-0 mt-4"
-            disabled={
-              !verifiedEmail ||
-              !hasOneStellarAccount ||
-              !social ||
-              !userType ||
-              !location ||
-              !gender
-            }
+            disabled={disableClaim}
           >
             {isLoadingTier ? <SVGSpinner /> : submitMessage}
           </Button>

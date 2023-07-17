@@ -126,7 +126,7 @@ const VerifyBadges = () => {
           </ListItem>
           <ListItem>
             <div tw="flex justify-between items-center">
-              {developer?.publicKeys && developer.publicKeys.length > 0 ? (
+              {developer?.public_keys && developer.public_keys.length > 0 ? (
                 'Connected Wallets'
               ) : (
                 <p>
@@ -152,7 +152,7 @@ const VerifyBadges = () => {
               </Button>
             </div>
           </ListItem>
-          {developer?.publicKeys.map((key) => (
+          {developer?.public_keys.map((key) => (
             <p tw="flex justify-between items-center gap-2">
               <QuestKeyWrapper>
                 <p>{key.slice(0, -3)}</p>
@@ -214,7 +214,7 @@ const VerifyBadges = () => {
                 variant={'outline'}
                 color={theme`colors.stellar.purple`}
                 onClick={exportProof}
-                disabled={!developer || !developer?.publicKeys.length}
+                disabled={!developer || !developer?.public_keys.length}
                 tw="shrink-0"
               >
                 {isLoadingExport ? <SVGSpinner /> : 'Download'}
