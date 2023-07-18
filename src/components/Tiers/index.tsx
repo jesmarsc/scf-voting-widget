@@ -328,14 +328,14 @@ const Tiers = () => {
               </Button>
             </div>
           </ListItem>
-          {developer?.public_keys.map((key) => (
+          {developer?.public_keys?.map((key) => (
             <p tw="flex justify-between items-center gap-2 my-2">
               <IoKey tw="text-gray-500" />
               <QuestKeyWrapper>
                 <p>{key.slice(0, -3)}</p>
                 <p>{key.slice(-3)}</p>
               </QuestKeyWrapper>
-              {developer?.public_keys.length > 1 && (
+              {developer?.public_keys?.length > 1 && (
                 <Button
                   variant={'outline'}
                   color={theme`colors.stellar.salmon`}
