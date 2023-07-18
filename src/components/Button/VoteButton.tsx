@@ -125,7 +125,7 @@ const VoteButton = ({ id, ...restProps }: Props) => {
           approved || unapproved || isLoadingApproved || isLoadingUnapproved
         }
       >
-        {needs ? 'Remove Needs Work' : 'Needs Work'}
+        {needs ? 'Remove' : 'Needs Work'}
       </ButtonWrapper>
     </div>
   );
