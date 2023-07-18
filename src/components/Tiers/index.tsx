@@ -223,7 +223,7 @@ const Tiers = () => {
   const verifiedEmail =
     !!developer && !!developer.email && !!developer.verified;
 
-  const hasOneStellarAccount = !!developer && developer.public_keys.length > 0;
+  const hasOneStellarAccount = !!developer && developer?.public_keys.length > 0;
 
   const hasRequiredData =
     !!developer &&
