@@ -7,7 +7,7 @@ import useAuth from 'src/stores/useAuth';
 import Button, { WebComponentProps } from 'src/components/Button';
 import useBallotState from 'src/stores/useBallotState';
 
-const ButtonWrapper = styled(Button)(tw`min-w-[12ch]`);
+const ButtonWrapper = styled(Button)(tw`min-w-[8ch]`);
 
 type Props = {
   id: string;
