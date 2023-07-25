@@ -17,11 +17,11 @@ const AdminPanel = () => {
   const { user, fetchData } = useBallotState();
   const discordToken = useAuth((state) => state.discordToken);
 
-  if (!discordToken || !user) return null;
-
   useEffect(() => {
     fetchData();
   }, [discordToken]);
+
+  if (!discordToken || !user) return null;
 
   return (
     <div tw="space-y-8">
