@@ -10,6 +10,7 @@ import DiscordCollector from 'src/components/DiscordCollector';
 import AdminPanel from 'src/components/AdminPanel';
 import ErrorBanner from 'src/components/ErrorBanner';
 import VerifyBadges from './components/VerifyBadges';
+import Tiers from './components/Tiers';
 
 define(VoteButton, 'vote-button');
 define(DiscordButton, 'discord-button');
@@ -18,3 +19,4 @@ define(DiscordCollector, 'discord-collector');
 define(AdminPanel, 'admin-panel');
 define(ErrorBanner, 'error-banner');
 define(VerifyBadges, 'verify-badges');
+define(Tiers, 'verify-tiers');

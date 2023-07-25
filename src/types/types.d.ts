@@ -2,7 +2,8 @@ interface Project {
   id: string;
   name: string;
   slug: string;
-  approved_count: number;
+  needs_work?: boolean;
+  score: -1 | 0 | 1;
 }
 
 type PartialProject = Pick<Project, 'id' | 'name' | 'slug'>;
@@ -26,17 +27,30 @@ interface DiscordUser {
 }
 
 interface User extends DiscordUser {
-  approved: PartialProject[];
-  needsWork: PartialProject[];
   hash?: string;
-  isAdmin: boolean;
-  publicKey?: string;
+  admin: boolean;
+  public_key?: string;
   timestamp?: number;
   voted: boolean;
 }
 
+type DiscordConnection = {
+  id: string;
+  name: string;
+  type: string;
+  revoked?: boolean;
+  verified: boolean;
+  two_way_link: boolean;
+  visibility: number;
+};
+
 interface Developer extends DiscordUser {
-  publicKeys: string[];
+  public_keys: string[];
+  connections: DiscordConnection[];
+  tier: number;
+  type: 'developer' | 'entrepreneur' | 'community-member';
+  location: string;
+  gender: 'male' | 'female' | 'non';
 }
 
 interface SignedMessage {

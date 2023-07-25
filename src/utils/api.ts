@@ -15,26 +15,51 @@ export async function handleResponse(response: Response) {
 }
 
 export const getUser = async (discordToken: string): Promise<User> => {
-  return await fetch(`${SCF_API}/auth`, {
+  return await fetch(`${SCF_API}/user`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
+  }).then(handleResponse);
+};
+
+export const getVotes = async (discordToken: string): Promise<Project[]> => {
+  return await fetch(`${SCF_API}/vote`, {
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+  }).then(handleResponse);
+};
+
+export const voteProject = async (
+  id: string,
+  score: -1 | 0 | 1,
+  discordToken: string,
+  needs_work?: boolean
+): Promise<{ project: PartialProject }> => {
+  return await fetch(`${SCF_API}/vote`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({
+      id,
+      score,
+      needs_work,
+    }),
   }).then(handleResponse);
 };
 
 export const getDeveloper = async (
   discordToken: string
 ): Promise<Developer> => {
-  return await fetch(`${SCF_API}/developer`, {
+  return await fetch(`${SCF_API}/user?type=developer`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
   }).then(handleResponse);
 };
 
-export const getProjects = async (
-  discordToken: string
-): Promise<{ total: number; projects: Project[] }> => {
+export const getProjects = async (discordToken: string): Promise<Project[]> => {
   return await fetch(`${SCF_API}/projects`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -45,17 +70,17 @@ export const getProjects = async (
 export const getProjectsCsv = async (
   discordToken: string
 ): Promise<{ csv: string }> => {
-  return await fetch(`${SCF_API}/projects/csv`, {
+  return await fetch(`${SCF_API}/projects?csv=true`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
   }).then(handleResponse);
 };
 
-export const getPanelists = async (
+export const getDevelopersCsv = async (
   discordToken: string
-): Promise<{ panelists: User[] }> => {
-  return await fetch(`${SCF_API}/panelists`, {
+): Promise<{ csv: string }> => {
+  return await fetch(`${SCF_API}/developers?csv=true`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
@@ -65,79 +90,10 @@ export const getPanelists = async (
 export const getPanelistsCsv = async (
   discordToken: string
 ): Promise<{ csv: string }> => {
-  return await fetch(`${SCF_API}/panelists/csv`, {
+  return await fetch(`${SCF_API}/users?csv=true`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
-  }).then(handleResponse);
-};
-
-export const approveProject = async (
-  slug: string,
-  discordToken: string
-): Promise<{ project: PartialProject }> => {
-  return await fetch(`${SCF_API}/approve`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-    body: JSON.stringify({
-      slug,
-    }),
-  }).then(handleResponse);
-};
-
-export const unapproveProject = async (slug: string, discordToken: string) => {
-  return await fetch(`${SCF_API}/unapprove`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-    body: JSON.stringify({
-      slug,
-    }),
-  }).then(handleResponse);
-};
-
-export const needsWorkProject = async (
-  slug: string,
-  discordToken: string
-): Promise<{ project: PartialProject }> => {
-  return await fetch(`${SCF_API}/needs-work`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-    body: JSON.stringify({
-      slug,
-    }),
-  }).then(handleResponse);
-};
-
-export const removeNeedsWork = async (slug: string, discordToken: string) => {
-  return await fetch(`${SCF_API}/remove-needs-work`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-    body: JSON.stringify({
-      slug,
-    }),
-  }).then(handleResponse);
-};
-
-export const saveFavorites = async (
-  favorites: string[],
-  discordToken: string
-): Promise<Project[]> => {
-  return await fetch(`${SCF_API}/favorites`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${discordToken}`,
-    },
-    body: JSON.stringify({
-      favorites,
-    }),
   }).then(handleResponse);
 };
 
@@ -145,17 +101,15 @@ export const submitVote = async (
   discordToken: string,
   publicKey: string
 ): Promise<{ xdr: string }> => {
-  return await fetch(`${SCF_API}/submit`, {
-    method: 'POST',
+  return await fetch(`${SCF_API}/submit?public_key=${publicKey}`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
-    body: JSON.stringify({ publicKey }),
   }).then(handleResponse);
 };
 
 export const submitXdr = async (discordToken: string, signedXdr: string) => {
-  return await fetch(`${SCF_API}/submit-xdr`, {
+  return await fetch(`${SCF_API}/submit`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,
@@ -168,19 +122,44 @@ export const updatePublicKeys = async (
   discordToken: string,
   signedMessage: SignedMessage
 ) => {
-  return await fetch(`${SCF_API}/update-public-keys`, {
+  return await fetch(`${SCF_API}/user`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
-    body: JSON.stringify({ signedMessage: signedMessage }),
+    body: JSON.stringify({ signed_message: signedMessage }),
+  }).then(handleResponse);
+};
+
+export const claimTier = async (
+  discordToken: string,
+  type: string,
+  location: string,
+  gender: string
+) => {
+  return await fetch(`${SCF_API}/tiers`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ type, location, gender }),
+  }).then(handleResponse);
+};
+
+export const updateEmail = async (discordToken: string, email: string) => {
+  return await fetch(`${SCF_API}/user`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${discordToken}`,
+    },
+    body: JSON.stringify({ email: email }),
   }).then(handleResponse);
 };
 
 export const getProofTxt = async (
   discordToken: string
 ): Promise<{ proofs: { txt: string; pk: string }[] }> => {
-  return await fetch(`${SCF_API}/export-proof`, {
+  return await fetch(`${SCF_API}/proof`, {
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },

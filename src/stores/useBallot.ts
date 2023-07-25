@@ -3,16 +3,19 @@ import { persist } from 'zustand/middleware';
 
 export type State = {
   user?: User;
+  ballot?: Project[];
   isExpanded: boolean;
-  init: (user: User) => void;
+  init: (user: User, ballot: Project[]) => void;
+  setUser: (user: User) => void;
+  setBallot: (ballot: Project[]) => void;
   cleanupBallot: () => void;
   isValid: () => boolean;
-  isApproved: (slug: string) => boolean;
+  isApproved: (id: string) => boolean;
+  isUnapproved: (id: string) => boolean;
   needsWork: (slug: string) => boolean;
-  addApprovedProject: (project: PartialProject) => void;
-  addNeedsWorkProject: (project: PartialProject) => void;
-  removeApprovedProject: (slug: string) => void;
-  removeNeedsWorkProject: (slug: string) => void;
+  allNeedsWork: () => Project[];
+  approved: () => Project[];
+  unapproved: () => Project[];
   setVoted: (voted: boolean) => void;
 };
 
@@ -20,96 +23,81 @@ const useBallot = create(
   persist<State>(
     (set, get) => ({
       user: undefined,
+      ballot: undefined,
       isExpanded: false,
 
-      init: (user: User) => {
-        user.approved.sort((a, b) => a.name.localeCompare(b.name));
-        set({ user });
+      init: (user: User, ballot: Project[]) => {
+        ballot.sort((a, b) => a.name.localeCompare(b.name));
+        set({ user, ballot });
+      },
+
+      setUser: (updatedUser: User) => {
+        set(({ user, ...restState }) => {
+          return { ...restState, user: updatedUser };
+        });
+      },
+
+      setBallot: (updatedBallot: Project[]) => {
+        updatedBallot.sort((a, b) => a.name.localeCompare(b.name));
+        set(({ ballot, ...restState }) => {
+          return { ...restState, ballot: updatedBallot };
+        });
       },
 
       cleanupBallot: () =>
         set(({ user, isExpanded, ...restState }) => restState, true),
 
       isValid: () => {
-        const { user } = get();
+        const { user, ballot } = get();
+        if (!user || !ballot) return false;
 
-        if (!user) return false;
-
-        return user.approved.length > 0;
+        return ballot.map((project) => project.score === 1).length > 0;
       },
 
-      isApproved: (slug: string) => {
-        const { user } = get();
+      isApproved: (id: string) => {
+        const { user, ballot } = get();
+        if (!user || !ballot) return false;
 
-        if (!user) return false;
-
-        return user.approved.some((project) => project.slug === slug);
+        return ballot.some(
+          (project) => project.id === id && project.score === 1
+        );
       },
 
-      needsWork: (slug: string) => {
-        const { user } = get();
+      isUnapproved: (id: string) => {
+        const { user, ballot } = get();
+        if (!user || !ballot) return false;
 
-        if (!user) return false;
-
-        return user.needsWork?.some((project) => project.slug === slug);
+        return ballot.some(
+          (project) => project.id === id && project.score === -1
+        );
       },
 
-      addNeedsWorkProject: (project: PartialProject) => {
-        set((state) => {
-          const { slug } = project;
-          const { user, needsWork } = state;
+      allNeedsWork: () => {
+        const { user, ballot } = get();
+        if (!user || !ballot) return [];
 
-          if (!user || needsWork(slug)) return state;
-
-          const neutral = [...user.needsWork, project];
-
-          neutral.sort((a, b) => a.name.localeCompare(b.name));
-
-          return { ...state, user: { ...user, needsWork: neutral } };
-        });
+        return ballot.filter((project) => project.needs_work === true);
       },
 
-      removeNeedsWorkProject: (slug: string) => {
-        set((state) => {
-          const { user } = state;
+      approved: () => {
+        const { user, ballot } = get();
+        if (!user || !ballot) return [];
 
-          if (!user) return state;
-
-          const neutral = user.needsWork.filter(
-            (project) => project.slug !== slug
-          );
-
-          return { ...state, user: { ...user, needsWork: neutral } };
-        });
+        return ballot.filter((project) => project.score === 1);
       },
 
-      addApprovedProject: (project: PartialProject) => {
-        set((state) => {
-          const { slug } = project;
-          const { user, isApproved } = state;
+      unapproved: () => {
+        const { user, ballot } = get();
+        if (!user || !ballot) return [];
 
-          if (!user || isApproved(slug)) return state;
-
-          const approved = [...user.approved, project];
-
-          approved.sort((a, b) => a.name.localeCompare(b.name));
-
-          return { ...state, user: { ...user, approved } };
-        });
+        return ballot.filter((project) => project.score === -1);
       },
 
-      removeApprovedProject: (slug: string) => {
-        set((state) => {
-          const { user } = state;
+      needsWork: (id: string) => {
+        const { user, ballot, allNeedsWork } = get();
+        if (!user || !ballot) return false;
 
-          if (!user) return state;
-
-          const approved = user.approved.filter(
-            (project) => project.slug !== slug
-          );
-
-          return { ...state, user: { ...user, approved } };
-        });
+        return allNeedsWork().some((project) => project.id === id);
       },
 
       setVoted: (voted: boolean) => {

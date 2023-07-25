@@ -19,13 +19,13 @@ export const getSetup = (): {
       };
     case 'staging':
       return {
-        SCF_API: 'https://scf-voting-dev.stellarcommunity.workers.dev',
+        SCF_API: 'https://scf-sanity-testnet.stellarcommunity.workers.dev',
         STELLAR_NETWORK: 'TESTNET',
         HORIZON_URL: HORIZON_TESTNET,
       };
     default:
       return {
-        SCF_API: 'https://scf-voting.stellarcommunity.workers.dev',
+        SCF_API: 'https://scf-sanity.stellarcommunity.workers.dev',
         STELLAR_NETWORK: 'PUBLIC',
         HORIZON_URL: HORIZON_PUBLIC,
       };

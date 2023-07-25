@@ -6,12 +6,7 @@ import useAuth from 'src/stores/useAuth';
 import useError from 'src/stores/useError';
 
 import Button, { WebComponentProps } from 'src/components/Button';
-import { routes } from 'src/constants/routes';
-import { mustJoinError } from 'src/constants/errors';
-
-const ExternalLink = styled('a')(
-  tw`flex items-center justify-center p-2 rounded text-center text-white bg-stellar-purple no-underline`
-);
+import { IoLogoDiscord } from 'react-icons/io5';
 
 const ConnectDiscord = ({
   variant,
@@ -25,14 +20,6 @@ const ConnectDiscord = ({
     cleanupAuth();
   };
 
-  if (error === mustJoinError) {
-    return (
-      <ExternalLink href={routes.DEV_DISCORD} target="_blank">
-        Join Stellar Dev
-      </ExternalLink>
-    );
-  }
-
   return (
     <Button
       variant={variant || 'outline'}
@@ -42,8 +29,10 @@ const ConnectDiscord = ({
           : inactiveColor || theme`colors.stellar.purple`
       }
       onClick={discordToken ? handleLogout : openDiscordAuth}
+      tw="shrink-0"
     >
-      {discordToken ? 'Disconnect' : 'Connect'}
+      {discordToken ? 'Disconnect' : 'Connect'}{' '}
+      <IoLogoDiscord tw="text-stellar-purple ml-2 text-lg" />
     </Button>
   );
 };

@@ -16,13 +16,13 @@ import AdminPanel from './components/AdminPanel';
 
 const App = () => {
   const [projects, setProjects] = useState<Project[]>([]);
-  const { discordToken } = useAuth.getState();
-
+  const { discordToken } = useAuth();
   useEffect(() => {
     if (discordToken) {
-      getProjects(discordToken).then(({ projects }) => setProjects(projects));
+      getProjects(discordToken).then((projects) => setProjects(projects));
     }
-  }, []);
+  }, [discordToken]);
+
   return (
     <div tw="space-y-8">
       <div tw="space-y-4">
@@ -37,7 +37,7 @@ const App = () => {
         {projects.map((project, index) => (
           <div key={index}>
             <p>{project.name.substring(0, 20)}</p>
-            <VoteButton slug={project.slug} />
+            <VoteButton id={project.id} />
           </div>
         ))}
       </div>
