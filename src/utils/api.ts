@@ -131,18 +131,13 @@ export const updatePublicKeys = async (
   }).then(handleResponse);
 };
 
-export const claimTier = async (
-  discordToken: string,
-  type: string,
-  location: string,
-  gender: string
-) => {
+export const claimTier = async (discordToken: string) => {
   return await fetch(`${SCF_API}/tiers`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${discordToken}`,
     },
-    body: JSON.stringify({ type, location, gender }),
+    body: JSON.stringify({}),
   }).then(handleResponse);
 };
 
