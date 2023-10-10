@@ -125,7 +125,7 @@ const Tiers = () => {
           As your first entry into being SCF verified, get exclusive access to
           the #verified-members channel to keep up to date with SCF round,
           influence governance and structure updates, and more (coming soon).
-          Before filling out this form, please register on
+          Before filling out this form, please register on{' '}
           <a href="https://dashboard.communityfund.stellar.org">
             dashboard.communityfund.stellar.org
           </a>{' '}
